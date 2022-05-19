@@ -10,10 +10,9 @@ import com.hamza.wallpap.data.remote.UnsplashApi
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.model.UnsplashRemoteKeys
 import com.hamza.wallpap.util.Constants.ITEMS_PER_PAGE
-import javax.inject.Inject
 
 @ExperimentalPagingApi
-class UnsplashRemoteMediator @Inject constructor(
+class UnsplashRemoteMediator(
     private val unsplashApi: UnsplashApi,
     private val unsplashDatabase: UnsplashDatabase
 ) : RemoteMediator<Int, UnsplashImage>() {
@@ -68,7 +67,7 @@ class UnsplashRemoteMediator @Inject constructor(
                     )
                 }
                 unsplashRemoteKeysDao.addAllRemoteKeys(remoteKeys = keys)
-                unsplashImageDao.addImages(image = response)
+                unsplashImageDao.addImages(images = response)
             }
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: Exception) {

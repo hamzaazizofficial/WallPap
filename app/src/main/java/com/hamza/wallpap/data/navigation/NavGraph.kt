@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.screens.home.HomeScreen
 
 
+@OptIn(ExperimentalPagingApi::class)
 @Composable
 fun NavGraph(navController: NavHostController) {
 
