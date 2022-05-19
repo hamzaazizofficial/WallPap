@@ -1,5 +1,6 @@
 package com.hamza.wallpap.data.remote
 
+import android.app.appsearch.SearchResult
 import com.hamza.wallpap.BuildConfig
 import com.hamza.wallpap.model.UnsplashImage
 import retrofit2.http.GET
@@ -13,12 +14,13 @@ interface UnsplashApi {
     suspend fun getAllImages(
         @Query("page") page: Int,
         @Query("per_page") perPage: Int
-    ) : List<UnsplashImage>
+    ): List<UnsplashImage>
 
     @Headers("Authorization: Client-ID ${BuildConfig.API_KEY}")
     @GET("/search/photos")
     suspend fun searchImages(
-        @Query("page") page: Int,
+        @Query("query") query: String,
         @Query("per_page") perPage: Int
-    ) : List<UnsplashImage>
+    ): SearchResult
+
 }

@@ -15,7 +15,7 @@ import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-@OptIn(ExperimentalSerializationApi::class)
+@ExperimentalSerializationApi
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -49,4 +49,5 @@ object NetworkModule {
     fun provideUnsplashApi(retrofit: Retrofit): UnsplashApi {
         return retrofit.create(UnsplashApi::class.java)
     }
+
 }
