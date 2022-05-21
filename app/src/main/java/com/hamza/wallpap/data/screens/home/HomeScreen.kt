@@ -28,7 +28,7 @@ fun HomeScreen(
             )
         },
         content = {
-            ListContent(items = getAllImages)
+            ListContent(items = getAllImages, navController)
         }
     )
 }

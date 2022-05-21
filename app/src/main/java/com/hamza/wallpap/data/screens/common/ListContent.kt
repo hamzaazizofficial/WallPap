@@ -3,6 +3,7 @@ package com.hamza.wallpap.data.screens.common
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -16,36 +17,39 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.R
 import com.hamza.wallpap.model.UnsplashImage
-import com.hamza.wallpap.model.Urls
-import com.hamza.wallpap.model.User
-import com.hamza.wallpap.model.UserLinks
 import com.hamza.wallpap.ui.theme.HeartRed
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalFoundationApi::class)
 @ExperimentalCoilApi
 @Composable
-fun ListContent(items: LazyPagingItems<UnsplashImage>) {
+fun ListContent(items: LazyPagingItems<UnsplashImage>, navController: NavHostController) {
     Log.d("Error", items.loadState.toString())
-
-    val numbers = (0..20).toList()
 
     LazyVerticalGrid(cells = GridCells.Fixed(2)) {
         items(items.itemCount) {
-            items[it]?.let { it1 -> UnsplashItem(unsplashImage = it1) }
+            items[it]?.let { unsplashImage -> UnsplashItem(unsplashImage = unsplashImage, navController) }
         }
     }
 }
 
 @ExperimentalCoilApi
 @Composable
-fun UnsplashItem(unsplashImage: UnsplashImage) {
+fun UnsplashItem(unsplashImage: UnsplashImage, navController: NavHostController) {
+
+    val regularUrl = unsplashImage.urls.regular
+    val fullUrl = unsplashImage.urls.full
+    val regularEncodedUrl = URLEncoder.encode(regularUrl, StandardCharsets.UTF_8.toString())
+    val fullEncodedUrl = URLEncoder.encode(fullUrl, StandardCharsets.UTF_8.toString())
+
     val painter = rememberImagePainter(data = unsplashImage.urls.regular) {
         crossfade(durationMillis = 1000)
         error(R.drawable.ic_placeholder)
@@ -53,11 +57,12 @@ fun UnsplashItem(unsplashImage: UnsplashImage) {
     }
 
     Card(
-        backgroundColor = Color.Red.copy(0.1f),
+        backgroundColor = Color.Black,
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
             .padding(3.dp)
-            .height(300.dp),
+            .height(300.dp)
+            .clickable { navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl") },
     ) {
         Box(
             modifier = Modifier
@@ -65,6 +70,7 @@ fun UnsplashItem(unsplashImage: UnsplashImage) {
                 .fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter
         ) {
+
             Image(
                 modifier = Modifier.fillMaxSize(),
                 painter = painter,
@@ -150,16 +156,17 @@ fun LikeCounter(
     }
 }
 
-@ExperimentalCoilApi
-@Composable
-@Preview
-fun UnsplashImagePreview() {
-    UnsplashItem(
-        unsplashImage = UnsplashImage(
-            id = "1",
-            urls = Urls(regular = ""),
-            likes = 100,
-            user = User(username = "Stevdza-San", userLinks = UserLinks(html = ""))
-        )
-    )
-}
+//@ExperimentalCoilApi
+//@Composable
+//@Preview
+//fun UnsplashImagePreview() {
+//    UnsplashItem(
+//        unsplashImage = UnsplashImage(
+//            id = "1",
+//            urls = Urls(regular = ""),
+//            likes = 100,
+//            user = User(username = "Stevdza-San", userLinks = UserLinks(html = ""))
+//        ),
+//        navController = navController
+//    )
+//}

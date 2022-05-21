@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Urls(
-    val regular: String
+    val regular: String,
+    val full: String
 )
