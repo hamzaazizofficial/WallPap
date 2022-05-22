@@ -1,7 +1,7 @@
 package com.hamza.wallpap.data.remote
 
-import android.app.appsearch.SearchResult
 import com.hamza.wallpap.BuildConfig
+import com.hamza.wallpap.model.SearchResult
 import com.hamza.wallpap.model.UnsplashImage
 import retrofit2.http.GET
 import retrofit2.http.Headers

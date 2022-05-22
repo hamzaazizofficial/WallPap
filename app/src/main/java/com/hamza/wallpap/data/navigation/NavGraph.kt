@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.screens.home.HomeScreen
+import com.hamza.wallpap.data.screens.search.SearchScreen
 import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreen
 
 
@@ -23,7 +24,7 @@ fun NavGraph(navController: NavHostController) {
             HomeScreen(navController)
         }
         composable(Screen.Search.route) {
-//            SettingsScreen(settingsViewModel)
+            SearchScreen(navController = navController)
         }
         composable(Screen.WallPaperScreen.route,
             arguments = listOf(
