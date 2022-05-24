@@ -23,7 +23,8 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
     Box(
         Modifier
             .fillMaxSize()
-            .background(Color.Black)) {
+            .background(Color.Black)
+    ) {
 
         var data by remember { mutableStateOf(regularUrl) }
 
