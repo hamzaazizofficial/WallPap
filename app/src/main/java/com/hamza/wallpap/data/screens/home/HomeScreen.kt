@@ -1,19 +1,15 @@
 package com.hamza.wallpap.data.screens.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -21,7 +17,6 @@ import coil.annotation.ExperimentalCoilApi
 import com.hamza.wallpap.data.navigation.Screen
 import com.hamza.wallpap.data.screens.common.ListContent
 import com.hamza.wallpap.data.screens.common.SearchChips
-import com.hamza.wallpap.data.screens.common.SearchChipsViewModel
 import com.hamza.wallpap.data.screens.search.SearchViewModel
 
 @ExperimentalCoilApi
@@ -46,6 +41,9 @@ fun HomeScreen(
                     navController.navigate(Screen.Search.route)
                 }
             )
+        },
+        bottomBar = {
+            BottomBar()
         }
     ) {
         Column(
