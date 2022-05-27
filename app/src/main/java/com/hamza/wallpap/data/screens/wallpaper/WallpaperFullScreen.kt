@@ -41,7 +41,9 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
         var showFitScreenBtn by remember { mutableStateOf(true) }
         var showCropScreenBtn by remember { mutableStateOf(false) }
 
-        LinearProgressIndicator(modifier = Modifier.align(Alignment.BottomCenter))
+        if (showFitScreenBtn) {
+            LinearProgressIndicator(modifier = Modifier.align(Alignment.BottomCenter))
+        }
 
         Image(
             contentScale = scale,
