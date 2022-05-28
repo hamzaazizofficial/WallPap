@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class SearchChip(val title: String, val query: String)
+
 @ExperimentalPagingApi
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -22,11 +24,11 @@ class SearchViewModel @Inject constructor(
 
     val wallpaperItems =
         arrayListOf(
-            "Popular",
-            "Amoled",
-            "Dark",
-            "Anime",
-            "Night"
+           SearchChip("Popular", ""),
+           SearchChip("Amoled", "Amoled"),
+           SearchChip("Dark", "Dark"),
+           SearchChip("Anime", "Anime"),
+           SearchChip("Night", "Night")
         )
 
     var selectedIndex = mutableStateOf(0)

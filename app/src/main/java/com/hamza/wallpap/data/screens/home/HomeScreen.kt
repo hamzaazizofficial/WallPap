@@ -26,13 +26,12 @@ fun HomeScreen(
     navController: NavHostController,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    val getAllImages = homeViewModel.getAllImages.collectAsLazyPagingItems()
-//    val searchChipsViewModel: SearchChipsViewModel = viewModel()
+//    val allImages = homeViewModel.getAllImagesFlow.collectAsLazyPagingItems()
     val searchViewModel: SearchViewModel = hiltViewModel()
     val searchedImages = searchViewModel.searchedImages.collectAsLazyPagingItems()
-//    val wallpaperItems = searchChipsViewModel.wallpaperItems
 
-    var items by remember { mutableStateOf(getAllImages) }
+//    var items by remember { mutableStateOf(allImages) }
+    val items = homeViewModel.itemsFlow.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = {
@@ -72,12 +71,11 @@ fun HomeScreen(
             ) {
                 searchViewModel.wallpaperItems.forEachIndexed { index, s ->
                     SearchChips(
-                        text = s,
+                        text = s.title,
                         selected = searchViewModel.selectedIndex.value == index,
                         onClick = {
                             searchViewModel.selectedIndex.value = index
-                            searchViewModel.searchHeroes(searchViewModel.wallpaperItems[index])
-                            items = searchedImages
+                            homeViewModel.query.value = searchViewModel.wallpaperItems[index].query
                         }
                     )
 

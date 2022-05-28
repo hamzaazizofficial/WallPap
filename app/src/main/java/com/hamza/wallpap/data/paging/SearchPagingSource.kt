@@ -14,7 +14,7 @@ class SearchPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UnsplashImage> {
         val currentPage = params.key ?: 1
         return try {
-            val response = unsplashApi.searchImages(query = query, perPage = ITEMS_PER_PAGE)
+            val response = unsplashApi.searchImages(query = query, page = currentPage, perPage = ITEMS_PER_PAGE)
             val endOfPaginationReached = response.images.isEmpty()
             if (response.images.isNotEmpty()) {
                 LoadResult.Page(
