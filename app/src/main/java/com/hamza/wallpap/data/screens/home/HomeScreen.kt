@@ -5,7 +5,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -26,11 +26,7 @@ fun HomeScreen(
     navController: NavHostController,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-//    val allImages = homeViewModel.getAllImagesFlow.collectAsLazyPagingItems()
     val searchViewModel: SearchViewModel = hiltViewModel()
-    val searchedImages = searchViewModel.searchedImages.collectAsLazyPagingItems()
-
-//    var items by remember { mutableStateOf(allImages) }
     val items = homeViewModel.itemsFlow.collectAsLazyPagingItems()
 
     Scaffold(
@@ -49,20 +45,6 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.background(Color.Black)
         ) {
-//                Text(text = "Anime", fontSize = 26.sp, modifier = Modifier.background(Color.Green)
-//                    .clickable {
-//                        searchViewModel.searchHeroes("anime")
-//                        items = searchedImages
-//                    })
-//                Spacer(modifier = Modifier.padding(6.dp))
-
-//            var selectedIndex by remember {
-//                mutableStateOf(0)
-//            }
-
-//            if (searchChipsViewModel.selectedIndex.value == 0) {
-//                items = getAllImages
-//            }
 
             Row(
                 modifier = Modifier
@@ -78,11 +60,9 @@ fun HomeScreen(
                             homeViewModel.query.value = searchViewModel.wallpaperItems[index].query
                         }
                     )
-
                     Spacer(modifier = Modifier.padding(horizontal = 10.dp))
                 }
             }
-
             ListContent(items = items, navController)
         }
     }

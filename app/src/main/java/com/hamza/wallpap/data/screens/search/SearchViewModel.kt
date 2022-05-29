@@ -24,11 +24,12 @@ class SearchViewModel @Inject constructor(
 
     val wallpaperItems =
         arrayListOf(
-           SearchChip("Popular", ""),
-           SearchChip("Amoled", "Amoled"),
-           SearchChip("Dark", "Dark"),
-           SearchChip("Anime", "Anime"),
-           SearchChip("Night", "Night")
+            SearchChip("Popular", ""),
+            SearchChip("Night", "Night"),
+            SearchChip("Mobile", "Android Wallpapers"),
+            SearchChip("Anime", "Anime"),
+            SearchChip("Dark", "Dark"),
+            SearchChip("Amoled", "Nature"),
         )
 
     var selectedIndex = mutableStateOf(0)
@@ -50,5 +51,4 @@ class SearchViewModel @Inject constructor(
             }
         }
     }
-
 }
