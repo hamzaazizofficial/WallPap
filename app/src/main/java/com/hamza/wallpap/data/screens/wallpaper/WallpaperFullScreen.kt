@@ -6,8 +6,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
-import android.os.SystemClock
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -26,12 +26,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.paging.ExperimentalPagingApi
 import coil.compose.rememberImagePainter
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.net.URL
+
 
 @Composable
 fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
@@ -52,23 +52,17 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
 //            placeholder(R.drawable.loading)
         }
 
-//        var image: Bitmap? = null
-//
-//        LaunchedEffect(key1 = true) {
-//
-//            val thread = Thread {
-//                try {
-//                    //Your code goes here
-//                    val url = URL(fullUrl)
-//                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-////                    wallpaperManager.setBitmap(image)
-//                } catch (e: java.lang.Exception) {
-//                    e.printStackTrace()
-//                }
-//            }
-//
-//            thread.start()
-//        }
+        lateinit var image: Bitmap
+        val thread = Thread {
+            try {
+                val url = URL(fullUrl)
+                image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        thread.start()
 
         var scale by remember { mutableStateOf(ContentScale.Crop) }
         var showFitScreenBtn by remember { mutableStateOf(true) }
@@ -153,10 +147,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
 
             FloatingActionButton(
                 onClick = {
-//                    fullUrlUri =
-//                        homeViewModel.unsplashBitmap!!.saveImage(
-//                            context
-//                        )
+                    saveMediaToStorage(image, context)
                 },
                 modifier = Modifier
                     .padding(8.dp)
@@ -219,105 +210,54 @@ fun setWallPaper(context: Context, fullUrl: String) {
     }
 
     thread.start()
-
-//    val wallpaperManager = WallpaperManager.getInstance(context)
-//            Snackbar.make(context, "Wallpaper set successfully", Snackbar.LENGTH_LONG)
-//                .show()
-//    Toast.makeText(context, "Wallpaper Set Successfully!", Toast.LENGTH_SHORT).show()
-//
-//    try {
-////        val url = URL(fullUrl)
-////        val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-////        wallpaperManager.setBitmap(image)
-//    } catch (e: IOException) {
-//        println(e)
-//    }
-
-//
-//    try {
-//
-//    } catch (e: IOException) {
-//        e.printStackTrace()
-//    }
-
-//    val uri = Uri.parse(fullUrl)
-//
-//    val wallpaperManager = WallpaperManager.getInstance(this@MainActivity)
-//    val uri = Uri.parse("android.resource://lv.revo.inspicfootballhd/drawable/v1")
-//    val intent = Intent(wallpaperManager.getCropAndSetWallpaperIntent(uri))
-//    startActivity(intent)
-
-//    Glide.with(context).asBitmap().load(fullUrl).placeholder(R.drawable.ic_placeholder).into(object : CustomTarget<Bitmap>() {
-//        override fun onResourceReady(
-//            resource: Bitmap,
-//            transition: Transition<in Bitmap>?
-//        ) {
-//            val wallpaperManager = WallpaperManager.getInstance(context)
-////            Snackbar.make(context, "Wallpaper set successfully", Snackbar.LENGTH_LONG)
-////                .show()
-//            Toast.makeText(context, "Wallpaper Set Successfully!", Toast.LENGTH_SHORT).show()
-//            try {
-//                wallpaperManager.setBitmap(resource)
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
-//        }
-//
-//        override fun onLoadCleared(placeholder: Drawable?) {
-//
-//        }
-//    })
 }
 
-fun Bitmap.saveImage(context: Context): Uri? {
-    if (android.os.Build.VERSION.SDK_INT >= 29) {
-        val values = ContentValues()
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-        values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000)
-        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
-        values.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/COMPRESSR")
-        values.put(MediaStore.Images.Media.IS_PENDING, true)
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, "img_${SystemClock.uptimeMillis()}")
 
-        val uri: Uri? =
-            context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-        if (uri != null) {
-            saveImageToStream(this, context.contentResolver.openOutputStream(uri), 100)
-            values.put(MediaStore.Images.Media.IS_PENDING, false)
-            context.contentResolver.update(uri, values, null, null)
-            return uri
+fun saveMediaToStorage(bitmap: Bitmap, context: Context) {
+    //Generating a file name
+    val filename = "${System.currentTimeMillis()}.jpg"
+
+    //Output stream
+    var fos: OutputStream? = null
+
+    //For devices running android >= Q
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        //getting the contentResolver
+
+        context?.contentResolver?.also { resolver ->
+
+            //Content resolver will process the contentvalues
+            val contentValues = ContentValues().apply {
+
+                //putting file information in content values
+                put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/WallPap")
+            }
+
+            //Inserting the contentValues to contentResolver and getting the Uri
+            val imageUri: Uri? =
+                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+            //Opening an outputstream with the Uri that we got
+            fos = imageUri?.let { resolver.openOutputStream(it) }
         }
     } else {
-        val directory =
-            File(
-                context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                    .toString() + File.separator + "COMPRESSR"
-            )
-        if (!directory.exists()) {
-            directory.mkdirs()
-        }
-        val fileName = "img_${SystemClock.uptimeMillis()}" + ".jpeg"
-        val file = File(directory, fileName)
-        saveImageToStream(this, FileOutputStream(file), 100)
-        if (file.absolutePath != null) {
-            val values = ContentValues()
-            values.put(MediaStore.Images.Media.DATA, file.absolutePath)
-            // .DATA is deprecated in API 29
-            context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-            return Uri.fromFile(file)
-        }
+        //These for devices running on android < Q
+        //So I don't think an explanation is needed here
+        val imagesDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                .toString() + File.separator + "WallPap"
+
+        val image = File(imagesDir, filename)
+        fos = FileOutputStream(image)
     }
-    return null
-}
 
-
-fun saveImageToStream(bitmap: Bitmap, outputStream: OutputStream?, compressQuality: Int) {
-    if (outputStream != null) {
-        try {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, outputStream)
-            outputStream.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    fos?.use {
+        //Finally writing the bitmap to the output stream that we opened
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+//        context?.toast("Saved to Photos")
+        Toast.makeText(context, "Saved to Gallery!", Toast.LENGTH_SHORT).show()
     }
 }
+
