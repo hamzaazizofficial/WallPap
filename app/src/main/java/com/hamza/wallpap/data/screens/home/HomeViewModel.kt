@@ -1,5 +1,10 @@
 package com.hamza.wallpap.data.screens.home
 
+import android.graphics.Bitmap
+import android.net.Uri
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.repository.Repository
@@ -17,6 +22,9 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val query = MutableStateFlow<String?>(null)
+
+    var unsplashImageUri by mutableStateOf<Uri?>(null)
+    var unsplashBitmap by mutableStateOf<Bitmap?>(null)
 
     val itemsFlow = query.flatMapLatest {
         if (it.isNullOrEmpty()) {

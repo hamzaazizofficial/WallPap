@@ -29,7 +29,7 @@ class SearchViewModel @Inject constructor(
             SearchChip("Mobile", "Android Wallpapers"),
             SearchChip("Anime", "Anime"),
             SearchChip("Dark", "Dark"),
-            SearchChip("Amoled", "Nature"),
+            SearchChip("Nature", "Nature"),
         )
 
     var selectedIndex = mutableStateOf(0)
