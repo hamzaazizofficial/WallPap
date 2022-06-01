@@ -23,9 +23,6 @@ class HomeViewModel @Inject constructor(
 
     val query = MutableStateFlow<String?>(null)
 
-    var unsplashImageUri by mutableStateOf<Uri?>(null)
-    var unsplashBitmap by mutableStateOf<Bitmap?>(null)
-
     val itemsFlow = query.flatMapLatest {
         if (it.isNullOrEmpty()) {
             repository.getAllImages()
