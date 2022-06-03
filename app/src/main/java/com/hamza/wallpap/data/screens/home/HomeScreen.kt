@@ -34,7 +34,11 @@ fun HomeScreen(
             HomeTopBar(
                 onSearchClicked = {
                     navController.navigate(Screen.Search.route)
-                }
+                },
+                onUserDetailsClicked = {
+                    homeViewModel.showUserDetails = !homeViewModel.showUserDetails
+                },
+                homeViewModel
             )
         },
         bottomBar = {
@@ -63,7 +67,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.padding(horizontal = 10.dp))
                 }
             }
-            ListContent(items = items, navController)
+            ListContent(items = items, navController, homeViewModel)
         }
     }
 }

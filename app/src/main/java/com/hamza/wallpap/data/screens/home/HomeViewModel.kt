@@ -23,6 +23,8 @@ class HomeViewModel @Inject constructor(
 
     val query = MutableStateFlow<String?>(null)
 
+    var showUserDetails by mutableStateOf(false)
+
     val itemsFlow = query.flatMapLatest {
         if (it.isNullOrEmpty()) {
             repository.getAllImages()
