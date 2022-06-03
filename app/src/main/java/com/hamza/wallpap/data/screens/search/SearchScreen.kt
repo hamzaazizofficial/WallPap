@@ -9,13 +9,15 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import com.hamza.wallpap.data.screens.common.ListContent
+import com.hamza.wallpap.data.screens.home.HomeViewModel
 
 @ExperimentalPagingApi
 @ExperimentalCoilApi
 @Composable
 fun SearchScreen(
     navController: NavHostController,
-    searchViewModel: SearchViewModel = hiltViewModel()
+    searchViewModel: SearchViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val searchQuery by searchViewModel.searchQuery
     val searchedImages = searchViewModel.searchedImages.collectAsLazyPagingItems()
@@ -36,7 +38,7 @@ fun SearchScreen(
             )
         },
         content = {
-            ListContent(items = searchedImages, navController)
+            ListContent(items = searchedImages, navController, homeViewModel)
         }
     )
 }

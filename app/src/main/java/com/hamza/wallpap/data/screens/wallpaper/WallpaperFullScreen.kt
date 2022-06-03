@@ -161,7 +161,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
             }
 
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = {  },
                 modifier = Modifier
                     .padding(8.dp)
                     .alpha(0.6f),

@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.paging.ExperimentalPagingApi
@@ -25,6 +26,7 @@ class HomeViewModel @Inject constructor(
 
     var unsplashImageUri by mutableStateOf<Uri?>(null)
     var unsplashBitmap by mutableStateOf<Bitmap?>(null)
+    var showUserDetails by mutableStateOf(false)
 
     val itemsFlow = query.flatMapLatest {
         if (it.isNullOrEmpty()) {
