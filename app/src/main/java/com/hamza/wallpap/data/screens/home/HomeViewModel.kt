@@ -23,9 +23,6 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val query = MutableStateFlow<String?>(null)
-
-    var unsplashImageUri by mutableStateOf<Uri?>(null)
-    var unsplashBitmap by mutableStateOf<Bitmap?>(null)
     var showUserDetails by mutableStateOf(false)
 
     val itemsFlow = query.flatMapLatest {
