@@ -28,6 +28,7 @@ fun SearchScreen(
                 text = searchQuery,
                 onTextChange = {
                     searchViewModel.updateSearchQuery(query = it)
+                    searchViewModel.searchHeroes(query = it)
                 },
                 onSearchClicked = {
                     searchViewModel.searchHeroes(query = it)
