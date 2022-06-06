@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.paging.ExperimentalPagingApi
@@ -24,6 +25,8 @@ class HomeViewModel @Inject constructor(
     val query = MutableStateFlow<String?>(null)
 
     var showUserDetails by mutableStateOf(false)
+
+    var bottomBarSelectedItem by mutableStateOf("home")
 
     val itemsFlow = query.flatMapLatest {
         if (it.isNullOrEmpty()) {

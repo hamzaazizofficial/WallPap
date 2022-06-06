@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.screens.home.HomeScreen
 import com.hamza.wallpap.data.screens.search.SearchScreen
+import com.hamza.wallpap.data.screens.settings.SettingsScreen
 import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreen
 
 
@@ -22,6 +23,9 @@ fun NavGraph(navController: NavHostController) {
         }
         composable(Screen.Search.route) {
             SearchScreen(navController = navController)
+        }
+        composable(Screen.Settings.route) {
+            SettingsScreen()
         }
         composable(Screen.WallPaperScreen.route,
             arguments = listOf(
