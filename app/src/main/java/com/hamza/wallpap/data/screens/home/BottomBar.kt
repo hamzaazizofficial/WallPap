@@ -10,12 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.paging.ExperimentalPagingApi
 
+@OptIn(ExperimentalPagingApi::class)
 @Composable
-fun BottomBar() {
+fun BottomBar(homeViewModel: HomeViewModel, onSettingsClick: () -> Unit) {
 
-    val selectedItem = remember { mutableStateOf("home") }
+//    val bottomBarSelectedItem = remember { mutableStateOf("home") }
 
     BottomNavigation(
         backgroundColor = Color.Black,
@@ -23,12 +24,13 @@ fun BottomBar() {
     ) {
 
         BottomNavigationItem(
+
             icon = {
                 Icon(Icons.Filled.Home, contentDescription = "")
             },
             label = { Text(text = "Home") },
-            selected = selectedItem.value == "home", onClick = {
-                selectedItem.value = "home"
+            selected = homeViewModel.bottomBarSelectedItem == "home", onClick = {
+                homeViewModel.bottomBarSelectedItem = "home"
             },
             alwaysShowLabel = false
         )
@@ -40,9 +42,9 @@ fun BottomBar() {
                 )
             },
             label = { Text(text = "Hot") },
-            selected = selectedItem.value == "hot",
+            selected = homeViewModel.bottomBarSelectedItem == "hot",
             onClick = {
-                selectedItem.value = "hot"
+                homeViewModel.bottomBarSelectedItem = "hot"
             },
             alwaysShowLabel = false
         )
@@ -54,9 +56,9 @@ fun BottomBar() {
                 )
             },
             label = { Text(text = "Favorite") },
-            selected = selectedItem.value == "favorite",
+            selected = homeViewModel.bottomBarSelectedItem == "favorite",
             onClick = {
-                selectedItem.value = "favorite"
+                homeViewModel.bottomBarSelectedItem = "favorite"
             },
             alwaysShowLabel = false
         )
@@ -68,11 +70,11 @@ fun BottomBar() {
                 )
             },
             label = { Text(text = "Settings") },
-            selected = selectedItem.value == "settings",
-            onClick = {
-
-                selectedItem.value = "settings"
-            },
+            selected = homeViewModel.bottomBarSelectedItem == "settings",
+            onClick =
+//                homeViewModel.bottomBarSelectedItem = "settings"
+                onSettingsClick
+            ,
             alwaysShowLabel = false
         )
     }
