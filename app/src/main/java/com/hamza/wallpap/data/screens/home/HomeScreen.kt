@@ -42,13 +42,14 @@ fun HomeScreen(
             )
         },
         bottomBar = {
-            BottomBar(
-                homeViewModel,
-                onSettingsClick = {
-                    homeViewModel.bottomBarSelectedItem = "settings"
-                    navController.navigate("settings_screen")
-                }
-            )
+            BottomBar(navController)
+//            BottomBar(
+//                homeViewModel,
+//                navController
+//            ) {
+//                homeViewModel.bottomBarSelectedItem = "settings"
+//                navController.navigate("settings_screen")
+//            }
         }
     ) {
         Column(
