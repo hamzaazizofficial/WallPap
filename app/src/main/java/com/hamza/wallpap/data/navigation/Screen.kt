@@ -10,5 +10,5 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Search : Screen("search_screen","Search", Icons.Default.Search)
     object Settings : Screen("settings_screen","Settings", Icons.Default.Settings)
     object Hot : Screen("hot", "Hot", Icons.Default.Whatshot)
-    object Favorite: Screen("favorite", "Favorite", Icons.Default.Favorite)
+    object Favourite: Screen("favourite", "Favourite", Icons.Default.Favorite)
 }

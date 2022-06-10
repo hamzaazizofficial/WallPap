@@ -7,7 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.paging.ExperimentalPagingApi
+import com.hamza.wallpap.data.screens.favourite.FavouriteScreen
 import com.hamza.wallpap.data.screens.home.HomeScreen
+import com.hamza.wallpap.data.screens.hot.HotScreen
 import com.hamza.wallpap.data.screens.search.SearchScreen
 import com.hamza.wallpap.data.screens.settings.SettingsScreen
 import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreen
@@ -26,6 +28,12 @@ fun NavGraph(navController: NavHostController) {
         }
         composable(Screen.Settings.route) {
             SettingsScreen()
+        }
+        composable(Screen.Favourite.route) {
+            FavouriteScreen()
+        }
+        composable(Screen.Hot.route) {
+            HotScreen()
         }
         composable(Screen.WallPaperScreen.route,
             arguments = listOf(
