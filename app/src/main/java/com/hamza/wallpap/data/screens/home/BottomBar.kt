@@ -16,7 +16,7 @@ fun BottomBar(
     val items = listOf(
         Screen.Home,
         Screen.Hot,
-        Screen.Favorite,
+        Screen.Favourite,
         Screen.Settings,
     )
     CompositionLocalProvider(LocalElevationOverlay provides null) {
