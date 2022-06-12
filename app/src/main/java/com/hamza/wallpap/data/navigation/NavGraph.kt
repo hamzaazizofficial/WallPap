@@ -1,40 +1,58 @@
 package com.hamza.wallpap.data.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.paging.ExperimentalPagingApi
+import coil.annotation.ExperimentalCoilApi
 import com.hamza.wallpap.data.screens.favourite.FavouriteScreen
 import com.hamza.wallpap.data.screens.home.HomeScreen
+import com.hamza.wallpap.data.screens.home.HomeViewModel
 import com.hamza.wallpap.data.screens.hot.HotScreen
 import com.hamza.wallpap.data.screens.search.SearchScreen
+import com.hamza.wallpap.data.screens.search.SearchViewModel
 import com.hamza.wallpap.data.screens.settings.SettingsScreen
+import com.hamza.wallpap.data.screens.settings.SettingsViewModel
 import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreen
+import com.hamza.wallpap.ui.MainScreen
 
-
-@OptIn(ExperimentalPagingApi::class)
+@OptIn(ExperimentalPagingApi::class, ExperimentalCoilApi::class)
 @Composable
 fun NavGraph(navController: NavHostController) {
 
+    val homeViewModel: HomeViewModel = hiltViewModel()
+    val settingsViewModel: SettingsViewModel = hiltViewModel()
+    val searchViewModel: SearchViewModel = hiltViewModel()
+
     NavHost(navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) {
-            HomeScreen(navController)
+            HomeScreen(navController, homeViewModel)
         }
+
+        composable(Screen.Main.route) {
+            MainScreen(navController)
+        }
+
         composable(Screen.Search.route) {
-            SearchScreen(navController = navController)
+            SearchScreen(navController = navController, searchViewModel, homeViewModel)
         }
+
         composable(Screen.Settings.route) {
-            SettingsScreen()
+            SettingsScreen(settingsViewModel)
         }
+
         composable(Screen.Favourite.route) {
             FavouriteScreen()
         }
+
         composable(Screen.Hot.route) {
             HotScreen()
         }
+
         composable(Screen.WallPaperScreen.route,
             arguments = listOf(
                 navArgument("regularUrl") {

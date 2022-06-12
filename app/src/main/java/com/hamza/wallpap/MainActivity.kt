@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
 import com.hamza.wallpap.data.navigation.NavGraph
+import com.hamza.wallpap.ui.MainScreen
 import com.hamza.wallpap.ui.theme.WallPapTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,7 +16,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             WallPapTheme {
                 val navController = rememberNavController()
-                NavGraph(navController = navController)
+//                NavGraph(navController = navController)
+                MainScreen(navController = navController)
             }
         }
     }

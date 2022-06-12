@@ -20,11 +20,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.hamza.wallpap.BuildConfig
 
 @Composable
-fun SettingsScreen(settingsViewModel: SettingsViewmodel = hiltViewModel()) {
+fun SettingsScreen(settingsViewModel: SettingsViewModel) {
     val scaffoldState = rememberScaffoldState()
     var themeExpanded by remember { mutableStateOf(false) }
     val themes = settingsViewModel.themes

@@ -151,12 +151,14 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
                 },
                 modifier = Modifier
                     .padding(8.dp)
-                    .alpha(0.5f),
+//                    .alpha(0.5f)
+                ,
                 backgroundColor = Color.White
             ) {
                 Icon(
                     imageVector = Icons.Default.Download,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = Color.Black
                 )
             }
 
@@ -164,7 +166,8 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
                 onClick = {  },
                 modifier = Modifier
                     .padding(8.dp)
-                    .alpha(0.6f),
+//                    .alpha(0.6f)
+                ,
                 backgroundColor = Color.White
             ) {
                 Icon(
@@ -179,13 +182,14 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
                     setWallPaper(context, fullUrl)
                 },
                 modifier = Modifier
-                    .padding(8.dp)
-                    .alpha(0.5f),
+                    .padding(8.dp),
+//                    .alpha(0.5f),
                 backgroundColor = Color.White
             ) {
                 Icon(
                     imageVector = Icons.Default.ImagesearchRoller,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = Color.Black
                 )
             }
         }
