@@ -16,8 +16,8 @@ import com.hamza.wallpap.data.screens.home.HomeViewModel
 @Composable
 fun SearchScreen(
     navController: NavHostController,
-    searchViewModel: SearchViewModel = hiltViewModel(),
-    homeViewModel: HomeViewModel = hiltViewModel()
+    searchViewModel: SearchViewModel,
+    homeViewModel: HomeViewModel
 ) {
     val searchQuery by searchViewModel.searchQuery
     val searchedImages = searchViewModel.searchedImages.collectAsLazyPagingItems()
