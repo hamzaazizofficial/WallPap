@@ -28,24 +28,26 @@ fun TopBar(
                 else if (currentRoute.equals(Screen.Hot.route)) "Hot"
                 else if (currentRoute.equals(Screen.Favourite.route)) "Favourite"
                 else "Home",
-                color = MaterialTheme.colors.topAppBarContentColor
+                color = MaterialTheme.colors.topAppBarContentColor,
             )
         },
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor,
         actions = {
 
-            IconButton(onClick = onUserDetailsClicked) {
-                Icon(
-                    imageVector = if (homeViewModel.showUserDetails) Icons.Outlined.AccountCircle else Icons.Default.AccountCircle,
-                    contentDescription = "Show user details icon"
-                )
-            }
+            if (!currentRoute.equals(Screen.Settings.route) && !currentRoute.equals(Screen.Favourite.route)) {
+                IconButton(onClick = onUserDetailsClicked) {
+                    Icon(
+                        imageVector = if (homeViewModel.showUserDetails) Icons.Outlined.AccountCircle else Icons.Default.AccountCircle,
+                        contentDescription = "Show user details icon"
+                    )
+                }
 
-            IconButton(onClick = onSearchClicked) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search Icon"
-                )
+                IconButton(onClick = onSearchClicked) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search Icon"
+                    )
+                }
             }
         }
     )
