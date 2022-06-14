@@ -3,6 +3,7 @@ package com.hamza.wallpap.data.screens.home
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Dehaze
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import com.hamza.wallpap.ui.theme.topAppBarContentColor
 @OptIn(ExperimentalPagingApi::class)
 @Composable
 fun TopBar(
+    onNavButtonClick: () -> Unit = {},
     currentRoute: String?,
     onSearchClicked: () -> Unit,
     onUserDetailsClicked: () -> Unit,
@@ -32,6 +34,29 @@ fun TopBar(
             )
         },
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor,
+        navigationIcon = {
+            IconButton(onClick = onNavButtonClick) {
+//                if (currentRoute == Screen.Home.route) {
+                Icon(
+                    imageVector = Icons.Default.Dehaze,
+                    contentDescription = null
+                )
+//                }
+//                if (currentRoute == Screen.Inbox.route) {
+//                    Icon(
+//                        imageVector = Icons.Default.ArrowBack,
+//                        contentDescription = null
+//                    )
+//                }
+//                if (currentRoute == Screen.Settings.route) {
+//                    Icon(
+//                        imageVector = Icons.Default.ArrowBack,
+//                        contentDescription = null
+//                    )
+//                }
+
+            }
+        },
         actions = {
 
             if (!currentRoute.equals(Screen.Settings.route) && !currentRoute.equals(Screen.Favourite.route)) {
