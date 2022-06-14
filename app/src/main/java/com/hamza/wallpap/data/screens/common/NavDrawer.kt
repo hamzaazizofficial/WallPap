@@ -389,7 +389,6 @@ fun NavOption(
                         Spacer(modifier = Modifier.padding(end = 20.dp))
                         Text(
                             text = title,
-//                            color = if (isSystemInDarkTheme()) onPrimaryDark.copy(0.9f) else onPrimary,
                             fontSize = 16.sp,
                             style = MaterialTheme.typography.subtitle1,
                             modifier = Modifier
