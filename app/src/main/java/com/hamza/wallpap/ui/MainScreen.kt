@@ -64,7 +64,7 @@ fun MainScreen(
         }
     ) { padding ->
         Column(Modifier.padding(padding)) {
-            NavGraph(navController = navController)
+            NavGraph(navController = navController, scaffoldState)
         }
     }
 }
