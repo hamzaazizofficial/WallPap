@@ -1,5 +1,6 @@
 package com.hamza.wallpap.data.navigation
 
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -22,7 +23,7 @@ import com.hamza.wallpap.ui.MainScreen
 
 @OptIn(ExperimentalPagingApi::class, ExperimentalCoilApi::class)
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
 
     val homeViewModel: HomeViewModel = hiltViewModel()
     val settingsViewModel: SettingsViewModel = hiltViewModel()
@@ -30,7 +31,7 @@ fun NavGraph(navController: NavHostController) {
 
     NavHost(navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) {
-            HomeScreen(navController, homeViewModel)
+            HomeScreen(navController, homeViewModel, scaffoldState)
         }
 
         composable(Screen.Main.route) {
@@ -42,15 +43,15 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable(Screen.Settings.route) {
-            SettingsScreen(settingsViewModel)
+            SettingsScreen(settingsViewModel, navController, scaffoldState)
         }
 
         composable(Screen.Favourite.route) {
-            FavouriteScreen()
+            FavouriteScreen(navController, scaffoldState)
         }
 
         composable(Screen.Hot.route) {
-            HotScreen()
+            HotScreen(navController, scaffoldState)
         }
 
         composable(Screen.WallPaperScreen.route,

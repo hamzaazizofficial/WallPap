@@ -1,5 +1,6 @@
 package com.hamza.wallpap.data.screens.settings
 
+import androidx.activity.compose.BackHandler
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -20,11 +21,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.hamza.wallpap.BuildConfig
+import kotlinx.coroutines.launch
 
 @Composable
-fun SettingsScreen(settingsViewModel: SettingsViewModel) {
-    val scaffoldState = rememberScaffoldState()
+fun SettingsScreen(
+    settingsViewModel: SettingsViewModel,
+    navController: NavHostController,
+    scaffoldState: ScaffoldState
+) {
+    val scope = rememberCoroutineScope()
     var themeExpanded by remember { mutableStateOf(false) }
     val themes = settingsViewModel.themes
 
@@ -34,6 +41,16 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel) {
     val themeDropDownRotationState by animateFloatAsState(
         targetValue = if (themeExpandedState) 180f else 0f
     )
+
+    BackHandler {
+        if (scaffoldState.drawerState.isOpen) {
+            scope.launch {
+                scaffoldState.drawerState.close()
+            }
+        } else {
+            navController.navigate("home_screen")
+        }
+    }
 
 //    if (settingsViewModel.value.value == themes[1]) {
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
