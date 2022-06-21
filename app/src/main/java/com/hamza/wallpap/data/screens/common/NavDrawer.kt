@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -38,7 +39,7 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
 
     Column(
         modifier = Modifier
-            .background(color = Color.White)
+            .background(color = if (isSystemInDarkTheme()) Color.Black else Color.White)
             .fillMaxHeight()
     ) {
 
@@ -71,18 +72,16 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = Color.Gray.copy(
-                            0.5f
-                        )
+                        color = if (isSystemInDarkTheme()) Color.White else Color.Gray.copy(0.5f)
                     )
                     .height(160.dp)
                     .layoutId("bgnavimg")
             )
             Image(
-                painterResource(id = R.drawable.loading),
+                painterResource(id = R.drawable.picture),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
-                colorFilter = ColorFilter.tint(Color.Black),
+//                colorFilter = ColorFilter.tint(Color.Black),
                 modifier = Modifier
                     .padding(start = 30.dp, top = 2.dp, bottom = 16.dp)
                     .height(70.dp)
@@ -137,7 +136,7 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
 
         Text(
             text = "More",
-            color = Color.Black,
+            color = if (isSystemInDarkTheme()) Color.White else Color.Black,
             fontSize = 17.sp,
             style = TextStyle(
                 fontSize = MaterialTheme.typography.subtitle1.fontSize,
@@ -212,12 +211,12 @@ fun NavOption(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = Color.Black,
+                tint = if (isSystemInDarkTheme()) Color.White else Color.Black,
             )
             Spacer(modifier = Modifier.padding(end = 20.dp))
             Text(
                 text = title,
-                color = Color.Black,
+                color = if (isSystemInDarkTheme()) Color.White else Color.Black,
                 fontSize = 16.sp,
                 style = MaterialTheme.typography.subtitle1,
                 modifier = Modifier
