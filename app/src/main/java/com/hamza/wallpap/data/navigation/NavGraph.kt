@@ -3,6 +3,7 @@ package com.hamza.wallpap.data.navigation
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -10,10 +11,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.paging.ExperimentalPagingApi
 import coil.annotation.ExperimentalCoilApi
+import com.hamza.wallpap.data.screens.common.SearchChipsViewModel
 import com.hamza.wallpap.data.screens.favourite.FavouriteScreen
 import com.hamza.wallpap.data.screens.home.HomeScreen
 import com.hamza.wallpap.data.screens.home.HomeViewModel
 import com.hamza.wallpap.data.screens.hot.HotScreen
+import com.hamza.wallpap.data.screens.hot.HotViewModel
 import com.hamza.wallpap.data.screens.search.SearchScreen
 import com.hamza.wallpap.data.screens.search.SearchViewModel
 import com.hamza.wallpap.data.screens.settings.SettingsScreen
@@ -28,6 +31,8 @@ fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
     val homeViewModel: HomeViewModel = hiltViewModel()
     val settingsViewModel: SettingsViewModel = hiltViewModel()
     val searchViewModel: SearchViewModel = hiltViewModel()
+    val hotViewModel: HotViewModel = viewModel()
+//    val searchChipsViewModel: SearchChipsViewModel = hiltViewModel()
 
     NavHost(navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) {
@@ -51,7 +56,7 @@ fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
         }
 
         composable(Screen.Hot.route) {
-            HotScreen(navController, scaffoldState)
+            HotScreen(navController, scaffoldState, hotViewModel)
         }
 
         composable(Screen.WallPaperScreen.route,

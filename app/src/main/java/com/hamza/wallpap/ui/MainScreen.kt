@@ -18,13 +18,15 @@ import com.hamza.wallpap.data.screens.common.NavDrawer
 import com.hamza.wallpap.data.screens.home.BottomBar
 import com.hamza.wallpap.data.screens.home.TopBar
 import com.hamza.wallpap.data.screens.home.HomeViewModel
+import com.hamza.wallpap.data.screens.hot.HotViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagingApi::class)
 @Composable
 fun MainScreen(
     navController: NavHostController,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    hotViewModel: HotViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -48,9 +50,15 @@ fun MainScreen(
                         navController.navigate(Screen.Search.route)
                     },
                     onUserDetailsClicked = {
-                        homeViewModel.showUserDetails = !homeViewModel.showUserDetails
+                        if (currentRoute.equals(Screen.Home.route)) {
+                            homeViewModel.showUserDetails = !homeViewModel.showUserDetails
+                        }
+                        if (currentRoute.equals(Screen.Hot.route)){
+                            hotViewModel.showUserDetails = !hotViewModel.showUserDetails
+                        }
                     },
-                    homeViewModel
+                    homeViewModel,
+                    hotViewModel
                 )
             }
         },

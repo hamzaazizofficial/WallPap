@@ -11,9 +11,7 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -21,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -35,29 +32,28 @@ import androidx.paging.compose.LazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.R
-import com.hamza.wallpap.data.screens.home.HomeViewModel
+import com.hamza.wallpap.data.screens.hot.HotViewModel
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.theme.HeartRed
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalPagingApi::class)
-@ExperimentalCoilApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ListContent(
+fun HotListContent(
     items: LazyPagingItems<UnsplashImage>,
     navController: NavHostController,
-    homeViewModel: HomeViewModel
+    hotViewModel: HotViewModel
 ) {
     Log.d("Error", items.loadState.toString())
 
     LazyVerticalGrid(cells = GridCells.Fixed(2)) {
         items(items.itemCount) {
             items[it]?.let { unsplashImage ->
-                UnsplashItem(
+                HotUnsplashItem(
                     unsplashImage = unsplashImage,
                     navController,
-                    homeViewModel
+                    hotViewModel
                 )
             }
         }
@@ -67,10 +63,10 @@ fun ListContent(
 @OptIn(ExperimentalPagingApi::class)
 @ExperimentalCoilApi
 @Composable
-fun UnsplashItem(
+fun HotUnsplashItem(
     unsplashImage: UnsplashImage,
     navController: NavHostController,
-    homeViewModel: HomeViewModel
+    hotViewModel: HotViewModel
 ) {
 
     val regularUrl = unsplashImage.urls.regular
@@ -108,8 +104,7 @@ fun UnsplashItem(
                 contentScale = ContentScale.Crop
             )
 
-            if (homeViewModel.showUserDetails) {
-
+            if (hotViewModel.showUserDetails) {
                 Surface(
                     modifier = Modifier
                         .height(40.dp)
@@ -154,7 +149,7 @@ fun UnsplashItem(
 }
 
 @Composable
-fun LikeCounter(
+fun HotLikeCounter(
     modifier: Modifier,
     painter: Painter,
     likes: String

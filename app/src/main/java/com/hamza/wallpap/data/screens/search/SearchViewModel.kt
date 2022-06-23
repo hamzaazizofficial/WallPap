@@ -22,17 +22,17 @@ class SearchViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    val wallpaperItems =
-        arrayListOf(
-            SearchChip("Popular", ""),
-            SearchChip("Night", "Night"),
-            SearchChip("Mobile", "Android Wallpapers"),
-            SearchChip("Anime", "Anime"),
-            SearchChip("Dark", "Dark"),
-            SearchChip("Nature", "Nature"),
-        )
-
-    var selectedIndex = mutableStateOf(0)
+//    val wallpaperItems =
+//        arrayListOf(
+//            SearchChip("Popular", "wallpaper"),
+//            SearchChip("Night", "Night"),
+//            SearchChip("Mobile", "Android Wallpapers"),
+//            SearchChip("Anime", "Anime"),
+//            SearchChip("Dark", "Dark"),
+//            SearchChip("Nature", "Nature"),
+//        )
+//
+//    var selectedIndex = mutableStateOf(0)
 
     private val _searchQuery = mutableStateOf("")
     val searchQuery = _searchQuery
