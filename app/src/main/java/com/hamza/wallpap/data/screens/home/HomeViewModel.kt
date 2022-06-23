@@ -19,7 +19,7 @@ class HomeViewModel @Inject constructor(
     repository: Repository
 ) : ViewModel() {
 
-    val query = MutableStateFlow<String?>(null)
+    val query = MutableStateFlow<String?>("wallpaper")
 
     var showUserDetails by mutableStateOf(false)
 

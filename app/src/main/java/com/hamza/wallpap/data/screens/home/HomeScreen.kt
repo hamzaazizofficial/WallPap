@@ -13,14 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
-import com.hamza.wallpap.data.screens.common.ListContent
+import com.hamza.wallpap.data.screens.common.HomeListContent
 import com.hamza.wallpap.data.screens.common.SearchChips
-import com.hamza.wallpap.data.screens.search.SearchViewModel
+import com.hamza.wallpap.data.screens.common.SearchChipsViewModel
 import kotlinx.coroutines.launch
 
 @ExperimentalCoilApi
@@ -31,10 +31,9 @@ fun HomeScreen(
     homeViewModel: HomeViewModel,
     scaffoldState: ScaffoldState
 ) {
-    val searchViewModel: SearchViewModel = hiltViewModel()
-    val items = homeViewModel.itemsFlow.collectAsLazyPagingItems()
     val scope = rememberCoroutineScope()
     val activity = (LocalContext.current as? Activity)
+    val searchChipsViewModel: SearchChipsViewModel = viewModel()
 
     BackHandler {
         if (scaffoldState.drawerState.isOpen) {
@@ -56,18 +55,18 @@ fun HomeScreen(
                 .padding(horizontal = 7.dp, vertical = 7.dp)
                 .horizontalScroll(rememberScrollState())
         ) {
-            searchViewModel.wallpaperItems.forEachIndexed { index, s ->
+            searchChipsViewModel.wallpaperItems.forEachIndexed { index, s ->
                 SearchChips(
                     text = s.title,
-                    selected = searchViewModel.selectedIndex.value == index,
+                    selected = searchChipsViewModel.selectedIndex.value == index,
                     onClick = {
-                        searchViewModel.selectedIndex.value = index
-                        homeViewModel.query.value = searchViewModel.wallpaperItems[index].query
+                        searchChipsViewModel.selectedIndex.value = index
+                        homeViewModel.query.value = searchChipsViewModel.wallpaperItems[index].query
                     }
                 )
                 Spacer(modifier = Modifier.padding(horizontal = 10.dp))
             }
         }
-        ListContent(items = items, navController, homeViewModel)
+        HomeListContent(items = homeViewModel.itemsFlow.collectAsLazyPagingItems(), navController, homeViewModel)
     }
 }

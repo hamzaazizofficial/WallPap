@@ -9,6 +9,7 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.navigation.Screen
+import com.hamza.wallpap.data.screens.hot.HotViewModel
 import com.hamza.wallpap.ui.theme.topAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.topAppBarContentColor
 
@@ -19,7 +20,8 @@ fun TopBar(
     currentRoute: String?,
     onSearchClicked: () -> Unit,
     onUserDetailsClicked: () -> Unit,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    hotViewModel: HotViewModel
 ) {
     TopAppBar(
         title = {
@@ -36,35 +38,28 @@ fun TopBar(
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor,
         navigationIcon = {
             IconButton(onClick = onNavButtonClick) {
-//                if (currentRoute == Screen.Home.route) {
                 Icon(
                     imageVector = Icons.Default.Dehaze,
                     contentDescription = null
                 )
-//                }
-//                if (currentRoute == Screen.Inbox.route) {
-//                    Icon(
-//                        imageVector = Icons.Default.ArrowBack,
-//                        contentDescription = null
-//                    )
-//                }
-//                if (currentRoute == Screen.Settings.route) {
-//                    Icon(
-//                        imageVector = Icons.Default.ArrowBack,
-//                        contentDescription = null
-//                    )
-//                }
-
             }
         },
         actions = {
 
             if (!currentRoute.equals(Screen.Settings.route) && !currentRoute.equals(Screen.Favourite.route)) {
                 IconButton(onClick = onUserDetailsClicked) {
-                    Icon(
-                        imageVector = if (homeViewModel.showUserDetails) Icons.Outlined.AccountCircle else Icons.Default.AccountCircle,
-                        contentDescription = "Show user details icon"
-                    )
+                    if (currentRoute.equals(Screen.Home.route)) {
+                        Icon(
+                            imageVector = if (homeViewModel.showUserDetails) Icons.Outlined.AccountCircle else Icons.Default.AccountCircle,
+                            contentDescription = "Show user details icon"
+                        )
+                    }
+                    if (currentRoute.equals(Screen.Hot.route)) {
+                        Icon(
+                            imageVector = if (hotViewModel.showUserDetails) Icons.Outlined.AccountCircle else Icons.Default.AccountCircle,
+                            contentDescription = "Show user details icon"
+                        )
+                    }
                 }
 
                 IconButton(onClick = onSearchClicked) {
