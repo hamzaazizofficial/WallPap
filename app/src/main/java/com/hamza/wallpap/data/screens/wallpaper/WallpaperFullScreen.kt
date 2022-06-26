@@ -27,6 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -35,6 +36,7 @@ import java.net.URL
 
 @Composable
 fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
+    val scope = rememberCoroutineScope()
     Box(
         Modifier
             .fillMaxSize()
@@ -148,6 +150,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
             FloatingActionButton(
                 onClick = {
                     saveMediaToStorage(image, context)
+//                    Log.d("checkUrl", urlValue.toString())
                 },
                 modifier = Modifier
                     .padding(8.dp)
@@ -163,7 +166,10 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
             }
 
             FloatingActionButton(
-                onClick = {  },
+                onClick = {
+//                    scope.launch {
+//                    }
+                },
                 modifier = Modifier
                     .padding(8.dp)
 //                    .alpha(0.6f)
