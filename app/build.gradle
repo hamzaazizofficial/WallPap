@@ -62,6 +62,9 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.1'
     kapt "com.google.dagger:hilt-android-compiler:2.38.1"
 
+    // DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
