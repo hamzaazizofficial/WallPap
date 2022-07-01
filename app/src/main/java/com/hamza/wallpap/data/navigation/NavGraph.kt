@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.paging.ExperimentalPagingApi
 import coil.annotation.ExperimentalCoilApi
+import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.screens.favourite.FavouriteScreen
 import com.hamza.wallpap.data.screens.home.HomeScreen
 import com.hamza.wallpap.data.screens.home.HomeViewModel
@@ -31,6 +32,7 @@ fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
     val settingsViewModel: SettingsViewModel = hiltViewModel()
     val searchViewModel: SearchViewModel = hiltViewModel()
     val hotViewModel: HotViewModel = viewModel()
+    val favUrlsViewModel: FavUrlsViewModel = viewModel()
 //    val searchChipsViewModel: SearchChipsViewModel = hiltViewModel()
 
     NavHost(navController, startDestination = Screen.Home.route) {
@@ -51,7 +53,7 @@ fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
         }
 
         composable(Screen.Favourite.route) {
-            FavouriteScreen(navController, scaffoldState)
+            FavouriteScreen(favUrlsViewModel,navController, scaffoldState)
         }
 
         composable(Screen.Hot.route) {
