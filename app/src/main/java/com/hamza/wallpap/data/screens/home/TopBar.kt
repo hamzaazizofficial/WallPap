@@ -2,14 +2,13 @@ package com.hamza.wallpap.data.screens.home
 
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Dehaze
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.paging.ExperimentalPagingApi
+import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.navigation.Screen
-import com.hamza.wallpap.data.screens.hot.HotViewModel
+import com.hamza.wallpap.data.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.topAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.topAppBarContentColor
 
@@ -21,7 +20,8 @@ fun TopBar(
     onSearchClicked: () -> Unit,
     onUserDetailsClicked: () -> Unit,
     homeViewModel: HomeViewModel,
-    hotViewModel: HotViewModel
+    randomScreenViewModel: RandomScreenViewModel,
+    favUrlsViewModel: FavUrlsViewModel
 ) {
     TopAppBar(
         title = {
@@ -29,7 +29,7 @@ fun TopBar(
                 text =
                 if (currentRoute.equals(Screen.Home.route)) "Home"
                 else if (currentRoute.equals(Screen.Settings.route)) "Settings"
-                else if (currentRoute.equals(Screen.Hot.route)) "Hot"
+                else if (currentRoute.equals(Screen.Random.route)) "Random"
                 else if (currentRoute.equals(Screen.Favourite.route)) "Favourite"
                 else "Home",
                 color = MaterialTheme.colors.topAppBarContentColor,
@@ -46,7 +46,7 @@ fun TopBar(
         },
         actions = {
 
-            if (!currentRoute.equals(Screen.Settings.route) && !currentRoute.equals(Screen.Favourite.route)) {
+            if (!currentRoute.equals(Screen.Settings.route)) {
                 IconButton(onClick = onUserDetailsClicked) {
                     if (currentRoute.equals(Screen.Home.route)) {
                         Icon(
@@ -54,19 +54,32 @@ fun TopBar(
                             contentDescription = "Show user details icon"
                         )
                     }
-                    if (currentRoute.equals(Screen.Hot.route)) {
+                    if (currentRoute.equals(Screen.Random.route)) {
                         Icon(
-                            imageVector = if (hotViewModel.showUserDetails) Icons.Outlined.AccountCircle else Icons.Default.AccountCircle,
+                            imageVector = if (randomScreenViewModel.showUserDetails) Icons.Outlined.AccountCircle else Icons.Default.AccountCircle,
                             contentDescription = "Show user details icon"
                         )
                     }
                 }
 
-                IconButton(onClick = onSearchClicked) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search Icon"
-                    )
+                if (currentRoute.equals(Screen.Favourite.route)) {
+                    IconButton(onClick = {
+                        favUrlsViewModel.deleteAllFavouriteUrls()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.DeleteSweep,
+                            contentDescription = "Show user details icon"
+                        )
+                    }
+                }
+
+                if (!currentRoute.equals(Screen.Settings.route) && !currentRoute.equals(Screen.Favourite.route)) {
+                    IconButton(onClick = onSearchClicked) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search Icon"
+                        )
+                    }
                 }
             }
         }

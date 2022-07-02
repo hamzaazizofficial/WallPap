@@ -11,11 +11,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.paging.ExperimentalPagingApi
 import coil.annotation.ExperimentalCoilApi
+import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.screens.favourite.FavouriteScreen
 import com.hamza.wallpap.data.screens.home.HomeScreen
 import com.hamza.wallpap.data.screens.home.HomeViewModel
-import com.hamza.wallpap.data.screens.hot.HotScreen
-import com.hamza.wallpap.data.screens.hot.HotViewModel
+import com.hamza.wallpap.data.screens.random.RandomScreen
+import com.hamza.wallpap.data.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.data.screens.search.SearchScreen
 import com.hamza.wallpap.data.screens.search.SearchViewModel
 import com.hamza.wallpap.data.screens.settings.SettingsScreen
@@ -30,7 +31,8 @@ fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
     val homeViewModel: HomeViewModel = hiltViewModel()
     val settingsViewModel: SettingsViewModel = hiltViewModel()
     val searchViewModel: SearchViewModel = hiltViewModel()
-    val hotViewModel: HotViewModel = viewModel()
+    val randomScreenViewModel: RandomScreenViewModel = viewModel()
+    val favUrlsViewModel: FavUrlsViewModel = viewModel()
 //    val searchChipsViewModel: SearchChipsViewModel = hiltViewModel()
 
     NavHost(navController, startDestination = Screen.Home.route) {
@@ -51,11 +53,11 @@ fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
         }
 
         composable(Screen.Favourite.route) {
-            FavouriteScreen(navController, scaffoldState)
+            FavouriteScreen(favUrlsViewModel,navController, scaffoldState)
         }
 
-        composable(Screen.Hot.route) {
-            HotScreen(navController, scaffoldState, hotViewModel)
+        composable(Screen.Random.route) {
+            RandomScreen(navController, scaffoldState, randomScreenViewModel)
         }
 
         composable(Screen.WallPaperScreen.route,

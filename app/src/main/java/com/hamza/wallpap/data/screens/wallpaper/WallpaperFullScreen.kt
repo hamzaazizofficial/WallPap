@@ -26,7 +26,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
+import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
+import com.hamza.wallpap.model.FavouriteUrls
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -37,6 +40,7 @@ import java.net.URL
 @Composable
 fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
     val scope = rememberCoroutineScope()
+    var viewModel: FavUrlsViewModel = viewModel()
     Box(
         Modifier
             .fillMaxSize()
@@ -165,10 +169,11 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
                 )
             }
 
+            val favUrl = FavouriteUrls(0,fullUrl)
+
             FloatingActionButton(
                 onClick = {
-//                    scope.launch {
-//                    }
+                    viewModel.addToFav(favUrl)
                 },
                 modifier = Modifier
                     .padding(8.dp)

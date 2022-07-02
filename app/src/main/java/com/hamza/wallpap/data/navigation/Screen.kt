@@ -10,6 +10,6 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object WallPaperScreen : Screen("wallpaper_screen/{regularUrl}/{fullUrl}","Wallpaper", Icons.Default.Wallpaper)
     object Search : Screen("search_screen","Search", Icons.Default.Search)
     object Settings : Screen("settings_screen","Settings", Icons.Default.Settings)
-    object Hot : Screen("hot", "Hot", Icons.Default.Whatshot)
+    object Random : Screen("random", "Random", Icons.Default.AutoAwesome)
     object Favourite: Screen("favourite", "Favourite", Icons.Default.Favorite)
 }

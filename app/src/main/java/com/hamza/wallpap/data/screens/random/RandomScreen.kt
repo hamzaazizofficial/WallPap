@@ -1,4 +1,4 @@
-package com.hamza.wallpap.data.screens.hot
+package com.hamza.wallpap.data.screens.random
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -11,17 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.hamza.wallpap.data.screens.common.HotListContent
+import com.hamza.wallpap.data.screens.common.RandomListContent
 import kotlinx.coroutines.launch
 
 @Composable
-fun HotScreen(
+fun RandomScreen(
     navController: NavHostController,
     scaffoldState: ScaffoldState,
-    hotViewModel: HotViewModel
+    randomScreenViewModel: RandomScreenViewModel
 ) {
     val scope = rememberCoroutineScope()
-    val items = hotViewModel.itemsFlow.collectAsLazyPagingItems()
+    val items = randomScreenViewModel.itemsFlow.collectAsLazyPagingItems()
     BackHandler {
         if (scaffoldState.drawerState.isOpen) {
             scope.launch {
@@ -35,6 +35,6 @@ fun HotScreen(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.background(Color.Black)
     ) {
-        HotListContent(items = items, navController, hotViewModel)
+        RandomListContent(items = items, navController, randomScreenViewModel)
     }
 }
