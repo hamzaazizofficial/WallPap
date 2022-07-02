@@ -15,7 +15,7 @@ fun BottomBar(
 ) {
     val items = listOf(
         Screen.Home,
-        Screen.Hot,
+        Screen.Random,
         Screen.Favourite,
         Screen.Settings,
     )

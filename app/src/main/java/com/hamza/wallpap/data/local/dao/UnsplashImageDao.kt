@@ -2,10 +2,7 @@ package com.hamza.wallpap.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.model.UnsplashImage
 
@@ -23,6 +20,12 @@ interface UnsplashImageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addToFavourites(favouriteUrls: FavouriteUrls)
+
+    @Delete
+    suspend fun deleteFavouriteUrl(favouriteUrls: FavouriteUrls)
+
+    @Query("DELETE FROM unsplash_fav_urls_table")
+    suspend fun deleteAllFavUrls()
 
     @Query("DELETE FROM unsplash_image_table")
     suspend fun deleteAllImages()

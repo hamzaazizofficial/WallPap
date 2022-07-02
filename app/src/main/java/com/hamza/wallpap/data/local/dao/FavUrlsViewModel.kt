@@ -29,4 +29,16 @@ class FavUrlsViewModel(
             repository.addFavUrl(favouriteUrls)
         }
     }
+
+    fun deleteFavouriteUrl(favouriteUrls: FavouriteUrls) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteFavUrl(favouriteUrls)
+        }
+    }
+
+    fun deleteAllFavouriteUrls(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllFavUrls()
+        }
+    }
 }

@@ -11,4 +11,12 @@ class FavUrlsRepository(private val unsplashImageDao: UnsplashImageDao) {
     suspend fun addFavUrl(favUrls: FavouriteUrls){
         unsplashImageDao.addToFavourites(favUrls)
     }
+
+    suspend fun deleteFavUrl(favUrls: FavouriteUrls){
+        unsplashImageDao.deleteFavouriteUrl(favUrls)
+    }
+
+    suspend fun deleteAllFavUrls(){
+        unsplashImageDao.deleteAllFavUrls()
+    }
 }

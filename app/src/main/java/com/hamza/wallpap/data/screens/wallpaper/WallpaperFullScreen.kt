@@ -171,12 +171,8 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
 
             val favUrl = FavouriteUrls(0,fullUrl)
 
-
-
             FloatingActionButton(
                 onClick = {
-//                    scope.launch {
-//                    }
                     viewModel.addToFav(favUrl)
                 },
                 modifier = Modifier

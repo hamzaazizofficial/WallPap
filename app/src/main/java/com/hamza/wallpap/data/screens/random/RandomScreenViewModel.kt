@@ -1,4 +1,4 @@
-package com.hamza.wallpap.data.screens.hot
+package com.hamza.wallpap.data.screens.random
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 @HiltViewModel
-class HotViewModel @Inject constructor(
+class RandomScreenViewModel @Inject constructor(
     repository: Repository
 ) : ViewModel() {
     var showUserDetails by mutableStateOf(false)

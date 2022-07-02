@@ -12,13 +12,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.paging.ExperimentalPagingApi
+import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.navigation.NavGraph
 import com.hamza.wallpap.data.navigation.Screen
 import com.hamza.wallpap.data.screens.common.NavDrawer
 import com.hamza.wallpap.data.screens.home.BottomBar
 import com.hamza.wallpap.data.screens.home.TopBar
 import com.hamza.wallpap.data.screens.home.HomeViewModel
-import com.hamza.wallpap.data.screens.hot.HotViewModel
+import com.hamza.wallpap.data.screens.random.RandomScreenViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagingApi::class)
@@ -26,7 +27,8 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     navController: NavHostController,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    hotViewModel: HotViewModel = hiltViewModel()
+    randomScreenViewModel: RandomScreenViewModel = hiltViewModel(),
+    favUrlsViewModel: FavUrlsViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -53,12 +55,13 @@ fun MainScreen(
                         if (currentRoute.equals(Screen.Home.route)) {
                             homeViewModel.showUserDetails = !homeViewModel.showUserDetails
                         }
-                        if (currentRoute.equals(Screen.Hot.route)){
-                            hotViewModel.showUserDetails = !hotViewModel.showUserDetails
+                        if (currentRoute.equals(Screen.Random.route)){
+                            randomScreenViewModel.showUserDetails = !randomScreenViewModel.showUserDetails
                         }
                     },
                     homeViewModel,
-                    hotViewModel
+                    randomScreenViewModel,
+                    favUrlsViewModel
                 )
             }
         },

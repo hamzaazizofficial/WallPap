@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
@@ -32,25 +31,24 @@ import androidx.paging.compose.LazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.R
-import com.hamza.wallpap.data.screens.hot.HotViewModel
+import com.hamza.wallpap.data.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.model.UnsplashImage
-import com.hamza.wallpap.ui.theme.HeartRed
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HotListContent(
+fun RandomListContent(
     items: LazyPagingItems<UnsplashImage>,
     navController: NavHostController,
-    hotViewModel: HotViewModel
+    hotViewModel: RandomScreenViewModel
 ) {
     Log.d("Error", items.loadState.toString())
 
     LazyVerticalGrid(cells = GridCells.Fixed(2)) {
         items(items.itemCount) {
             items[it]?.let { unsplashImage ->
-                HotUnsplashItem(
+                RandomUnsplashItem(
                     unsplashImage = unsplashImage,
                     navController,
                     hotViewModel
@@ -63,10 +61,10 @@ fun HotListContent(
 @OptIn(ExperimentalPagingApi::class)
 @ExperimentalCoilApi
 @Composable
-fun HotUnsplashItem(
+fun RandomUnsplashItem(
     unsplashImage: UnsplashImage,
     navController: NavHostController,
-    hotViewModel: HotViewModel
+    hotViewModel: RandomScreenViewModel
 ) {
 
     val regularUrl = unsplashImage.urls.regular
@@ -148,30 +146,30 @@ fun HotUnsplashItem(
 
 }
 
-@Composable
-fun HotLikeCounter(
-    modifier: Modifier,
-    painter: Painter,
-    likes: String
-) {
-    Row(
-        modifier = modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End
-    ) {
-        Icon(
-            painter = painter,
-            contentDescription = "Heart Icon",
-            tint = HeartRed
-        )
-        Divider(modifier = Modifier.width(6.dp))
-        Text(
-            text = likes,
-            color = Color.White,
-            fontSize = MaterialTheme.typography.subtitle1.fontSize,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
-}
+//@Composable
+//fun HotLikeCounter(
+//    modifier: Modifier,
+//    painter: Painter,
+//    likes: String
+//) {
+//    Row(
+//        modifier = modifier.fillMaxSize(),
+//        verticalAlignment = Alignment.CenterVertically,
+//        horizontalArrangement = Arrangement.End
+//    ) {
+//        Icon(
+//            painter = painter,
+//            contentDescription = "Heart Icon",
+//            tint = HeartRed
+//        )
+//        Divider(modifier = Modifier.width(6.dp))
+//        Text(
+//            text = likes,
+//            color = Color.White,
+//            fontSize = MaterialTheme.typography.subtitle1.fontSize,
+//            fontWeight = FontWeight.Bold,
+//            maxLines = 1,
+//            overflow = TextOverflow.Ellipsis
+//        )
+//    }
+//}

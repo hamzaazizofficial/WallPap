@@ -2,13 +2,17 @@ package com.hamza.wallpap.data.screens.favourite
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -32,13 +36,13 @@ fun FavouriteScreen(
 
     LazyVerticalGrid(cells = GridCells.Fixed(2)) {
         items(data.value) { favUrl ->
-            FavouriteItem(favUrl)
+            FavouriteItem(favUrl, favUrlsViewModel)
         }
     }
 }
 
 @Composable
-fun FavouriteItem(favUrl: FavouriteUrls) {
+fun FavouriteItem(favUrl: FavouriteUrls, favUrlsViewModel: FavUrlsViewModel) {
     val painter = rememberImagePainter(data = favUrl.full) {
         crossfade(durationMillis = 1000)
         error(R.drawable.ic_placeholder)
@@ -59,12 +63,24 @@ fun FavouriteItem(favUrl: FavouriteUrls) {
                 .fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter
         ) {
-
             Image(
                 modifier = Modifier.fillMaxSize(),
                 painter = painter,
                 contentDescription = "Unsplash Image",
                 contentScale = ContentScale.Crop
+            )
+
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = null,
+                modifier = Modifier
+                    .align(
+                        Alignment.TopEnd
+                    )
+                    .padding(10.dp)
+                    .clickable {
+                        favUrlsViewModel.deleteFavouriteUrl(favUrl)
+                    }
             )
 
 //            if (homeViewModel.showUserDetails) {
