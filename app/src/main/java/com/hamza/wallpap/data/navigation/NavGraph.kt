@@ -13,6 +13,7 @@ import androidx.paging.ExperimentalPagingApi
 import coil.annotation.ExperimentalCoilApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.screens.favourite.FavouriteScreen
+import com.hamza.wallpap.data.screens.favourite.FavouriteWallpaperFullScreen
 import com.hamza.wallpap.data.screens.home.HomeScreen
 import com.hamza.wallpap.data.screens.home.HomeViewModel
 import com.hamza.wallpap.data.screens.random.RandomScreen
@@ -75,6 +76,19 @@ fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
             val fullUrl = it.arguments?.getString("fullUrl")
             if (regularUrl != null && fullUrl != null) {
                 WallpaperFullScreen(regularUrl, fullUrl)
+            }
+        }
+
+        composable(Screen.FavouriteWallPaperScreen.route,
+            arguments = listOf(
+                navArgument("fullUrl") {
+                    nullable = true
+                    type = NavType.StringType
+                }
+            )) {
+            val fullUrl = it.arguments?.getString("fullUrl")
+            if (fullUrl != null) {
+                FavouriteWallpaperFullScreen(fullUrl)
             }
         }
     }
