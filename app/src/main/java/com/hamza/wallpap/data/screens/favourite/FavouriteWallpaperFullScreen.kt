@@ -1,4 +1,5 @@
-package com.hamza.wallpap.data.screens.wallpaper
+package com.hamza.wallpap.data.screens.favourite
+
 
 import android.app.WallpaperManager
 import android.content.ContentValues
@@ -26,21 +27,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
+import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.model.FavouriteUrls
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.net.URL
 
-
 @Composable
-fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
+fun FavouriteWallpaperFullScreen(fullUrl: String) {
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
+    val favUrlsViewModel: FavUrlsViewModel = hiltViewModel()
     val scope = rememberCoroutineScope()
-    var viewModel: FavUrlsViewModel = viewModel()
     Box(
         Modifier
             .fillMaxSize()
@@ -48,7 +50,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
         contentAlignment = Alignment.BottomCenter
     ) {
 
-        var data by remember { mutableStateOf(regularUrl) }
+        var data by remember { mutableStateOf(fullUrl) }
 
         val context = LocalContext.current
 
@@ -170,9 +172,12 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
 
             FloatingActionButton(
                 onClick = {
-                    wallpaperFullScreenViewModel.id += 1
-                    val favUrl = FavouriteUrls(wallpaperFullScreenViewModel.id, fullUrl)
-                    viewModel.addToFav(favUrl)
+                    favUrlsViewModel.deleteFavouriteUrl(
+                        FavouriteUrls(
+                            wallpaperFullScreenViewModel.id,
+                            fullUrl
+                        )
+                    )
                 },
                 modifier = Modifier
                     .padding(8.dp)
@@ -181,7 +186,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
                 backgroundColor = Color.White
             ) {
                 Icon(
-                    imageVector = Icons.Default.Favorite,
+                    imageVector = Icons.Default.Delete,
                     contentDescription = null,
                     tint = Color.Red
                 )
@@ -274,4 +279,3 @@ fun saveMediaToStorage(bitmap: Bitmap, context: Context) {
         Toast.makeText(context, "Saved to Gallery!", Toast.LENGTH_SHORT).show()
     }
 }
-

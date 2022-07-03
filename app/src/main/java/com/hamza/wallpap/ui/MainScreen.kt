@@ -39,7 +39,8 @@ fun MainScreen(
         topBar = {
             if (
                 !currentRoute.equals(Screen.Search.route) &&
-                !currentRoute.equals(Screen.WallPaperScreen.route)
+                !currentRoute.equals(Screen.WallPaperScreen.route) &&
+                !currentRoute.equals(Screen.FavouriteWallPaperScreen.route)
             ) {
                 TopBar(
                     onNavButtonClick = {
@@ -55,8 +56,9 @@ fun MainScreen(
                         if (currentRoute.equals(Screen.Home.route)) {
                             homeViewModel.showUserDetails = !homeViewModel.showUserDetails
                         }
-                        if (currentRoute.equals(Screen.Random.route)){
-                            randomScreenViewModel.showUserDetails = !randomScreenViewModel.showUserDetails
+                        if (currentRoute.equals(Screen.Random.route)) {
+                            randomScreenViewModel.showUserDetails =
+                                !randomScreenViewModel.showUserDetails
                         }
                     },
                     homeViewModel,
@@ -66,7 +68,11 @@ fun MainScreen(
             }
         },
         bottomBar = {
-            if (!currentRoute.equals(Screen.Search.route) && !currentRoute.equals(Screen.WallPaperScreen.route)) {
+            if (
+                !currentRoute.equals(Screen.Search.route) &&
+                !currentRoute.equals(Screen.WallPaperScreen.route) &&
+                !currentRoute.equals(Screen.FavouriteWallPaperScreen.route)
+            ) {
                 BottomBar(navController = navController)
             }
         },
