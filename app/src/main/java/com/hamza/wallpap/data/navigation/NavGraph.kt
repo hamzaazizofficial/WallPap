@@ -23,11 +23,15 @@ import com.hamza.wallpap.data.screens.search.SearchViewModel
 import com.hamza.wallpap.data.screens.settings.SettingsScreen
 import com.hamza.wallpap.data.screens.settings.SettingsViewModel
 import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreen
-import com.hamza.wallpap.ui.MainScreen
+import com.hamza.wallpap.util.WallPapTheme
 
 @OptIn(ExperimentalPagingApi::class, ExperimentalCoilApi::class)
 @Composable
-fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
+fun NavGraph(
+    navController: NavHostController,
+    scaffoldState: ScaffoldState,
+    onItemSelected: (WallPapTheme) -> Unit
+) {
 
     val homeViewModel: HomeViewModel = hiltViewModel()
     val settingsViewModel: SettingsViewModel = hiltViewModel()
@@ -41,16 +45,16 @@ fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
             HomeScreen(navController, homeViewModel, scaffoldState)
         }
 
-        composable(Screen.Main.route) {
-            MainScreen(navController)
-        }
+//        composable(Screen.Main.route) {
+//            MainScreen(navController)
+//        }
 
         composable(Screen.Search.route) {
             SearchScreen(navController = navController, searchViewModel, homeViewModel)
         }
 
         composable(Screen.Settings.route) {
-            SettingsScreen(settingsViewModel, navController, scaffoldState)
+            SettingsScreen(settingsViewModel, navController, scaffoldState, onItemSelected)
         }
 
         composable(Screen.Favourite.route) {
