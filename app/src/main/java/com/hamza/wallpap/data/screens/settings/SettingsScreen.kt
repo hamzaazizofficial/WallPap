@@ -3,14 +3,13 @@ package com.hamza.wallpap.data.screens.settings
 import androidx.activity.compose.BackHandler
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,13 +22,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.hamza.wallpap.BuildConfig
+import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(
     settingsViewModel: SettingsViewModel,
     navController: NavHostController,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
+    onItemSelected: (WallPapTheme) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     var themeExpanded by remember { mutableStateOf(false) }
@@ -53,13 +54,15 @@ fun SettingsScreen(
     }
 
 //    if (settingsViewModel.value.value == themes[1]) {
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//        onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_NIGHT.ordinal))
+////        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 ////        ThemeState.isLight = false
 //
 //    }
-//
+////
 //    if (settingsViewModel.value.value == themes[0]) {
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//        onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_DAY.ordinal))
+////        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 ////        ThemeState.isLight = true
 //    }
 
@@ -72,7 +75,7 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .background(Color.Black)
+                .background(Color.Green)
                 .padding(12.dp),
             verticalArrangement = Arrangement.Top
         ) {
@@ -90,54 +93,63 @@ fun SettingsScreen(
                     ),
                     modifier = Modifier.weight(1f)
                 )
-                Row(
-                    modifier = Modifier.clickable {
-                        themeExpanded = true
-                        themeExpandedState = !themeExpandedState
-                    },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = settingsViewModel.value.value,
-                        fontSize = 14.sp,
-                        style = TextStyle(
-                            fontStyle = MaterialTheme.typography.body1.fontStyle,
-//                                        fontFamily = abel_regular
-                        ),
-                        modifier = Modifier
-                    )
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = null,
-                        modifier = Modifier.rotate(themeDropDownRotationState)
-                    )
-                    if (themeExpanded) {
-                        DropdownMenu(
-                            expanded = themeExpanded,
-                            onDismissRequest = {
-                                themeExpanded = false
-                                themeExpandedState = !themeExpandedState
-                            }
-                        ) {
-                            themes.forEach { selectionOption ->
-                                DropdownMenuItem(
-                                    onClick = {
-                                        settingsViewModel.value.value = selectionOption
-                                        themeExpanded = false
-                                        themeExpandedState = !themeExpandedState
-                                    }
-                                ) {
-                                    Text(
-                                        text = selectionOption,
-//                                                    fontFamily = abel_regular,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                }
-                            }
-                        }
+
+                Row() {
+                    IconButton(onClick = { onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_NIGHT.ordinal)) }) {
+                        Icon(imageVector = Icons.Default.LightMode, contentDescription = null)
+                    }
+                    IconButton(onClick = { onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_DAY.ordinal)) }) {
+                        Icon(imageVector = Icons.Default.DarkMode, contentDescription = null)
                     }
                 }
+//                Row(
+//                    modifier = Modifier.clickable {
+//                        themeExpanded = true
+//                        themeExpandedState = !themeExpandedState
+//                    },
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Text(
+//                        text = settingsViewModel.value.value,
+//                        fontSize = 14.sp,
+//                        style = TextStyle(
+//                            fontStyle = MaterialTheme.typography.body1.fontStyle,
+////                                        fontFamily = abel_regular
+//                        ),
+//                        modifier = Modifier
+//                    )
+//                    Icon(
+//                        imageVector = Icons.Default.ArrowDropDown,
+//                        contentDescription = null,
+//                        modifier = Modifier.rotate(themeDropDownRotationState)
+//                    )
+//                    if (themeExpanded) {
+//                        DropdownMenu(
+//                            expanded = themeExpanded,
+//                            onDismissRequest = {
+//                                themeExpanded = false
+//                                themeExpandedState = !themeExpandedState
+//                            }
+//                        ) {
+//                            themes.forEach { selectionOption ->
+//                                DropdownMenuItem(
+//                                    onClick = {
+//                                        settingsViewModel.value.value = selectionOption
+//                                        themeExpanded = false
+//                                        themeExpandedState = !themeExpandedState
+//                                    }
+//                                ) {
+//                                    Text(
+//                                        text = selectionOption,
+////                                                    fontFamily = abel_regular,
+//                                        maxLines = 1,
+//                                        overflow = TextOverflow.Ellipsis
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
             }
 
             Spacer(modifier = Modifier.padding(6.dp))

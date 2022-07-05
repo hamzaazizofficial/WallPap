@@ -20,6 +20,7 @@ import com.hamza.wallpap.data.screens.home.BottomBar
 import com.hamza.wallpap.data.screens.home.TopBar
 import com.hamza.wallpap.data.screens.home.HomeViewModel
 import com.hamza.wallpap.data.screens.random.RandomScreenViewModel
+import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagingApi::class)
@@ -28,7 +29,8 @@ fun MainScreen(
     navController: NavHostController,
     homeViewModel: HomeViewModel = hiltViewModel(),
     randomScreenViewModel: RandomScreenViewModel = hiltViewModel(),
-    favUrlsViewModel: FavUrlsViewModel = hiltViewModel()
+    favUrlsViewModel: FavUrlsViewModel = hiltViewModel(),
+    onItemSelected: (WallPapTheme) -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -81,7 +83,7 @@ fun MainScreen(
         }
     ) { padding ->
         Column(Modifier.padding(padding)) {
-            NavGraph(navController = navController, scaffoldState)
+            NavGraph(navController = navController, scaffoldState, onItemSelected)
         }
     }
 }
