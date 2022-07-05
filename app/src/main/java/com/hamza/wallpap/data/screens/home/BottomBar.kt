@@ -34,7 +34,9 @@ fun BottomBar(
                     label = { Text(text = item.title) },
                     selected = currentRoute == item.route,
                     onClick = {
-                        navController.navigate(item.route)
+                        if (currentRoute != item.route) {
+                            navController.navigate(item.route)
+                        }
                     },
                     alwaysShowLabel = false
                 )
