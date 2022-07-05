@@ -2,22 +2,23 @@ package com.hamza.wallpap.data.screens.settings
 
 import androidx.activity.compose.BackHandler
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -33,15 +34,10 @@ fun SettingsScreen(
     onItemSelected: (WallPapTheme) -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    var themeExpanded by remember { mutableStateOf(false) }
-    val themes = settingsViewModel.themes
+    val context = LocalContext.current
 
-    var themeExpandedState by remember {
-        mutableStateOf(false)
-    }
-    val themeDropDownRotationState by animateFloatAsState(
-        targetValue = if (themeExpandedState) 180f else 0f
-    )
+    val dataStore = DataStorePreferenceRepository(context)
+    val themeValue = dataStore.getThemeValue.collectAsState(initial = 0)
 
     BackHandler {
         if (scaffoldState.drawerState.isOpen) {
@@ -52,19 +48,6 @@ fun SettingsScreen(
             navController.navigate("home_screen")
         }
     }
-
-//    if (settingsViewModel.value.value == themes[1]) {
-//        onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_NIGHT.ordinal))
-////        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-////        ThemeState.isLight = false
-//
-//    }
-////
-//    if (settingsViewModel.value.value == themes[0]) {
-//        onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_DAY.ordinal))
-////        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-////        ThemeState.isLight = true
-//    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -94,62 +77,29 @@ fun SettingsScreen(
                     modifier = Modifier.weight(1f)
                 )
 
-                Row() {
-                    IconButton(onClick = { onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_NIGHT.ordinal)) }) {
-                        Icon(imageVector = Icons.Default.LightMode, contentDescription = null)
-                    }
-                    IconButton(onClick = { onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_DAY.ordinal)) }) {
-                        Icon(imageVector = Icons.Default.DarkMode, contentDescription = null)
-                    }
+                if (themeValue.value == 0) {
+                    Icon(
+                        imageVector = Icons.Default.LightMode,
+                        contentDescription = null,
+                        modifier = Modifier.clickable {
+                            onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_DAY.ordinal))
+                            scope.launch {
+                                dataStore.saveThemeValue(1)
+                            }
+                        })
                 }
-//                Row(
-//                    modifier = Modifier.clickable {
-//                        themeExpanded = true
-//                        themeExpandedState = !themeExpandedState
-//                    },
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    Text(
-//                        text = settingsViewModel.value.value,
-//                        fontSize = 14.sp,
-//                        style = TextStyle(
-//                            fontStyle = MaterialTheme.typography.body1.fontStyle,
-////                                        fontFamily = abel_regular
-//                        ),
-//                        modifier = Modifier
-//                    )
-//                    Icon(
-//                        imageVector = Icons.Default.ArrowDropDown,
-//                        contentDescription = null,
-//                        modifier = Modifier.rotate(themeDropDownRotationState)
-//                    )
-//                    if (themeExpanded) {
-//                        DropdownMenu(
-//                            expanded = themeExpanded,
-//                            onDismissRequest = {
-//                                themeExpanded = false
-//                                themeExpandedState = !themeExpandedState
-//                            }
-//                        ) {
-//                            themes.forEach { selectionOption ->
-//                                DropdownMenuItem(
-//                                    onClick = {
-//                                        settingsViewModel.value.value = selectionOption
-//                                        themeExpanded = false
-//                                        themeExpandedState = !themeExpandedState
-//                                    }
-//                                ) {
-//                                    Text(
-//                                        text = selectionOption,
-////                                                    fontFamily = abel_regular,
-//                                        maxLines = 1,
-//                                        overflow = TextOverflow.Ellipsis
-//                                    )
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
+
+                if (themeValue.value == 1) {
+                    Icon(
+                        imageVector = Icons.Default.DarkMode,
+                        contentDescription = null,
+                        modifier = Modifier.clickable {
+                            onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_NIGHT.ordinal))
+                            scope.launch {
+                                dataStore.saveThemeValue(0)
+                            }
+                        })
+                }
             }
 
             Spacer(modifier = Modifier.padding(6.dp))
