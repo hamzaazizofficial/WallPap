@@ -14,6 +14,7 @@ import com.hamza.wallpap.data.navigation.Screen
 import com.hamza.wallpap.data.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.topAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.topAppBarContentColor
+import com.hamza.wallpap.ui.theme.topAppBarTitle
 
 @OptIn(ExperimentalPagingApi::class)
 @Composable
@@ -35,7 +36,7 @@ fun TopBar(
                 else if (currentRoute.equals(Screen.Random.route)) "Random"
                 else if (currentRoute.equals(Screen.Favourite.route)) "Favourite"
                 else "Home",
-                color = MaterialTheme.colors.topAppBarContentColor,
+                color = MaterialTheme.colors.topAppBarTitle,
             )
         },
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor,
@@ -43,7 +44,8 @@ fun TopBar(
             IconButton(onClick = onNavButtonClick) {
                 Icon(
                     imageVector = Icons.Default.Dehaze,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.topAppBarContentColor
                 )
             }
         },
@@ -54,13 +56,15 @@ fun TopBar(
                     if (currentRoute.equals(Screen.Home.route)) {
                         Icon(
                             imageVector = if (homeViewModel.showUserDetails) Icons.Outlined.AccountCircle else Icons.Default.AccountCircle,
-                            contentDescription = "Show user details icon"
+                            contentDescription = "Show user details icon",
+                            tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
                     if (currentRoute.equals(Screen.Random.route)) {
                         Icon(
                             imageVector = if (randomScreenViewModel.showUserDetails) Icons.Outlined.AccountCircle else Icons.Default.AccountCircle,
-                            contentDescription = "Show user details icon"
+                            contentDescription = "Show user details icon",
+                            tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
                 }
@@ -71,7 +75,8 @@ fun TopBar(
                     }) {
                         Icon(
                             imageVector = Icons.Default.DeleteSweep,
-                            contentDescription = "Show user details icon"
+                            contentDescription = "Show user details icon",
+                            tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
                 }
@@ -80,7 +85,8 @@ fun TopBar(
                     IconButton(onClick = onSearchClicked) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search Icon"
+                            contentDescription = "Search Icon",
+                            tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
                 }

@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreenViewModel
@@ -39,14 +40,14 @@ import java.io.OutputStream
 import java.net.URL
 
 @Composable
-fun FavouriteWallpaperFullScreen(fullUrl: String) {
+fun FavouriteWallpaperFullScreen(fullUrl: String, navController: NavHostController) {
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
     val favUrlsViewModel: FavUrlsViewModel = hiltViewModel()
     val scope = rememberCoroutineScope()
     Box(
         Modifier
             .fillMaxSize()
-            .background(Color.Black),
+            .background(MaterialTheme.colors.background),
         contentAlignment = Alignment.BottomCenter
     ) {
 
@@ -77,7 +78,10 @@ fun FavouriteWallpaperFullScreen(fullUrl: String) {
         var showCropScreenBtn by remember { mutableStateOf(false) }
 
         if (showFitScreenBtn) {
-            LinearProgressIndicator(modifier = Modifier.align(Alignment.BottomCenter))
+            LinearProgressIndicator(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                color = MaterialTheme.colors.secondary
+            )
         }
 
         Image(
@@ -102,6 +106,16 @@ fun FavouriteWallpaperFullScreen(fullUrl: String) {
                     .padding(18.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate("favourite")
+                        },
+                    tint = Color.White
+                )
 
                 if (showFitScreenBtn) {
                     Icon(
@@ -130,18 +144,6 @@ fun FavouriteWallpaperFullScreen(fullUrl: String) {
                         tint = Color.White
                     )
                 }
-
-                Spacer(modifier = Modifier.padding(end = 10.dp))
-
-                Icon(
-                    imageVector = Icons.Default.HighQuality,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            data = fullUrl
-                        },
-                    tint = Color.White
-                )
             }
         }
 

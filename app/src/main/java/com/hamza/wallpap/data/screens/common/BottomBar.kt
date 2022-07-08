@@ -8,6 +8,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.hamza.wallpap.data.navigation.Screen
+import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
+import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
+import com.hamza.wallpap.ui.theme.topAppBarBackgroundColor
+import com.hamza.wallpap.ui.theme.topAppBarContentColor
 
 @Composable
 fun BottomBar(
@@ -21,13 +25,14 @@ fun BottomBar(
     )
     CompositionLocalProvider(LocalElevationOverlay provides null) {
         BottomNavigation(
-            backgroundColor = Color.Black,
-            contentColor = Color.White
+            backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor,
+            contentColor = MaterialTheme.colors.bottomAppBarContentColor
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
             items.forEach { item ->
                 BottomNavigationItem(
+                    unselectedContentColor = Color.LightGray,
                     icon = {
                         Icon(imageVector = item.icon, item.title)
                     },

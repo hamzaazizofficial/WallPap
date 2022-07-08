@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,7 +34,7 @@ fun RandomScreen(
     }
     Column(
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.background(Color.Black)
+        modifier = Modifier.background(MaterialTheme.colors.background)
     ) {
         RandomListContent(items = items, navController, randomScreenViewModel)
     }

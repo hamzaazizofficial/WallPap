@@ -92,7 +92,7 @@ fun NavGraph(
             )) {
             val fullUrl = it.arguments?.getString("fullUrl")
             if (fullUrl != null) {
-                FavouriteWallpaperFullScreen(fullUrl)
+                FavouriteWallpaperFullScreen(fullUrl, navController)
             }
         }
     }

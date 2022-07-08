@@ -38,6 +38,7 @@ import com.hamza.wallpap.R
 import com.hamza.wallpap.data.screens.home.HomeViewModel
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.theme.HeartRed
+import com.hamza.wallpap.ui.theme.maven_pro_regular
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -88,9 +89,9 @@ fun UnsplashItem(
 
     Card(
         backgroundColor = Color.Black,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(2.dp),
         modifier = Modifier
-            .padding(3.dp)
+            .padding(1.5.dp)
             .height(300.dp)
             .clickable { navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl") },
     ) {
@@ -142,6 +143,7 @@ fun UnsplashItem(
                         },
                         color = Color.White,
                         fontSize = MaterialTheme.typography.caption.fontSize,
+                        fontFamily = maven_pro_regular,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

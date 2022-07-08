@@ -1,6 +1,10 @@
 package com.hamza.wallpap
 
+import android.app.Activity
+import android.os.Build
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -15,14 +19,23 @@ import com.hamza.wallpap.util.ThemeSetting
 import com.hamza.wallpap.util.ThemeSettingPreference
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     //    @Inject
     private lateinit var themeSetting: ThemeSetting
+//    val activity: Activity = Activity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                val w: Window = window
+                w.setFlags(
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                )
+            }
             themeSetting = ThemeSettingPreference(context = LocalContext.current)
             val theme = themeSetting.themeStream.collectAsState()
             val useDarkColors = when (theme.value) {

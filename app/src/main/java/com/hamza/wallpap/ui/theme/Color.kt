@@ -8,9 +8,38 @@ val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 val HeartRed = Color(0xFFFF4444)
+val lightTopBarBg = Color(0xFFCEE3FB)
+val transparentStatusBarColor = Color(0xFFFFFF)
+
+val Colors.navDrawerBgColor: Color
+    get() = if (isLight) Color.LightGray else Color.Gray
+
+val Colors.navOptionContentColor: Color
+    get() = if (isLight) Color.White else Color.Black
+
+val Colors.navOptionIconColor: Color
+    get() = if (isLight) Color.White else Color.Gray
+
+val Colors.topAppBarTitle: Color
+    get() = if (isLight) Color(0xFF474747) else Color.LightGray
 
 val Colors.topAppBarContentColor: Color
-    get() = if (isLight) Color.White else Color.LightGray
+    get() = if (isLight) Color.Gray else Color.LightGray
 
 val Colors.topAppBarBackgroundColor: Color
-    get() = if (isLight) Purple500 else Color.Black
+    get() = if (isLight) Color.White else Color.Black
+
+val Colors.bottomAppBarContentColor: Color
+    get() = if (isLight) Color(0xFFFF5252) else Color.LightGray
+
+val Colors.bottomAppBarBackgroundColor: Color
+    get() = if (isLight) Color.White else Color.Black
+
+val Colors.systemBarColor: Color
+    get() = if (isLight) Color.White else Color.Black
+
+val Colors.textColor: Color
+    get() = if (isLight) Color.Black else Color.White
+
+val Colors.iconColor: Color
+    get() = if (isLight) Color.Gray else Color.White

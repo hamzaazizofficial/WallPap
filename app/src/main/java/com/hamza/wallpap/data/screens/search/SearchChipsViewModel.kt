@@ -1,4 +1,4 @@
-package com.hamza.wallpap.data.screens.common
+package com.hamza.wallpap.data.screens.search
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
