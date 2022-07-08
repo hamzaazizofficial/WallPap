@@ -38,13 +38,14 @@ import java.net.URL
 
 @Composable
 fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
+
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
     val scope = rememberCoroutineScope()
     var viewModel: FavUrlsViewModel = viewModel()
     Box(
         Modifier
             .fillMaxSize()
-            .background(Color.Black),
+            .background(MaterialTheme.colors.background),
         contentAlignment = Alignment.BottomCenter
     ) {
 
@@ -75,7 +76,10 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
         var showCropScreenBtn by remember { mutableStateOf(false) }
 
         if (showFitScreenBtn) {
-            LinearProgressIndicator(modifier = Modifier.align(Alignment.BottomCenter))
+            LinearProgressIndicator(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                color = MaterialTheme.colors.secondary
+            )
         }
 
         Image(
@@ -100,6 +104,16 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
                     .padding(18.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+
+//                Icon(
+//                    imageVector = Icons.Default.ArrowBack,
+//                    contentDescription = null,
+//                    modifier = Modifier
+//                        .clickable {
+////                            navController.navigate("favourite")
+//                        },
+//                    tint = Color.White
+//                )
 
                 if (showFitScreenBtn) {
                     Icon(

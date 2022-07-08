@@ -10,7 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -22,7 +22,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.BuildConfig
+import com.hamza.wallpap.ui.theme.iconColor
+import com.hamza.wallpap.ui.theme.systemBarColor
+import com.hamza.wallpap.ui.theme.textColor
 import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
 
@@ -33,6 +37,9 @@ fun SettingsScreen(
     scaffoldState: ScaffoldState,
     onItemSelected: (WallPapTheme) -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
+
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -58,7 +65,7 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .background(Color.Green)
+                .background(MaterialTheme.colors.background)
                 .padding(12.dp),
             verticalArrangement = Arrangement.Top
         ) {
@@ -69,6 +76,7 @@ fun SettingsScreen(
             ) {
                 Text(
                     text = "Theme",
+                    color = MaterialTheme.colors.textColor,
                     fontSize = 14.sp,
                     style = TextStyle(
                         fontStyle = MaterialTheme.typography.subtitle1.fontStyle,
@@ -79,7 +87,8 @@ fun SettingsScreen(
 
                 if (themeValue.value == 0) {
                     Icon(
-                        imageVector = Icons.Default.LightMode,
+                        imageVector = Icons.Filled.DarkMode,
+                        tint = Color.Yellow,
                         contentDescription = null,
                         modifier = Modifier.clickable {
                             onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_DAY.ordinal))
@@ -91,7 +100,8 @@ fun SettingsScreen(
 
                 if (themeValue.value == 1) {
                     Icon(
-                        imageVector = Icons.Default.DarkMode,
+                        imageVector = Icons.Outlined.DarkMode,
+                        tint = MaterialTheme.colors.iconColor,
                         contentDescription = null,
                         modifier = Modifier.clickable {
                             onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_NIGHT.ordinal))
@@ -114,6 +124,7 @@ fun SettingsScreen(
             ) {
                 Text(
                     text = "Tired of Ads?",
+                    color = MaterialTheme.colors.textColor,
                     fontSize = 14.sp,
                     style = TextStyle(
                         fontStyle = MaterialTheme.typography.subtitle1.fontStyle,
@@ -150,6 +161,7 @@ fun SettingsScreen(
             ) {
                 Text(
                     text = "App Version",
+                    color = MaterialTheme.colors.textColor,
                     fontSize = 14.sp,
                     style = TextStyle(
                         fontStyle = MaterialTheme.typography.subtitle1.fontStyle,
@@ -159,6 +171,7 @@ fun SettingsScreen(
                 )
                 Text(
                     text = "${BuildConfig.VERSION_CODE}",
+                    color = MaterialTheme.colors.textColor,
                     fontSize = 14.sp,
                     style = TextStyle(
                         fontStyle = MaterialTheme.typography.body1.fontStyle,

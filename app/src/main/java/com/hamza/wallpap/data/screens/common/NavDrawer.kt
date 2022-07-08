@@ -31,6 +31,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.core.content.ContextCompat.startActivity
 import com.hamza.wallpap.BuildConfig
 import com.hamza.wallpap.R
+import com.hamza.wallpap.ui.theme.*
 import kotlinx.coroutines.launch
 
 @Composable
@@ -39,7 +40,7 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
 
     Column(
         modifier = Modifier
-            .background(color = if (isSystemInDarkTheme()) Color.Black else Color.White)
+            .background(color = MaterialTheme.colors.background)
             .fillMaxHeight()
     ) {
 
@@ -55,7 +56,7 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
             }
 
             constrain(appName) {
-                top.linkTo(appLogo.bottom)
+                top.linkTo(bgNavImg.top)
                 start.linkTo(bgNavImg.start)
                 bottom.linkTo(bgNavImg.bottom)
             }
@@ -72,35 +73,35 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = if (isSystemInDarkTheme()) Color.White else Color.Gray.copy(0.5f)
+                        color = MaterialTheme.colors.navDrawerBgColor
                     )
-                    .height(160.dp)
+                    .height(80.dp)
                     .layoutId("bgnavimg")
             )
-            Image(
-                painterResource(id = R.drawable.picture),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-//                colorFilter = ColorFilter.tint(Color.Black),
-                modifier = Modifier
-                    .padding(start = 30.dp, top = 2.dp, bottom = 16.dp)
-                    .height(70.dp)
-                    .layoutId("logo")
-            )
+//            Image(
+//                painterResource(id = R.drawable.picture),
+//                contentDescription = null,
+//                contentScale = ContentScale.Fit,
+////                colorFilter = ColorFilter.tint(Color.Black),
+//                modifier = Modifier
+//                    .padding(start = 30.dp, top = 2.dp, bottom = 16.dp)
+//                    .height(70.dp)
+//                    .layoutId("logo")
+//            )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(start = 30.dp, bottom = 20.dp)
+                    .padding(horizontal = 30.dp)
                     .layoutId("appname")
             ) {
                 Text(
                     text = "WallPap",
-                    fontSize = 20.sp,
-                    color = Color.Black,
+                    fontSize = 29.sp,
+                    color = MaterialTheme.colors.textColor,
                     style = TextStyle(
                         fontSize = MaterialTheme.typography.subtitle1.fontSize,
                         fontWeight = FontWeight.Bold,
-//                                    fontFamily = abel_regular
+                        fontFamily = maven_pro_regular
                     ),
                     modifier = Modifier
                 )
@@ -132,15 +133,15 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
             modifier = Modifier.clickable { }
         )
 
-        Divider()
+        Divider(color = MaterialTheme.colors.iconColor.copy(0.5f))
 
         Text(
             text = "More",
-            color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+            color = MaterialTheme.colors.textColor,
             fontSize = 17.sp,
             style = TextStyle(
                 fontSize = MaterialTheme.typography.subtitle1.fontSize,
-//                            fontFamily = abel_regular
+                fontFamily = maven_pro_regular
             ),
             modifier = Modifier
                 .padding(start = 12.dp, top = 14.dp, bottom = 8.dp)
@@ -211,12 +212,12 @@ fun NavOption(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = if (isSystemInDarkTheme()) Color.White else Color.Black,
+                tint = MaterialTheme.colors.iconColor,
             )
             Spacer(modifier = Modifier.padding(end = 20.dp))
             Text(
                 text = title,
-                color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+                color = MaterialTheme.colors.textColor,
                 fontSize = 16.sp,
                 style = MaterialTheme.typography.subtitle1,
                 modifier = Modifier

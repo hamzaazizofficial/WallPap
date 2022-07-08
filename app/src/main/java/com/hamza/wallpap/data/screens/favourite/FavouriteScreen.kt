@@ -9,10 +9,7 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
@@ -30,6 +27,8 @@ import coil.compose.rememberImagePainter
 import com.hamza.wallpap.R
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
+import com.hamza.wallpap.ui.theme.iconColor
+import com.hamza.wallpap.ui.theme.textColor
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -42,11 +41,11 @@ fun FavouriteScreen(
     val data = favUrlsViewModel.getAllFavUrls.observeAsState(listOf())
 
     if (data.value.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize().background(Color.Black), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background), contentAlignment = Alignment.Center) {
             Text(
                 text = "Your Favourite Wallpapers will appear here",
                 fontSize = 16.sp,
-                color = Color.White,
+                color = MaterialTheme.colors.textColor,
                 textAlign = TextAlign.Center
             )
         }
@@ -75,9 +74,9 @@ fun FavouriteItem(
 
     Card(
         backgroundColor = Color.Black,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(2.dp),
         modifier = Modifier
-            .padding(3.dp)
+            .padding(1.5.dp)
             .height(300.dp)
             .clickable { navController.navigate("fav_wallpaper_screen/$fullEncodedUrl") },
     ) {
@@ -96,6 +95,7 @@ fun FavouriteItem(
 
             Icon(
                 imageVector = Icons.Default.Delete,
+                tint = MaterialTheme.colors.iconColor,
                 contentDescription = null,
                 modifier = Modifier
                     .align(

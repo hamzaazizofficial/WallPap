@@ -73,7 +73,6 @@ fun RandomUnsplashItem(
     val fullEncodedUrl = URLEncoder.encode(fullUrl, StandardCharsets.UTF_8.toString())
     val context = LocalContext.current
 
-
     val painter = rememberImagePainter(data = unsplashImage.urls.regular) {
         crossfade(durationMillis = 1000)
         error(R.drawable.ic_placeholder)
@@ -82,9 +81,9 @@ fun RandomUnsplashItem(
 
     Card(
         backgroundColor = Color.Black,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(2.dp),
         modifier = Modifier
-            .padding(3.dp)
+            .padding(1.5.dp)
             .height(300.dp)
             .clickable { navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl") },
     ) {
