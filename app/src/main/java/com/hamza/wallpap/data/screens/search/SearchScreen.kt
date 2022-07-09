@@ -34,6 +34,9 @@ fun SearchScreen(
                 },
                 onCloseClicked = {
                     navController.popBackStack()
+                },
+                onNavBackPop = {
+                    navController.popBackStack()
                 }
             )
         },

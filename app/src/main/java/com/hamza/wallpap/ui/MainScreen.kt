@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -32,6 +33,7 @@ fun MainScreen(
     favUrlsViewModel: FavUrlsViewModel = hiltViewModel(),
     onItemSelected: (WallPapTheme) -> Unit
 ) {
+    val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -65,7 +67,8 @@ fun MainScreen(
                     },
                     homeViewModel,
                     randomScreenViewModel,
-                    favUrlsViewModel
+                    favUrlsViewModel,
+                    context
                 )
             }
         },

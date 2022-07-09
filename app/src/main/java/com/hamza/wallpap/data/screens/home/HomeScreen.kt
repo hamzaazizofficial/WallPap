@@ -20,7 +20,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.screens.common.HomeListContent
-import com.hamza.wallpap.data.screens.common.SearchChips
+import com.hamza.wallpap.data.screens.search.SearchChips
 import com.hamza.wallpap.data.screens.search.SearchChipsViewModel
 import com.hamza.wallpap.ui.theme.systemBarColor
 import kotlinx.coroutines.launch
@@ -40,6 +40,7 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val activity = (LocalContext.current as? Activity)
     val searchChipsViewModel: SearchChipsViewModel = viewModel()
+    val items = homeViewModel.itemsFlow.collectAsLazyPagingItems()
 
     BackHandler {
         if (scaffoldState.drawerState.isOpen) {
@@ -73,6 +74,6 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.padding(horizontal = 6.dp))
             }
         }
-        HomeListContent(items = homeViewModel.itemsFlow.collectAsLazyPagingItems(), navController, homeViewModel)
+        HomeListContent(items = items, navController, homeViewModel)
     }
 }

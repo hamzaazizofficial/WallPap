@@ -1,12 +1,11 @@
-package com.hamza.wallpap.data.screens.common
+package com.hamza.wallpap.data.screens.search
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hamza.wallpap.ui.theme.textColor
 
 @Composable
 fun SearchChips(
@@ -31,8 +30,8 @@ fun SearchChips(
                 onClick()
             },
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.secondary.copy(0.8f),
-                contentColor = MaterialTheme.colors.onSecondary
+                backgroundColor = MaterialTheme.colors.secondary.copy(0.1f),
+                contentColor = MaterialTheme.colors.textColor
             ),
             shape = RoundedCornerShape(12.dp)
         ) {

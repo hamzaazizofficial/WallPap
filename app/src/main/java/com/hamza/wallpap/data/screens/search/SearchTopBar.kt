@@ -6,8 +6,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -26,7 +26,8 @@ fun SearchWidget(
     text: String,
     onTextChange: (String) -> Unit,
     onSearchClicked: (String) -> Unit,
-    onCloseClicked: () -> Unit
+    onCloseClicked: () -> Unit,
+    onNavBackPop: () -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -62,11 +63,13 @@ fun SearchWidget(
                 IconButton(
                     modifier = Modifier
                         .alpha(alpha = ContentAlpha.medium),
-                    onClick = {}
+                    onClick = {
+                        onNavBackPop()
+                    }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search Icon",
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Arrow back Icon",
                         tint = MaterialTheme.colors.topAppBarContentColor
                     )
                 }
@@ -117,6 +120,7 @@ fun SearchWidgetPreview() {
         text = "Search",
         onTextChange = {},
         onSearchClicked = {},
-        onCloseClicked = {}
+        onCloseClicked = {},
+        onNavBackPop = {}
     )
 }
