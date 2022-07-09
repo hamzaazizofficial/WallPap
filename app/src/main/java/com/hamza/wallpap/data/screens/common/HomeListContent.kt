@@ -3,6 +3,7 @@ package com.hamza.wallpap.data.screens.common
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -80,10 +81,9 @@ fun UnsplashItem(
     val fullEncodedUrl = URLEncoder.encode(fullUrl, StandardCharsets.UTF_8.toString())
     val context = LocalContext.current
 
-
     val painter = rememberImagePainter(data = unsplashImage.urls.regular) {
         crossfade(durationMillis = 1000)
-        error(R.drawable.ic_placeholder)
+//        error(R.drawable.ic_placeholder)
         placeholder(R.drawable.ic_placeholder)
     }
 
@@ -101,6 +101,11 @@ fun UnsplashItem(
                 .fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter
         ) {
+
+            LinearProgressIndicator(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                color = MaterialTheme.colors.secondary
+            )
 
             Image(
                 modifier = Modifier.fillMaxSize(),

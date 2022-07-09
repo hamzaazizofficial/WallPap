@@ -33,6 +33,7 @@ import coil.compose.rememberImagePainter
 import com.hamza.wallpap.R
 import com.hamza.wallpap.data.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.theme.maven_pro_regular
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -134,6 +135,7 @@ fun RandomUnsplashItem(
                         },
                         color = Color.White,
                         fontSize = MaterialTheme.typography.caption.fontSize,
+                        fontFamily = maven_pro_regular,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

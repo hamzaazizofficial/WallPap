@@ -11,9 +11,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +27,9 @@ import coil.compose.rememberImagePainter
 import com.hamza.wallpap.R
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
+import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.iconColor
+import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.textColor
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -41,10 +43,16 @@ fun FavouriteScreen(
     val data = favUrlsViewModel.getAllFavUrls.observeAsState(listOf())
 
     if (data.value.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.background),
+            contentAlignment = Alignment.Center
+        ) {
             Text(
                 text = "Your Favourite Wallpapers will appear here",
                 fontSize = 16.sp,
+                fontFamily = maven_pro_regular,
                 color = MaterialTheme.colors.textColor,
                 textAlign = TextAlign.Center
             )

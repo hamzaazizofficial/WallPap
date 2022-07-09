@@ -1,7 +1,6 @@
 package com.hamza.wallpap.data.screens.settings
 
 import androidx.activity.compose.BackHandler
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,6 +24,7 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.BuildConfig
 import com.hamza.wallpap.ui.theme.iconColor
+import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.ui.theme.textColor
 import com.hamza.wallpap.util.WallPapTheme
@@ -137,15 +137,11 @@ fun SettingsScreen(
                     fontSize = 14.sp,
                     style = TextStyle(
                         fontStyle = MaterialTheme.typography.body1.fontStyle,
-//                                    fontFamily = abel_regular
+                        fontFamily = maven_pro_regular
                     ),
                     fontWeight = FontWeight.Bold,
                     color = Color.Red,
-                    modifier = Modifier.clickable {
-                        AppCompatDelegate.setDefaultNightMode(
-                            AppCompatDelegate.MODE_NIGHT_NO
-                        )
-                    }
+                    modifier = Modifier.clickable { }
                 )
             }
 

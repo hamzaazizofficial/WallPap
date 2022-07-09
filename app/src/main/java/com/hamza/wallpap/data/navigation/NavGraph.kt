@@ -38,16 +38,11 @@ fun NavGraph(
     val searchViewModel: SearchViewModel = hiltViewModel()
     val randomScreenViewModel: RandomScreenViewModel = viewModel()
     val favUrlsViewModel: FavUrlsViewModel = viewModel()
-//    val searchChipsViewModel: SearchChipsViewModel = hiltViewModel()
 
     NavHost(navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) {
             HomeScreen(navController, homeViewModel, scaffoldState)
         }
-
-//        composable(Screen.Main.route) {
-//            MainScreen(navController)
-//        }
 
         composable(Screen.Search.route) {
             SearchScreen(navController = navController, searchViewModel, homeViewModel)
@@ -58,7 +53,7 @@ fun NavGraph(
         }
 
         composable(Screen.Favourite.route) {
-            FavouriteScreen(favUrlsViewModel,navController, scaffoldState)
+            FavouriteScreen(favUrlsViewModel, navController, scaffoldState)
         }
 
         composable(Screen.Random.route) {
@@ -79,7 +74,7 @@ fun NavGraph(
             val regularUrl = it.arguments?.getString("regularUrl")
             val fullUrl = it.arguments?.getString("fullUrl")
             if (regularUrl != null && fullUrl != null) {
-                WallpaperFullScreen(regularUrl, fullUrl)
+                WallpaperFullScreen(regularUrl, fullUrl, navController)
             }
         }
 

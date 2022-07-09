@@ -10,6 +10,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.DisplayMetrics
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,6 +36,8 @@ import coil.compose.rememberImagePainter
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.model.FavouriteUrls
+import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
+import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -50,7 +54,7 @@ fun FavouriteWallpaperFullScreen(fullUrl: String, navController: NavHostControll
             .background(MaterialTheme.colors.background),
         contentAlignment = Alignment.BottomCenter
     ) {
-
+        var image: Bitmap? = null
         var data by remember { mutableStateOf(fullUrl) }
 
         val context = LocalContext.current
@@ -61,17 +65,17 @@ fun FavouriteWallpaperFullScreen(fullUrl: String, navController: NavHostControll
 //            placeholder(R.drawable.loading)
         }
 
-        lateinit var image: Bitmap
-        val thread = Thread {
-            try {
-                val url = URL(fullUrl)
-                image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-            }
-        }
 
-        thread.start()
+//        val thread = Thread {
+//            try {
+//                val url = URL(data)
+//                image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+//            } catch (e: java.lang.Exception) {
+//                e.printStackTrace()
+//            }
+//        }
+//
+//        thread.start()
 
         var scale by remember { mutableStateOf(ContentScale.Crop) }
         var showFitScreenBtn by remember { mutableStateOf(true) }
@@ -112,7 +116,7 @@ fun FavouriteWallpaperFullScreen(fullUrl: String, navController: NavHostControll
                     contentDescription = null,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate("favourite")
+                            navController.popBackStack()
                         },
                     tint = Color.White
                 )
@@ -155,22 +159,79 @@ fun FavouriteWallpaperFullScreen(fullUrl: String, navController: NavHostControll
             horizontalArrangement = Arrangement.Center
         ) {
 
+//            FloatingActionButton(
+//                onClick = {
+//                    image?.let { saveMediaToStorage(it, context) }
+//                },
+//                modifier = Modifier
+//                    .padding(8.dp)
+////                    .alpha(0.5f)
+//                ,
+//                backgroundColor = Color.White
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Download,
+//                    contentDescription = null,
+//                    tint = Color.Black
+//                )
+//            }
+//
+//            FloatingActionButton(
+//                onClick = {
+//                    favUrlsViewModel.deleteFavouriteUrl(
+//                        FavouriteUrls(
+//                            wallpaperFullScreenViewModel.id,
+//                            fullUrl
+//                        )
+//                    )
+//                    Toast.makeText(context, "Removed!", Toast.LENGTH_SHORT).show()
+//                },
+//                modifier = Modifier
+//                    .padding(8.dp)
+////                    .alpha(0.6f)
+//                ,
+//                backgroundColor = Color.White
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Delete,
+//                    contentDescription = null,
+//                    tint = Color.Red
+//                )
+//            }
+//
+//            FloatingActionButton(
+//                onClick = {
+//                    setWallPaper(context, fullUrl)
+//                },
+//                modifier = Modifier
+//                    .padding(8.dp),
+////                    .alpha(0.5f),
+//                backgroundColor = Color.White
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.ImagesearchRoller,
+//                    contentDescription = null,
+//                    tint = Color.Black
+//                )
+//            }
+
             FloatingActionButton(
                 onClick = {
-                    saveMediaToStorage(image, context)
+                   favShareImage(context, fullUrl, image)
                 },
                 modifier = Modifier
                     .padding(8.dp)
-//                    .alpha(0.5f)
+//                    .alpha(0.6f)
                 ,
-                backgroundColor = Color.White
+                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
             ) {
                 Icon(
-                    imageVector = Icons.Default.Download,
+                    imageVector = Icons.Default.Share,
                     contentDescription = null,
-                    tint = Color.Black
+                    tint = MaterialTheme.colors.bottomAppBarContentColor
                 )
             }
+
 
             FloatingActionButton(
                 onClick = {
@@ -180,17 +241,18 @@ fun FavouriteWallpaperFullScreen(fullUrl: String, navController: NavHostControll
                             fullUrl
                         )
                     )
+                    Toast.makeText(context, "Removed!", Toast.LENGTH_SHORT).show()
                 },
                 modifier = Modifier
                     .padding(8.dp)
 //                    .alpha(0.6f)
                 ,
-                backgroundColor = Color.White
+                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = null,
-                    tint = Color.Red
+                    tint = MaterialTheme.colors.bottomAppBarContentColor
                 )
             }
 
@@ -201,29 +263,41 @@ fun FavouriteWallpaperFullScreen(fullUrl: String, navController: NavHostControll
                 modifier = Modifier
                     .padding(8.dp),
 //                    .alpha(0.5f),
-                backgroundColor = Color.White
+                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
             ) {
                 Icon(
-                    imageVector = Icons.Default.ImagesearchRoller,
+                    imageVector = Icons.Default.Wallpaper,
                     contentDescription = null,
-                    tint = Color.Black
+                    tint = MaterialTheme.colors.bottomAppBarContentColor
                 )
             }
+
         }
     }
 }
 
 fun setWallPaper(context: Context, fullUrl: String) {
 
+    val metrics = DisplayMetrics()
+    val windowsManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    windowsManager.defaultDisplay.getMetrics(metrics)
+
+    val screenWidth = metrics.widthPixels
+    val screenHeight = metrics.heightPixels.minus(300)
+
     val wallpaperManager = WallpaperManager.getInstance(context)
+    wallpaperManager.suggestDesiredDimensions(screenWidth, screenHeight)
+
+    val width = wallpaperManager.desiredMinimumWidth
+    val height = wallpaperManager.desiredMinimumHeight
     Toast.makeText(context, "Setting your Wallpaper...", Toast.LENGTH_LONG).show()
 
     val thread = Thread {
         try {
-            //Your code goes here
             val url = URL(fullUrl)
             val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            wallpaperManager.setBitmap(image)
+            val wallpaper = Bitmap.createScaledBitmap(image, width, height, true)
+            wallpaperManager.setBitmap(wallpaper)
 
         } catch (e: java.lang.Exception) {
             e.printStackTrace()

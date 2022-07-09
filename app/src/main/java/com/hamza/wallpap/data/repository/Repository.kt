@@ -34,6 +34,10 @@ class Repository @Inject constructor(
     fun searchImages(query: String): Flow<PagingData<UnsplashImage>> {
         return Pager(
             config = PagingConfig(pageSize = ITEMS_PER_PAGE),
+            remoteMediator = UnsplashRemoteMediator(
+                unsplashApi = unsplashApi,
+                unsplashDatabase = unsplashDatabase
+            ),
             pagingSourceFactory = {
                 SearchPagingSource(unsplashApi = unsplashApi, query = query)
             }

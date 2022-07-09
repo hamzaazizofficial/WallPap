@@ -1,5 +1,7 @@
 package com.hamza.wallpap.data.screens.home
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -8,6 +10,7 @@ import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.navigation.Screen
@@ -25,7 +28,8 @@ fun TopBar(
     onUserDetailsClicked: () -> Unit,
     homeViewModel: HomeViewModel,
     randomScreenViewModel: RandomScreenViewModel,
-    favUrlsViewModel: FavUrlsViewModel
+    favUrlsViewModel: FavUrlsViewModel,
+    context: Context
 ) {
     TopAppBar(
         title = {
@@ -72,6 +76,7 @@ fun TopBar(
                 if (currentRoute.equals(Screen.Favourite.route)) {
                     IconButton(onClick = {
                         favUrlsViewModel.deleteAllFavouriteUrls()
+                        Toast.makeText(context, "Removed all images!", Toast.LENGTH_SHORT).show()
                     }) {
                         Icon(
                             imageVector = Icons.Default.DeleteSweep,

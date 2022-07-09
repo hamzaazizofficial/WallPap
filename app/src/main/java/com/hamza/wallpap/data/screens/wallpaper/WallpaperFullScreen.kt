@@ -3,12 +3,16 @@ package com.hamza.wallpap.data.screens.wallpaper
 import android.app.WallpaperManager
 import android.content.ContentValues
 import android.content.Context
+import android.content.Context.WINDOW_SERVICE
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.DisplayMetrics
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +21,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,9 +32,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
+import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
+import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -37,20 +45,19 @@ import java.net.URL
 
 
 @Composable
-fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
+fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavHostController) {
 
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
-    val scope = rememberCoroutineScope()
     var viewModel: FavUrlsViewModel = viewModel()
+
     Box(
         Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background),
         contentAlignment = Alignment.BottomCenter
     ) {
-
+        var image: Bitmap? = null
         var data by remember { mutableStateOf(regularUrl) }
-
         val context = LocalContext.current
 
         val painter = rememberImagePainter(data = data) {
@@ -59,10 +66,9 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
 //            placeholder(R.drawable.loading)
         }
 
-        lateinit var image: Bitmap
         val thread = Thread {
             try {
-                val url = URL(fullUrl)
+                val url = URL(data)
                 image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -86,7 +92,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
             contentScale = scale,
             modifier = Modifier.fillMaxSize(),
             painter = painter,
-            contentDescription = "Unsplash Image",
+            contentDescription = "Unsplash Image"
         )
 
         Surface(
@@ -105,55 +111,75 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-//                Icon(
-//                    imageVector = Icons.Default.ArrowBack,
-//                    contentDescription = null,
-//                    modifier = Modifier
-//                        .clickable {
-////                            navController.navigate("favourite")
-//                        },
-//                    tint = Color.White
-//                )
-
-                if (showFitScreenBtn) {
-                    Icon(
-                        imageVector = Icons.Default.Fullscreen,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                scale = ContentScale.Fit
-                                showFitScreenBtn = false
-                                showCropScreenBtn = true
-                            },
-                        tint = Color.White
-                    )
-                }
-
-                if (showCropScreenBtn) {
-                    Icon(
-                        imageVector = Icons.Rounded.Fullscreen,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                scale = ContentScale.Crop
-                                showCropScreenBtn = false
-                                showFitScreenBtn = true
-                            },
-                        tint = Color.White
-                    )
-                }
-
-                Spacer(modifier = Modifier.padding(end = 10.dp))
-
                 Icon(
-                    imageVector = Icons.Default.HighQuality,
+                    imageVector = Icons.Default.ArrowBack,
                     contentDescription = null,
                     modifier = Modifier
                         .clickable {
-                            data = fullUrl
+                            navController.popBackStack()
                         },
                     tint = Color.White
                 )
+
+                Row {
+
+                    Icon(
+                        imageVector = Icons.Rounded.Download,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                image?.let {
+                                    saveMediaToStorage(
+                                        it,
+                                        context
+                                    )
+                                }
+                            },
+                        tint = Color.White
+                    )
+
+                    Spacer(modifier = Modifier.padding(end = 10.dp))
+
+                    if (showFitScreenBtn) {
+                        Icon(
+                            imageVector = Icons.Default.Fullscreen,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .clickable {
+                                    scale = ContentScale.Fit
+                                    showFitScreenBtn = false
+                                    showCropScreenBtn = true
+                                },
+                            tint = Color.White
+                        )
+                    }
+
+                    if (showCropScreenBtn) {
+                        Icon(
+                            imageVector = Icons.Rounded.Fullscreen,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .clickable {
+                                    scale = ContentScale.Crop
+                                    showCropScreenBtn = false
+                                    showFitScreenBtn = true
+                                },
+                            tint = Color.White
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.padding(end = 10.dp))
+
+                    Icon(
+                        imageVector = Icons.Default.HighQuality,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                data = fullUrl
+                            },
+                        tint = Color.White
+                    )
+                }
             }
         }
 
@@ -167,37 +193,54 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
 
             FloatingActionButton(
                 onClick = {
-                    saveMediaToStorage(image, context)
+                    val intent = Intent(Intent.ACTION_SEND).setType("image/*")
+
+                    val path = MediaStore.Images.Media.insertImage(
+                        context.contentResolver,
+                        image,
+                        "${System.currentTimeMillis()}",
+                        null
+                    )
+
+                    val uri = Uri.parse(path)
+                    intent.putExtra(Intent.EXTRA_STREAM, uri)
+                    intent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        "Download WallPap for more exciting WallPapers!"
+                    )
+                    context.startActivity(intent)
                 },
                 modifier = Modifier
                     .padding(8.dp)
-//                    .alpha(0.5f)
+//                    .alpha(0.6f)
                 ,
-                backgroundColor = Color.White
+                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
             ) {
                 Icon(
-                    imageVector = Icons.Default.Download,
+                    imageVector = Icons.Default.Share,
                     contentDescription = null,
-                    tint = Color.Black
+                    tint = MaterialTheme.colors.bottomAppBarContentColor
                 )
             }
+
 
             FloatingActionButton(
                 onClick = {
                     wallpaperFullScreenViewModel.id += 1
                     val favUrl = FavouriteUrls(wallpaperFullScreenViewModel.id, fullUrl)
                     viewModel.addToFav(favUrl)
+                    Toast.makeText(context, "Added to Favourites!", Toast.LENGTH_SHORT).show()
                 },
                 modifier = Modifier
                     .padding(8.dp)
 //                    .alpha(0.6f)
                 ,
-                backgroundColor = Color.White
+                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
             ) {
                 Icon(
                     imageVector = Icons.Default.Favorite,
                     contentDescription = null,
-                    tint = Color.Red
+                    tint = MaterialTheme.colors.bottomAppBarContentColor
                 )
             }
 
@@ -208,12 +251,12 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
                 modifier = Modifier
                     .padding(8.dp),
 //                    .alpha(0.5f),
-                backgroundColor = Color.White
+                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
             ) {
                 Icon(
-                    imageVector = Icons.Default.ImagesearchRoller,
+                    imageVector = Icons.Default.Wallpaper,
                     contentDescription = null,
-                    tint = Color.Black
+                    tint = MaterialTheme.colors.bottomAppBarContentColor
                 )
             }
         }
@@ -222,15 +265,26 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String) {
 
 fun setWallPaper(context: Context, fullUrl: String) {
 
+    val metrics = DisplayMetrics()
+    val windowsManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
+    windowsManager.defaultDisplay.getMetrics(metrics)
+
+    val screenWidth = metrics.widthPixels
+    val screenHeight = metrics.heightPixels.minus(300)
+
     val wallpaperManager = WallpaperManager.getInstance(context)
+    wallpaperManager.suggestDesiredDimensions(screenWidth, screenHeight)
+
+    val width = wallpaperManager.desiredMinimumWidth
+    val height = wallpaperManager.desiredMinimumHeight
     Toast.makeText(context, "Setting your Wallpaper...", Toast.LENGTH_LONG).show()
 
     val thread = Thread {
         try {
-            //Your code goes here
             val url = URL(fullUrl)
             val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            wallpaperManager.setBitmap(image)
+            val wallpaper = Bitmap.createScaledBitmap(image, width, height, true)
+            wallpaperManager.setBitmap(wallpaper)
 
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
