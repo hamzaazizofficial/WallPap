@@ -83,6 +83,10 @@ fun NavGraph(
                 navArgument("fullUrl") {
                     nullable = true
                     type = NavType.StringType
+                },
+                navArgument("regularUrl") {
+                    nullable = true
+                    type = NavType.StringType
                 }
             )) {
             val fullUrl = it.arguments?.getString("fullUrl")

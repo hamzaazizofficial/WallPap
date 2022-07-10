@@ -64,11 +64,12 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
             crossfade(durationMillis = 1)
 //            error(R.drawable.ic_placeholder)
 //            placeholder(R.drawable.loading)
+
         }
 
         val thread = Thread {
             try {
-                val url = URL(data)
+                val url = URL(fullUrl)
                 image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -202,13 +203,15 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
                         null
                     )
 
-                    val uri = Uri.parse(path)
-                    intent.putExtra(Intent.EXTRA_STREAM, uri)
-                    intent.putExtra(
-                        Intent.EXTRA_TEXT,
-                        "Download WallPap for more exciting WallPapers!"
-                    )
-                    context.startActivity(intent)
+                    if (path != null) {
+                        val uri = Uri.parse(path)
+                        intent.putExtra(Intent.EXTRA_STREAM, uri)
+                        intent.putExtra(
+                            Intent.EXTRA_TEXT,
+                            "Download WallPap for more exciting WallPapers!"
+                        )
+                        context.startActivity(intent)
+                    }
                 },
                 modifier = Modifier
                     .padding(8.dp)
@@ -310,7 +313,6 @@ fun saveMediaToStorage(bitmap: Bitmap, context: Context) {
 
             //Content resolver will process the contentvalues
             val contentValues = ContentValues().apply {
-
                 //putting file information in content values
                 put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
                 put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")

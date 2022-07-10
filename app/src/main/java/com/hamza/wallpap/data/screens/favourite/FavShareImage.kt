@@ -8,11 +8,11 @@ import android.net.Uri
 import android.provider.MediaStore
 import java.net.URL
 
-fun favShareImage(context: Context, fullUrl: String, image: Bitmap?) {
+fun favShareImage(context: Context, data: String, image: Bitmap?) {
     var image = image
     val thread = Thread {
         try {
-            val url = URL(fullUrl)
+            val url = URL(data)
             image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
