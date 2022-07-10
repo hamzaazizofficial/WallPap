@@ -4,6 +4,7 @@ package com.hamza.wallpap.data.screens.favourite
 import android.app.WallpaperManager
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -44,7 +45,10 @@ import java.io.OutputStream
 import java.net.URL
 
 @Composable
-fun FavouriteWallpaperFullScreen(fullUrl: String, navController: NavHostController) {
+fun FavouriteWallpaperFullScreen(
+    fullUrl: String,
+    navController: NavHostController
+) {
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
     val favUrlsViewModel: FavUrlsViewModel = hiltViewModel()
     val scope = rememberCoroutineScope()
@@ -64,6 +68,17 @@ fun FavouriteWallpaperFullScreen(fullUrl: String, navController: NavHostControll
 //            error(R.drawable.ic_placeholder)
 //            placeholder(R.drawable.loading)
         }
+
+        val thread = Thread {
+            try {
+                val url = URL(data)
+                image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        thread.start()
 
 
 //        val thread = Thread {
@@ -217,7 +232,24 @@ fun FavouriteWallpaperFullScreen(fullUrl: String, navController: NavHostControll
 
             FloatingActionButton(
                 onClick = {
-                   favShareImage(context, fullUrl, image)
+//                   favShareImage(context, data, image)
+                    val intent = Intent(Intent.ACTION_SEND).setType("image/*")
+
+                    val path = MediaStore.Images.Media.insertImage(
+                        context.contentResolver,
+                        image,
+                        "${System.currentTimeMillis()}",
+                        null
+                    )
+                    if (path != null) {
+                        val uri = Uri.parse(path)
+                        intent.putExtra(Intent.EXTRA_STREAM, uri)
+                        intent.putExtra(
+                            Intent.EXTRA_TEXT,
+                            "Download WallPap for more exciting WallPapers!"
+                        )
+                        context.startActivity(intent)
+                    }
                 },
                 modifier = Modifier
                     .padding(8.dp)
