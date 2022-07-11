@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -89,12 +90,84 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
             )
         }
 
+//        var sliderPosition1 by remember { mutableStateOf(1f) }
+//        var sliderPosition2 by remember { mutableStateOf(1f) }
+//        var sliderPosition3 by remember { mutableStateOf(1f) }
+//
         Image(
             contentScale = scale,
             modifier = Modifier.fillMaxSize(),
             painter = painter,
-            contentDescription = "Unsplash Image"
+            contentDescription = "Unsplash Image",
+//            colorFilter = androidx.compose.ui.graphics.ColorFilter.colorMatrix(colorMatrix = ColorMatrix().apply {
+////                setToRotateRed(sliderPosition1)
+////                setToRotateGreen(sliderPosition2)
+////                setToRotateBlue(sliderPosition3)
+//                setToScale(sliderPosition1, sliderPosition2, sliderPosition3, 1f)
+//            })
         )
+//
+//
+//        Text(text = sliderPosition1.toString())
+//        Spacer(modifier = Modifier.padding(bottom = 30.dp))
+//        Text(text = sliderPosition2.toString())
+//        Spacer(modifier = Modifier.padding(bottom = 30.dp))
+//        Text(text = sliderPosition3.toString())
+//        Slider(
+//            value = sliderPosition1,
+//            onValueChange = { it1->
+//                sliderPosition1 = it1
+//            },
+//            valueRange = 1f..3f,
+//            onValueChangeFinished = {
+//                // launch some business logic update with the state you hold
+//                // viewModel.updateSelectedSliderValue(sliderPosition)
+//            },
+//            steps = 3,
+//            colors = SliderDefaults.colors(
+//                thumbColor = MaterialTheme.colors.secondary,
+//                activeTrackColor = MaterialTheme.colors.secondary
+//            ),
+//            modifier = Modifier.padding(bottom = 200.dp)
+//        )
+//
+////        Spacer(modifier = Modifier.padding(30.dp))
+//
+//        Slider(
+//            value = sliderPosition2,
+//            onValueChange = {it2-> sliderPosition2 = it2 },
+//            valueRange = 1f..3f,
+//            onValueChangeFinished = {
+//                                    sliderPosition2 = sliderPosition2
+//                // launch some business logic update with the state you hold
+//                // viewModel.updateSelectedSliderValue(sliderPosition)
+//            },
+//            steps = 3,
+//            colors = SliderDefaults.colors(
+//                thumbColor = MaterialTheme.colors.secondary,
+//                activeTrackColor = MaterialTheme.colors.secondary
+//            ),
+//            modifier = Modifier.padding(bottom = 150.dp)
+//        )
+//
+////        Spacer(modifier = Modifier.padding(bottom = 30.dp))
+//
+//        Slider(
+//            value = sliderPosition3,
+//            onValueChange = {it3-> sliderPosition3 = it3 },
+//            valueRange = 1f..3f,
+//            onValueChangeFinished = {
+//                                    sliderPosition3 = sliderPosition3
+//                // launch some business logic update with the state you hold
+//                // viewModel.updateSelectedSliderValue(sliderPosition)
+//            },
+//            steps = 3,
+//            colors = SliderDefaults.colors(
+//                thumbColor = MaterialTheme.colors.secondary,
+//                activeTrackColor = MaterialTheme.colors.secondary
+//            ),
+//            modifier = Modifier.padding(bottom = 100.dp)
+//        )
 
         Surface(
             modifier = Modifier

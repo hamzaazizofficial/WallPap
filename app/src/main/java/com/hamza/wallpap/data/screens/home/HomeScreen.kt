@@ -13,7 +13,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -21,7 +20,6 @@ import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.screens.common.HomeListContent
 import com.hamza.wallpap.data.screens.search.SearchChips
-import com.hamza.wallpap.data.screens.search.SearchChipsViewModel
 import com.hamza.wallpap.ui.theme.systemBarColor
 import kotlinx.coroutines.launch
 
@@ -39,7 +37,6 @@ fun HomeScreen(
 
     val scope = rememberCoroutineScope()
     val activity = (LocalContext.current as? Activity)
-    val searchChipsViewModel: SearchChipsViewModel = viewModel()
     val items = homeViewModel.itemsFlow.collectAsLazyPagingItems()
 
     BackHandler {
@@ -62,13 +59,13 @@ fun HomeScreen(
                 .padding(horizontal = 5.dp, vertical = 7.dp)
                 .horizontalScroll(rememberScrollState())
         ) {
-            searchChipsViewModel.wallpaperItems.forEachIndexed { index, s ->
+            homeViewModel.wallpaperItems.forEachIndexed { index, s ->
                 SearchChips(
                     text = s.title,
-                    selected = searchChipsViewModel.selectedIndex.value == index,
+                    selected = homeViewModel.selectedIndex.value == index,
                     onClick = {
-                        searchChipsViewModel.selectedIndex.value = index
-                        homeViewModel.query.value = searchChipsViewModel.wallpaperItems[index].query
+                        homeViewModel.selectedIndex.value = index
+                        homeViewModel.query.value = homeViewModel.wallpaperItems[index].query
                     }
                 )
                 Spacer(modifier = Modifier.padding(horizontal = 6.dp))
