@@ -14,6 +14,7 @@ import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,6 +36,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
+import com.hamza.wallpap.data.screens.common.CustomDialog
 import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
@@ -44,6 +46,7 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.net.URL
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun FavouriteWallpaperFullScreen(
     fullUrl: String,
@@ -109,6 +112,15 @@ fun FavouriteWallpaperFullScreen(
             painter = painter,
             contentDescription = "Unsplash Image",
         )
+
+        if (wallpaperFullScreenViewModel.dialogState.value) {
+            CustomDialog(
+                dialogState = wallpaperFullScreenViewModel.dialogState,
+                context = context,
+                wallpaperFullScreenViewModel,
+                fullUrl
+            )
+        }
 
         Surface(
             modifier = Modifier
@@ -290,7 +302,8 @@ fun FavouriteWallpaperFullScreen(
 
             FloatingActionButton(
                 onClick = {
-                    setWallPaper(context, fullUrl)
+//                    setWallPaper(context, fullUrl)
+                    wallpaperFullScreenViewModel.dialogState.value = true
                 },
                 modifier = Modifier
                     .padding(8.dp),
@@ -308,6 +321,7 @@ fun FavouriteWallpaperFullScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.N)
 fun setWallPaper(context: Context, fullUrl: String) {
 
     val metrics = DisplayMetrics()
@@ -329,7 +343,8 @@ fun setWallPaper(context: Context, fullUrl: String) {
             val url = URL(fullUrl)
             val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             val wallpaper = Bitmap.createScaledBitmap(image, width, height, true)
-            wallpaperManager.setBitmap(wallpaper)
+            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
 
         } catch (e: java.lang.Exception) {
             e.printStackTrace()

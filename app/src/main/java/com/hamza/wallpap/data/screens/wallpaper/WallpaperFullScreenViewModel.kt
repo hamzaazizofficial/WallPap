@@ -7,4 +7,6 @@ import androidx.lifecycle.ViewModel
 
 class WallpaperFullScreenViewModel: ViewModel() {
     var id by mutableStateOf(0)
+    var dialogState = mutableStateOf(false)
+    var setWallpaperAs by mutableStateOf(1)
 }

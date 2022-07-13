@@ -14,6 +14,7 @@ import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -36,6 +36,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
+import com.hamza.wallpap.data.screens.common.CustomDialog
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
@@ -45,6 +46,7 @@ import java.io.OutputStream
 import java.net.URL
 
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavHostController) {
 
@@ -67,6 +69,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
 //            placeholder(R.drawable.loading)
 
         }
+
 
         val thread = Thread {
             try {
@@ -106,6 +109,16 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
 //                setToScale(sliderPosition1, sliderPosition2, sliderPosition3, 1f)
 //            })
         )
+
+        if (wallpaperFullScreenViewModel.dialogState.value) {
+            CustomDialog(
+                dialogState = wallpaperFullScreenViewModel.dialogState,
+                context = context,
+                wallpaperFullScreenViewModel,
+                fullUrl
+            )
+        }
+
 //
 //
 //        Text(text = sliderPosition1.toString())
@@ -322,7 +335,8 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
 
             FloatingActionButton(
                 onClick = {
-                    setWallPaper(context, fullUrl)
+//                    setWallPaper(context, fullUrl)
+                    wallpaperFullScreenViewModel.dialogState.value = true
                 },
                 modifier = Modifier
                     .padding(8.dp),
@@ -339,7 +353,8 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
     }
 }
 
-fun setWallPaper(context: Context, fullUrl: String) {
+@RequiresApi(Build.VERSION_CODES.N)
+fun setWallPaper(context: Context, fullUrl: String, wallpaperAs: Int) {
 
     val metrics = DisplayMetrics()
     val windowsManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
@@ -360,7 +375,14 @@ fun setWallPaper(context: Context, fullUrl: String) {
             val url = URL(fullUrl)
             val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             val wallpaper = Bitmap.createScaledBitmap(image, width, height, true)
-            wallpaperManager.setBitmap(wallpaper)
+            when (wallpaperAs) {
+                1 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+                2 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+                3 -> {
+                    wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+                    wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+                }
+            }
 
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
