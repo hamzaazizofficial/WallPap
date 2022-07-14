@@ -1,5 +1,7 @@
 package com.hamza.wallpap.data.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,6 +16,9 @@ import coil.annotation.ExperimentalCoilApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.screens.favourite.FavouriteScreen
 import com.hamza.wallpap.data.screens.favourite.FavouriteWallpaperFullScreen
+import com.hamza.wallpap.data.screens.firestore.amoled.AmoledFullScreen
+import com.hamza.wallpap.data.screens.firestore.amoled.AmoledScreen
+import com.hamza.wallpap.data.screens.firestore.amoled.AmoledViewModel
 import com.hamza.wallpap.data.screens.home.HomeScreen
 import com.hamza.wallpap.data.screens.home.HomeViewModel
 import com.hamza.wallpap.data.screens.random.RandomScreen
@@ -25,6 +30,7 @@ import com.hamza.wallpap.data.screens.settings.SettingsViewModel
 import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreen
 import com.hamza.wallpap.util.WallPapTheme
 
+@RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalPagingApi::class, ExperimentalCoilApi::class)
 @Composable
 fun NavGraph(
@@ -38,6 +44,7 @@ fun NavGraph(
     val searchViewModel: SearchViewModel = hiltViewModel()
     val randomScreenViewModel: RandomScreenViewModel = viewModel()
     val favUrlsViewModel: FavUrlsViewModel = viewModel()
+    val amoledViewModel: AmoledViewModel = viewModel()
 
     NavHost(navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) {
@@ -92,6 +99,24 @@ fun NavGraph(
             val fullUrl = it.arguments?.getString("fullUrl")
             if (fullUrl != null) {
                 FavouriteWallpaperFullScreen(fullUrl, navController)
+            }
+        }
+
+        // FireStore Screens
+        composable(Screen.Amoled.route) {
+            AmoledScreen(navController, amoledViewModel)
+        }
+
+        composable(Screen.AmoledFullScreen.route,
+            arguments = listOf(
+                navArgument("amoledUrl") {
+                    nullable = true
+                    type = NavType.StringType
+                }
+            )) {
+            val amoledUrl = it.arguments?.getString("amoledUrl")
+            if (amoledUrl != null) {
+                AmoledFullScreen(amoledUrl, navController)
             }
         }
     }

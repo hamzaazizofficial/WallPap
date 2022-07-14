@@ -114,46 +114,6 @@ fun FavouriteItem(
                         favUrlsViewModel.deleteFavouriteUrl(favUrl)
                     }
             )
-
-//            if (homeViewModel.showUserDetails) {
-//
-//                Surface(
-//                    modifier = Modifier
-//                        .height(40.dp)
-//                        .fillMaxWidth()
-//                        .clickable {
-//                            val browserIntent = Intent(
-//                                Intent.ACTION_VIEW,
-//                                Uri.parse("https://unsplash.com/@${unsplashImage.user.username}?utm_source=DemoApp&utm_medium=referral")
-//                            )
-//                            ContextCompat.startActivity(context, browserIntent, null)
-//                        }
-//                        .alpha(ContentAlpha.medium),
-//                    color = Color.Black
-//                ) {}
-//                Row(
-//                    modifier = Modifier
-//                        .height(40.dp)
-//                        .fillMaxWidth()
-//                        .padding(horizontal = 6.dp),
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    horizontalArrangement = Arrangement.SpaceBetween
-//                ) {
-//                    Text(
-//                        text = buildAnnotatedString {
-//                            append("Photo by ")
-//                            withStyle(style = SpanStyle(fontWeight = FontWeight.Black)) {
-//                                append(unsplashImage.user.username)
-//                            }
-//                            append(" on Unsplash")
-//                        },
-//                        color = Color.White,
-//                        fontSize = MaterialTheme.typography.caption.fontSize,
-//                        maxLines = 1,
-//                        overflow = TextOverflow.Ellipsis
-//                    )
-//                }
-//            }
         }
     }
 }

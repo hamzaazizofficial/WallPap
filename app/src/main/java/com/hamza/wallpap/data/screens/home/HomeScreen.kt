@@ -19,6 +19,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.screens.common.HomeListContent
+import com.hamza.wallpap.data.screens.firestore.amoled.AmoledScreen
 import com.hamza.wallpap.data.screens.search.SearchChips
 import com.hamza.wallpap.ui.theme.systemBarColor
 import kotlinx.coroutines.launch
@@ -72,5 +73,6 @@ fun HomeScreen(
             }
         }
         HomeListContent(items = items, navController, homeViewModel)
+//        AmoledScreen(navController)
     }
 }

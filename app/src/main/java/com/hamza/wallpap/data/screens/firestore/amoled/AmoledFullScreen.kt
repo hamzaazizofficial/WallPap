@@ -1,9 +1,8 @@
-package com.hamza.wallpap.data.screens.wallpaper
+package com.hamza.wallpap.data.screens.firestore.amoled
 
 import android.app.WallpaperManager
 import android.content.ContentValues
 import android.content.Context
-import android.content.Context.WINDOW_SERVICE
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -35,9 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
+import com.hamza.wallpap.R
 import com.hamza.wallpap.data.screens.common.CustomDialog
-import com.hamza.wallpap.model.FavouriteUrls
+import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import java.io.File
@@ -45,14 +44,14 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.net.URL
 
-
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavHostController) {
-
+fun AmoledFullScreen(
+    amoledUrl: String,
+    navController: NavHostController
+) {
+    val scope = rememberCoroutineScope()
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
-    var viewModel: FavUrlsViewModel = viewModel()
-
     Box(
         Modifier
             .fillMaxSize()
@@ -60,20 +59,19 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
         contentAlignment = Alignment.BottomCenter
     ) {
         var image: Bitmap? = null
-        var data by remember { mutableStateOf(regularUrl) }
+        var data by remember { mutableStateOf(amoledUrl) }
+
         val context = LocalContext.current
 
         val painter = rememberImagePainter(data = data) {
             crossfade(durationMillis = 1)
 //            error(R.drawable.ic_placeholder)
-//            placeholder(R.drawable.loading)
-
+//            placeholder(R.drawable.ic_placeholder)
         }
-
 
         val thread = Thread {
             try {
-                val url = URL(fullUrl)
+                val url = URL(data)
                 image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -93,21 +91,11 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
             )
         }
 
-//        var sliderPosition1 by remember { mutableStateOf(1f) }
-//        var sliderPosition2 by remember { mutableStateOf(1f) }
-//        var sliderPosition3 by remember { mutableStateOf(1f) }
-//
         Image(
             contentScale = scale,
             modifier = Modifier.fillMaxSize(),
             painter = painter,
-            contentDescription = "Unsplash Image",
-//            colorFilter = androidx.compose.ui.graphics.ColorFilter.colorMatrix(colorMatrix = ColorMatrix().apply {
-////                setToRotateRed(sliderPosition1)
-////                setToRotateGreen(sliderPosition2)
-////                setToRotateBlue(sliderPosition3)
-//                setToScale(sliderPosition1, sliderPosition2, sliderPosition3, 1f)
-//            })
+            contentDescription = "Amoled Image",
         )
 
         if (wallpaperFullScreenViewModel.dialogState.value) {
@@ -115,72 +103,9 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
                 dialogState = wallpaperFullScreenViewModel.dialogState,
                 context = context,
                 wallpaperFullScreenViewModel,
-                fullUrl
+                amoledUrl
             )
         }
-
-//
-//
-//        Text(text = sliderPosition1.toString())
-//        Spacer(modifier = Modifier.padding(bottom = 30.dp))
-//        Text(text = sliderPosition2.toString())
-//        Spacer(modifier = Modifier.padding(bottom = 30.dp))
-//        Text(text = sliderPosition3.toString())
-//        Slider(
-//            value = sliderPosition1,
-//            onValueChange = { it1->
-//                sliderPosition1 = it1
-//            },
-//            valueRange = 1f..3f,
-//            onValueChangeFinished = {
-//                // launch some business logic update with the state you hold
-//                // viewModel.updateSelectedSliderValue(sliderPosition)
-//            },
-//            steps = 3,
-//            colors = SliderDefaults.colors(
-//                thumbColor = MaterialTheme.colors.secondary,
-//                activeTrackColor = MaterialTheme.colors.secondary
-//            ),
-//            modifier = Modifier.padding(bottom = 200.dp)
-//        )
-//
-////        Spacer(modifier = Modifier.padding(30.dp))
-//
-//        Slider(
-//            value = sliderPosition2,
-//            onValueChange = {it2-> sliderPosition2 = it2 },
-//            valueRange = 1f..3f,
-//            onValueChangeFinished = {
-//                                    sliderPosition2 = sliderPosition2
-//                // launch some business logic update with the state you hold
-//                // viewModel.updateSelectedSliderValue(sliderPosition)
-//            },
-//            steps = 3,
-//            colors = SliderDefaults.colors(
-//                thumbColor = MaterialTheme.colors.secondary,
-//                activeTrackColor = MaterialTheme.colors.secondary
-//            ),
-//            modifier = Modifier.padding(bottom = 150.dp)
-//        )
-//
-////        Spacer(modifier = Modifier.padding(bottom = 30.dp))
-//
-//        Slider(
-//            value = sliderPosition3,
-//            onValueChange = {it3-> sliderPosition3 = it3 },
-//            valueRange = 1f..3f,
-//            onValueChangeFinished = {
-//                                    sliderPosition3 = sliderPosition3
-//                // launch some business logic update with the state you hold
-//                // viewModel.updateSelectedSliderValue(sliderPosition)
-//            },
-//            steps = 3,
-//            colors = SliderDefaults.colors(
-//                thumbColor = MaterialTheme.colors.secondary,
-//                activeTrackColor = MaterialTheme.colors.secondary
-//            ),
-//            modifier = Modifier.padding(bottom = 100.dp)
-//        )
 
         Surface(
             modifier = Modifier
@@ -255,17 +180,17 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
                         )
                     }
 
-                    Spacer(modifier = Modifier.padding(end = 10.dp))
-
-                    Icon(
-                        imageVector = Icons.Default.HighQuality,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                data = fullUrl
-                            },
-                        tint = Color.White
-                    )
+//                    Spacer(modifier = Modifier.padding(end = 10.dp))
+//
+//                    Icon(
+//                        imageVector = Icons.Default.HighQuality,
+//                        contentDescription = null,
+//                        modifier = Modifier
+//                            .clickable {
+//                                data = amoledUrl
+//                            },
+//                        tint = Color.White
+//                    )
                 }
             }
         }
@@ -278,8 +203,65 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
             horizontalArrangement = Arrangement.Center
         ) {
 
+//            FloatingActionButton(
+//                onClick = {
+//                    image?.let { saveMediaToStorage(it, context) }
+//                },
+//                modifier = Modifier
+//                    .padding(8.dp)
+////                    .alpha(0.5f)
+//                ,
+//                backgroundColor = Color.White
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Download,
+//                    contentDescription = null,
+//                    tint = Color.Black
+//                )
+//            }
+//
+//            FloatingActionButton(
+//                onClick = {
+//                    favUrlsViewModel.deleteFavouriteUrl(
+//                        FavouriteUrls(
+//                            wallpaperFullScreenViewModel.id,
+//                            fullUrl
+//                        )
+//                    )
+//                    Toast.makeText(context, "Removed!", Toast.LENGTH_SHORT).show()
+//                },
+//                modifier = Modifier
+//                    .padding(8.dp)
+////                    .alpha(0.6f)
+//                ,
+//                backgroundColor = Color.White
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Delete,
+//                    contentDescription = null,
+//                    tint = Color.Red
+//                )
+//            }
+//
+//            FloatingActionButton(
+//                onClick = {
+//                    setWallPaper(context, fullUrl)
+//                },
+//                modifier = Modifier
+//                    .padding(8.dp),
+////                    .alpha(0.5f),
+//                backgroundColor = Color.White
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.ImagesearchRoller,
+//                    contentDescription = null,
+//                    tint = Color.Black
+//                )
+//            }
+
             FloatingActionButton(
                 onClick = {
+//                   favShareImage(context, data, image)
                     val intent = Intent(Intent.ACTION_SEND).setType("image/*")
 
                     val path = MediaStore.Images.Media.insertImage(
@@ -288,7 +270,6 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
                         "${System.currentTimeMillis()}",
                         null
                     )
-
                     if (path != null) {
                         val uri = Uri.parse(path)
                         intent.putExtra(Intent.EXTRA_STREAM, uri)
@@ -313,31 +294,28 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
             }
 
 
-            FloatingActionButton(
-                onClick = {
-                    wallpaperFullScreenViewModel.id += 1
-                    val favUrl = FavouriteUrls(wallpaperFullScreenViewModel.id, fullUrl)
-                    viewModel.addToFav(favUrl)
-                    Toast.makeText(context, "Added to Favourites!", Toast.LENGTH_SHORT).show()
-                },
-                modifier = Modifier
-                    .padding(8.dp)
-//                    .alpha(0.6f)
-                ,
-                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.bottomAppBarContentColor
-                )
-            }
+//            FloatingActionButton(
+//                onClick = {
+//
+////                    Toast.makeText(context, "Removed!", Toast.LENGTH_SHORT).show()
+//                },
+//                modifier = Modifier
+//                    .padding(8.dp)
+////                    .alpha(0.6f)
+//                ,
+//                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Delete,
+//                    contentDescription = null,
+//                    tint = MaterialTheme.colors.bottomAppBarContentColor
+//                )
+//            }
 
             FloatingActionButton(
                 onClick = {
-//                    setWallPaper(context, fullUrl)
+//                    setWallPaper(context, amoledUrl)
                     wallpaperFullScreenViewModel.dialogState.value = true
-
                 },
                 modifier = Modifier
                     .padding(8.dp),
@@ -350,15 +328,16 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
                     tint = MaterialTheme.colors.bottomAppBarContentColor
                 )
             }
+
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.N)
-fun setWallPaper(context: Context, fullUrl: String, wallpaperAs: Int) {
+fun setWallPaper(context: Context, fullUrl: String) {
 
     val metrics = DisplayMetrics()
-    val windowsManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
+    val windowsManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     windowsManager.defaultDisplay.getMetrics(metrics)
 
     val screenWidth = metrics.widthPixels
@@ -376,14 +355,8 @@ fun setWallPaper(context: Context, fullUrl: String, wallpaperAs: Int) {
             val url = URL(fullUrl)
             val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             val wallpaper = Bitmap.createScaledBitmap(image, width, height, true)
-            when (wallpaperAs) {
-                1 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
-                2 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
-                3 -> {
-                    wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
-                    wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
-                }
-            }
+            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
 
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
@@ -409,6 +382,7 @@ fun saveMediaToStorage(bitmap: Bitmap, context: Context) {
 
             //Content resolver will process the contentvalues
             val contentValues = ContentValues().apply {
+
                 //putting file information in content values
                 put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
                 put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
@@ -440,4 +414,3 @@ fun saveMediaToStorage(bitmap: Bitmap, context: Context) {
         Toast.makeText(context, "Saved to Gallery!", Toast.LENGTH_SHORT).show()
     }
 }
-

@@ -1,19 +1,16 @@
-package com.hamza.wallpap.data.screens.home
+package com.hamza.wallpap.data.screens.common
 
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Dehaze
-import androidx.compose.material.icons.filled.DeleteSweep
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.navigation.Screen
+import com.hamza.wallpap.data.screens.home.HomeViewModel
 import com.hamza.wallpap.data.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.topAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.topAppBarContentColor
@@ -25,6 +22,7 @@ fun TopBar(
     onNavButtonClick: () -> Unit = {},
     currentRoute: String?,
     onSearchClicked: () -> Unit,
+    onRefreshClicked: () -> Unit,
     onUserDetailsClicked: () -> Unit,
     homeViewModel: HomeViewModel,
     randomScreenViewModel: RandomScreenViewModel,
@@ -39,6 +37,7 @@ fun TopBar(
                 else if (currentRoute.equals(Screen.Settings.route)) "Settings"
                 else if (currentRoute.equals(Screen.Random.route)) "Random"
                 else if (currentRoute.equals(Screen.Favourite.route)) "Favourite"
+                else if (currentRoute.equals(Screen.Amoled.route)) "Latest"
                 else "Home",
                 color = MaterialTheme.colors.topAppBarTitle,
             )
@@ -54,6 +53,16 @@ fun TopBar(
             }
         },
         actions = {
+
+            if (currentRoute.equals(Screen.Home.route)) {
+                IconButton(onClick = onRefreshClicked) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "Refresh Icon",
+                        tint = MaterialTheme.colors.topAppBarContentColor
+                    )
+                }
+            }
 
             if (!currentRoute.equals(Screen.Settings.route)) {
                 IconButton(onClick = onUserDetailsClicked) {

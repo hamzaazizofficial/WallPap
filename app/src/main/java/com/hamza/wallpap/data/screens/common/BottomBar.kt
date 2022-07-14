@@ -1,4 +1,4 @@
-package com.hamza.wallpap.data.screens.home
+package com.hamza.wallpap.data.screens.common
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -10,8 +10,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.hamza.wallpap.data.navigation.Screen
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
-import com.hamza.wallpap.ui.theme.topAppBarBackgroundColor
-import com.hamza.wallpap.ui.theme.topAppBarContentColor
 
 @Composable
 fun BottomBar(
@@ -19,6 +17,7 @@ fun BottomBar(
 ) {
     val items = listOf(
         Screen.Home,
+        Screen.Amoled,
         Screen.Random,
         Screen.Favourite,
         Screen.Settings,
@@ -36,7 +35,7 @@ fun BottomBar(
                     icon = {
                         Icon(imageVector = item.icon, item.title)
                     },
-                    label = { Text(text = item.title) },
+//                    label = { Text(text = item.title) },
                     selected = currentRoute == item.route,
                     onClick = {
                         if (currentRoute != item.route) {

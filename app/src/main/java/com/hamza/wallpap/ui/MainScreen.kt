@@ -1,5 +1,7 @@
 package com.hamza.wallpap.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -17,13 +19,14 @@ import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.navigation.NavGraph
 import com.hamza.wallpap.data.navigation.Screen
 import com.hamza.wallpap.data.screens.common.NavDrawer
-import com.hamza.wallpap.data.screens.home.BottomBar
-import com.hamza.wallpap.data.screens.home.TopBar
+import com.hamza.wallpap.data.screens.common.BottomBar
+import com.hamza.wallpap.data.screens.common.TopBar
 import com.hamza.wallpap.data.screens.home.HomeViewModel
 import com.hamza.wallpap.data.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalPagingApi::class)
 @Composable
 fun MainScreen(
@@ -44,7 +47,8 @@ fun MainScreen(
             if (
                 !currentRoute.equals(Screen.Search.route) &&
                 !currentRoute.equals(Screen.WallPaperScreen.route) &&
-                !currentRoute.equals(Screen.FavouriteWallPaperScreen.route)
+                !currentRoute.equals(Screen.FavouriteWallPaperScreen.route) &&
+                !currentRoute.equals(Screen.AmoledFullScreen.route)
             ) {
                 TopBar(
                     onNavButtonClick = {
@@ -55,6 +59,9 @@ fun MainScreen(
                     currentRoute,
                     onSearchClicked = {
                         navController.navigate(Screen.Search.route)
+                    },
+                    onRefreshClicked = {
+                        navController.navigate(Screen.Home.route)
                     },
                     onUserDetailsClicked = {
                         if (currentRoute.equals(Screen.Home.route)) {
@@ -76,7 +83,8 @@ fun MainScreen(
             if (
                 !currentRoute.equals(Screen.Search.route) &&
                 !currentRoute.equals(Screen.WallPaperScreen.route) &&
-                !currentRoute.equals(Screen.FavouriteWallPaperScreen.route)
+                !currentRoute.equals(Screen.FavouriteWallPaperScreen.route) &&
+                !currentRoute.equals(Screen.AmoledFullScreen.route)
             ) {
                 BottomBar(navController = navController)
             }
