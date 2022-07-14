@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "370916509083",
+    "project_id": "wallpap-4f199",
+    "storage_bucket": "wallpap-4f199.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:370916509083:android:2d609c2c54106de99c4d3e",
+        "android_client_info": {
+          "package_name": "com.hamza.wallpap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "370916509083-lpet27aor24ak01e88r9tlfkbe6serrh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARyQcvtD7Bdexb7QDr7uyurKmVo3SMEak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "370916509083-lpet27aor24ak01e88r9tlfkbe6serrh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

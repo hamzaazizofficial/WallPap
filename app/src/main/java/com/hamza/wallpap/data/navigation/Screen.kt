@@ -13,4 +13,8 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Settings : Screen("settings_screen","Settings", Icons.Default.Settings)
     object Random : Screen("random", "Random", Icons.Default.AutoAwesome)
     object Favourite: Screen("favourite", "Favourite", Icons.Default.Favorite)
+
+    //FireStore
+    object Amoled: Screen("amoled", "Amoled", Icons.Default.Whatshot)
+    object AmoledFullScreen : Screen("amoled_full_screen/{amoledUrl}","Amoled", Icons.Default.Wallpaper)
 }
