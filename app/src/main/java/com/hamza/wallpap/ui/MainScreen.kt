@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,8 +16,8 @@ import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.navigation.NavGraph
 import com.hamza.wallpap.data.navigation.Screen
-import com.hamza.wallpap.data.screens.common.NavDrawer
 import com.hamza.wallpap.data.screens.common.BottomBar
+import com.hamza.wallpap.data.screens.common.NavDrawer
 import com.hamza.wallpap.data.screens.common.TopBar
 import com.hamza.wallpap.data.screens.home.HomeViewModel
 import com.hamza.wallpap.data.screens.random.RandomScreenViewModel
@@ -41,6 +39,14 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val scope = rememberCoroutineScope()
+    var refreshClicked by remember { mutableStateOf(false)}
+
+    if (refreshClicked){
+        Column() {
+            NavGraph(navController = navController, scaffoldState, onItemSelected)
+        }
+    }
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -61,7 +67,7 @@ fun MainScreen(
                         navController.navigate(Screen.Search.route)
                     },
                     onRefreshClicked = {
-                        navController.navigate(Screen.Home.route)
+                        refreshClicked = true
                     },
                     onUserDetailsClicked = {
                         if (currentRoute.equals(Screen.Home.route)) {
