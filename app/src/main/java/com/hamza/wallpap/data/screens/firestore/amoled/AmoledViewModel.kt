@@ -49,7 +49,6 @@ class AmoledViewModel : ViewModel() {
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791927071.jpg?alt=media&token=435ee03d-e971-4689-ab05-823f7fac1635",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792614457.jpg?alt=media&token=7d58f91a-128d-4f99-b611-fe2d9b7bb5b5",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791749327.jpg?alt=media&token=8d5244f8-85f6-4e4d-b20d-925ab66c1ac2",
-            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791863799.jpg?alt=media&token=87aaaece-247a-4173-be4d-d5b98d799d67",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791633665.jpg?alt=media&token=8c0fef95-15ab-40d2-aea5-655673879a48",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792022048.jpg?alt=media&token=35bb9f5b-b668-41b0-b97c-4827b7321d02",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791658372.jpg?alt=media&token=4d155be5-6b4d-4219-a699-59fd070814af",
@@ -71,6 +70,22 @@ class AmoledViewModel : ViewModel() {
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791624919.jpg?alt=media&token=e645e75d-9f98-4987-bfd1-44ac6daa8255",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791633665.jpg?alt=media&token=8c0fef95-15ab-40d2-aea5-655673879a48",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791654700.jpg?alt=media&token=9b411ef6-6312-4e05-ae67-ffc9c5dd2522",
-            //216.24kb
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791658372.jpg?alt=media&token=4d155be5-6b4d-4219-a699-59fd070814af",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791751558.jpg?alt=media&token=10170afe-f509-4296-bf8b-c47151168c9f",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791807613.jpg?alt=media&token=7210f16e-646d-4d34-b15c-718826b0bd59",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791807613.jpg?alt=media&token=7210f16e-646d-4d34-b15c-718826b0bd5933",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791856721.jpg?alt=media&token=5bc31232-154c-405d-8015-1bdaf4a41713",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791863799.jpg?alt=media&token=87aaaece-247a-4173-be4d-d5b98d799d67",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791876277.jpg?alt=media&token=7ba80974-789e-471f-864f-12ddef806050",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791917493.jpg?alt=media&token=5acaf33b-fdb5-4192-9520-0b1bb0157089",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791991149.jpg?alt=media&token=551401e5-6f3c-48dc-a2a5-b8512ead7cba",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792012977.jpg?alt=media&token=41299416-78d1-4e87-8bd9-ecc551e4a112",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792022048.jpg?alt=media&token=35bb9f5b-b668-41b0-b97c-4827b7321d02",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792078101.jpg?alt=media&token=ad5c1558-5cd2-47fc-aa39-1d990df67585",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792093703.jpg?alt=media&token=37769a2d-c63f-4d4f-bf1c-38872803fb74",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792592725.jpg?alt=media&token=47ef861c-f892-4fec-b9ba-50d86c25cddf",
+
+
+            //356.12kb
         )
 }

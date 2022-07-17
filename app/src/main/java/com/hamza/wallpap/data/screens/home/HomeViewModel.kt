@@ -22,7 +22,7 @@ class HomeViewModel @Inject constructor(
 
     val wallpaperItems =
         arrayListOf(
-            SearchChip("Popular", "wallpaper"),
+            SearchChip("Popular", "hd amoled wallpapers"),
             SearchChip("Night", "Night"),
             SearchChip("Mobile", "Android Wallpapers"),
             SearchChip("Anime", "Anime"),
@@ -32,7 +32,7 @@ class HomeViewModel @Inject constructor(
 
     var selectedIndex = mutableStateOf(0)
 
-    val query = MutableStateFlow<String?>("wallpaper")
+    val query = MutableStateFlow<String?>("hd amoled wallpapers")
 
     var showUserDetails by mutableStateOf(false)
 
