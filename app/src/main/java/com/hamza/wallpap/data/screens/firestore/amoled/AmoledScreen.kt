@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,24 +29,6 @@ fun AmoledScreen(
     amoledViewModel: AmoledViewModel
 ) {
     val data = amoledViewModel.wallpaperItems
-
-//    if (data.value.isEmpty()) {
-//        Box(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .background(MaterialTheme.colors.background),
-//            contentAlignment = Alignment.Center
-//        ) {
-//            Text(
-//                text = "Your Favourite Wallpapers will appear here",
-//                fontSize = 16.sp,
-//                fontFamily = maven_pro_regular,
-//                color = MaterialTheme.colors.textColor,
-//                textAlign = TextAlign.Center
-//            )
-//        }
-//    }
-
     LazyVerticalGrid(cells = GridCells.Fixed(2)) {
         data.forEach { url->
             item()
@@ -58,7 +42,7 @@ fun AmoledItem(amoledUrl: String, navController: NavHostController) {
     val painter = rememberImagePainter(data = amoledUrl) {
         crossfade(durationMillis = 1000)
         error(R.drawable.ic_placeholder)
-        placeholder(R.drawable.ic_placeholder)
+//        placeholder(R.drawable.ic_placeholder)
     }
 
     val fullEncodedUrl = URLEncoder.encode(amoledUrl, StandardCharsets.UTF_8.toString())
@@ -77,6 +61,12 @@ fun AmoledItem(amoledUrl: String, navController: NavHostController) {
                 .fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter
         ) {
+
+            LinearProgressIndicator(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                color = MaterialTheme.colors.secondary
+            )
+
             Image(
                 modifier = Modifier.fillMaxSize(),
                 painter = painter,

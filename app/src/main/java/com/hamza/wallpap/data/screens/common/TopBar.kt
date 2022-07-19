@@ -4,7 +4,10 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Dehaze
+import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.paging.ExperimentalPagingApi
@@ -22,7 +25,6 @@ fun TopBar(
     onNavButtonClick: () -> Unit = {},
     currentRoute: String?,
     onSearchClicked: () -> Unit,
-    onRefreshClicked: () -> Unit,
     onUserDetailsClicked: () -> Unit,
     homeViewModel: HomeViewModel,
     randomScreenViewModel: RandomScreenViewModel,
@@ -53,16 +55,6 @@ fun TopBar(
             }
         },
         actions = {
-
-            if (currentRoute.equals(Screen.Home.route)) {
-                IconButton(onClick = onRefreshClicked) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "Refresh Icon",
-                        tint = MaterialTheme.colors.topAppBarContentColor
-                    )
-                }
-            }
 
             if (!currentRoute.equals(Screen.Settings.route)) {
                 IconButton(onClick = onUserDetailsClicked) {

@@ -1,5 +1,6 @@
 package com.hamza.wallpap.data.repository
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -8,6 +9,7 @@ import com.hamza.wallpap.data.local.UnsplashDatabase
 import com.hamza.wallpap.data.paging.SearchPagingSource
 import com.hamza.wallpap.data.paging.UnsplashRemoteMediator
 import com.hamza.wallpap.data.remote.UnsplashApi
+import com.hamza.wallpap.data.screens.search.SearchChip
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.util.Constants.ITEMS_PER_PAGE
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +20,18 @@ class Repository @Inject constructor(
     private val unsplashApi: UnsplashApi,
     private val unsplashDatabase: UnsplashDatabase
 ) {
+
+    val wallpaperItems =
+        arrayListOf(
+            SearchChip("Popular", "hd amoled wallpapers"),
+            SearchChip("Night", "Night"),
+            SearchChip("Mobile", "Android Wallpapers"),
+            SearchChip("Anime", "Anime"),
+            SearchChip("Dark", "Dark"),
+            SearchChip("Nature", "Nature"),
+        )
+
+    var selectedIndex = mutableStateOf(0)
 
     fun getAllImages(): Flow<PagingData<UnsplashImage>> {
         val pagingSourceFactory = { unsplashDatabase.unsplashImageDao().getAllImages() }
