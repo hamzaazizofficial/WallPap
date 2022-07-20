@@ -6,15 +6,15 @@ class AmoledViewModel : ViewModel() {
 
     val wallpaperItems =
         listOf(
-            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791542303.jpg?alt=media&token=ba577070-43d6-4fb4-98b3-cb9ef1464d1b",
-            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657784749358.jpg?alt=media&token=6914ff8f-9bb2-4a48-a6fe-ab9d1be5000f",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792078101.jpg?alt=media&token=ad5c1558-5cd2-47fc-aa39-1d990df67585",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/amoled-yellow-full-moon-rj2yddgg7fgf4538.jpg?alt=media&token=47ce09cd-ac82-4547-912a-ecb896d1a872",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/digital-wolf-artwork-amoled-pun1e82jtj93h33c.jpg?alt=media&token=c9d37802-ee6d-4848-ba27-9b66013bfc9c",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791996511.jpg?alt=media&token=2b8cb338-5b83-49d4-8be6-46cbb9022f01",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/797845.png?alt=media&token=649c8d1f-3608-4aed-a467-1e2422e817ef",
-            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791812768.jpg?alt=media&token=409e9c3a-2d4e-425c-80b4-0b9291072249",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657784749358.jpg?alt=media&token=6914ff8f-9bb2-4a48-a6fe-ab9d1be5000f",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657784665507.jpg?alt=media&token=93fb64f1-f6ca-434d-a029-4e09b71ae02b",
-            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792078101.jpg?alt=media&token=ad5c1558-5cd2-47fc-aa39-1d990df67585",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791812768.jpg?alt=media&token=409e9c3a-2d4e-425c-80b4-0b9291072249",
+            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791542303.jpg?alt=media&token=ba577070-43d6-4fb4-98b3-cb9ef1464d1b",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/amoled-blue-eyed-black-cat-rq91a4klmxqxaiyb.jpg?alt=media&token=c5d33b0b-c6ea-431e-b3cf-18590890584d",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/amoled-colorful-stormtrooper-36fiz607b6rdgfzf.jpg?alt=media&token=bb4473f2-7b4e-4ac7-ad3d-d97f506c4d9f",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/cyberpunk-2077-keanu-reeves-amoled-mg9gszqfqzjgrjls.jpg?alt=media&token=4018dc79-b3f7-4131-8e4b-b2e34e866f64",

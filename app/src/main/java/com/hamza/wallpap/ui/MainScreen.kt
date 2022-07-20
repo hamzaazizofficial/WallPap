@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,13 +41,6 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val scope = rememberCoroutineScope()
-    var refreshClicked by remember { mutableStateOf(false)}
-
-    if (refreshClicked){
-        Column() {
-            NavGraph(navController = navController, scaffoldState, onItemSelected)
-        }
-    }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -65,9 +60,6 @@ fun MainScreen(
                     currentRoute,
                     onSearchClicked = {
                         navController.navigate(Screen.Search.route)
-                    },
-                    onRefreshClicked = {
-                        refreshClicked = true
                     },
                     onUserDetailsClicked = {
                         if (currentRoute.equals(Screen.Home.route)) {

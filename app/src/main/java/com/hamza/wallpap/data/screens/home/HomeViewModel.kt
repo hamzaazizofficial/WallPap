@@ -20,17 +20,20 @@ class HomeViewModel @Inject constructor(
     repository: Repository
 ) : ViewModel() {
 
-    val wallpaperItems =
-        arrayListOf(
-            SearchChip("Popular", "hd amoled wallpapers"),
-            SearchChip("Night", "Night"),
-            SearchChip("Mobile", "Android Wallpapers"),
-            SearchChip("Anime", "Anime"),
-            SearchChip("Dark", "Dark"),
-            SearchChip("Nature", "Nature"),
-        )
+//    val wallpaperItems =
+//        arrayListOf(
+//            SearchChip("Popular", "hd amoled wallpapers"),
+//            SearchChip("Night", "Night"),
+//            SearchChip("Mobile", "Android Wallpapers"),
+//            SearchChip("Anime", "Anime"),
+//            SearchChip("Dark", "Dark"),
+//            SearchChip("Nature", "Nature"),
+//        )
+//
+//    var selectedIndex = mutableStateOf(0)
 
-    var selectedIndex = mutableStateOf(0)
+    val wallpaperItems = repository.wallpaperItems
+    val selectedIndex = repository.selectedIndex
 
     val query = MutableStateFlow<String?>("hd amoled wallpapers")
 
