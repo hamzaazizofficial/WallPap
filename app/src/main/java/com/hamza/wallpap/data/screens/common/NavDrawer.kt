@@ -176,7 +176,7 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
             modifier = Modifier.clickable {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data =
-                    Uri.parse("https://play.google.com/store/apps/developer?id=9iNe")
+                    Uri.parse("https://play.google.com/store/apps/dev?id=7870775867932667955")
                 try {
                     startActivity(context, intent, null)
                 } catch (e: Exception) {
