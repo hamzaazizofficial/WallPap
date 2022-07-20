@@ -84,8 +84,6 @@ class AmoledViewModel : ViewModel() {
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792078101.jpg?alt=media&token=ad5c1558-5cd2-47fc-aa39-1d990df67585",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792093703.jpg?alt=media&token=37769a2d-c63f-4d4f-bf1c-38872803fb74",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792592725.jpg?alt=media&token=47ef861c-f892-4fec-b9ba-50d86c25cddf",
-
-
             //356.12kb
         )
 }
