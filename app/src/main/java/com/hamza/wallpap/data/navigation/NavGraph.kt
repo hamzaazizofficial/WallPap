@@ -104,7 +104,7 @@ fun NavGraph(
 
         // FireStore Screens
         composable(Screen.Amoled.route) {
-            AmoledScreen(navController, amoledViewModel)
+            AmoledScreen(navController, amoledViewModel, scaffoldState)
         }
 
         composable(Screen.AmoledFullScreen.route,

@@ -15,7 +15,7 @@ class ThemeSettingPreference @Inject constructor(
 ): ThemeSetting {
 
     override val themeStream: MutableStateFlow<WallPapTheme>
-    override var theme: WallPapTheme by AppThemePreferenceDelegate("app_theme", WallPapTheme.MODE_AUTO)
+    override var theme: WallPapTheme by AppThemePreferenceDelegate("app_theme", WallPapTheme.MODE_DAY)
 
     private val preferences: SharedPreferences = context.getSharedPreferences("sample_theme", Context.MODE_PRIVATE)
 

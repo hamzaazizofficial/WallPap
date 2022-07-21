@@ -3,7 +3,7 @@ package com.hamza.wallpap.util
 import kotlinx.coroutines.flow.StateFlow
 
 enum class WallPapTheme {
-    MODE_AUTO,
+//    MODE_AUTO,
     MODE_DAY,
     MODE_NIGHT;
 

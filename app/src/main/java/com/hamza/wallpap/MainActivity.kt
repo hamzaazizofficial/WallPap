@@ -13,6 +13,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.ui.MainScreen
 import com.hamza.wallpap.ui.theme.WallPapTheme
 import com.hamza.wallpap.util.ThemeSetting
@@ -26,20 +27,21 @@ class MainActivity : ComponentActivity() {
     private lateinit var themeSetting: ThemeSetting
 //    val activity: Activity = Activity()
 
+    @OptIn(ExperimentalPagingApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                val w: Window = window
-                w.setFlags(
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                )
-            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//                val w: Window = window
+//                w.setFlags(
+//                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//                )
+//            }
             themeSetting = ThemeSettingPreference(context = LocalContext.current)
             val theme = themeSetting.themeStream.collectAsState()
             val useDarkColors = when (theme.value) {
-                com.hamza.wallpap.util.WallPapTheme.MODE_AUTO -> isSystemInDarkTheme()
+//                com.hamza.wallpap.util.WallPapTheme.MODE_AUTO -> isSystemInDarkTheme()
                 com.hamza.wallpap.util.WallPapTheme.MODE_DAY -> false
                 com.hamza.wallpap.util.WallPapTheme.MODE_NIGHT -> true
             }

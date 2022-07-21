@@ -354,6 +354,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
     }
 }
 
+
 @RequiresApi(Build.VERSION_CODES.N)
 fun setWallPaper(context: Context, fullUrl: String, wallpaperAs: Int) {
 
