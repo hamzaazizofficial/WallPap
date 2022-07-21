@@ -1,6 +1,8 @@
 package com.hamza.wallpap.data.screens.settings
 
+import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.BuildConfig
+import com.hamza.wallpap.data.screens.common.GetProDialog
 import com.hamza.wallpap.ui.theme.iconColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.systemBarColor
@@ -30,6 +33,7 @@ import com.hamza.wallpap.ui.theme.textColor
 import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun SettingsScreen(
     settingsViewModel: SettingsViewModel,
@@ -56,6 +60,13 @@ fun SettingsScreen(
         }
     }
 
+    if (settingsViewModel.dialogState.value) {
+        GetProDialog(
+            dialogState = settingsViewModel.dialogState,
+            context = context
+        )
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         scaffoldState
@@ -77,21 +88,21 @@ fun SettingsScreen(
                 Text(
                     text = "Theme",
                     color = MaterialTheme.colors.textColor,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     style = TextStyle(
                         fontStyle = MaterialTheme.typography.subtitle1.fontStyle,
-//                                    fontFamily = abel_regular
+                        fontFamily = maven_pro_regular
                     ),
                     modifier = Modifier.weight(1f)
                 )
 
                 if (themeValue.value == 0) {
                     Icon(
-                        imageVector = Icons.Filled.DarkMode,
-                        tint = Color.Yellow,
+                        imageVector = Icons.Outlined.DarkMode,
+                        tint = MaterialTheme.colors.iconColor,
                         contentDescription = null,
                         modifier = Modifier.clickable {
-                            onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_DAY.ordinal))
+                            onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_NIGHT.ordinal))
                             scope.launch {
                                 dataStore.saveThemeValue(1)
                             }
@@ -100,11 +111,11 @@ fun SettingsScreen(
 
                 if (themeValue.value == 1) {
                     Icon(
-                        imageVector = Icons.Outlined.DarkMode,
-                        tint = MaterialTheme.colors.iconColor,
+                        imageVector = Icons.Filled.DarkMode,
+                        tint = Color.Yellow,
                         contentDescription = null,
                         modifier = Modifier.clickable {
-                            onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_NIGHT.ordinal))
+                            onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_DAY.ordinal))
                             scope.launch {
                                 dataStore.saveThemeValue(0)
                             }
@@ -125,23 +136,25 @@ fun SettingsScreen(
                 Text(
                     text = "Tired of Ads?",
                     color = MaterialTheme.colors.textColor,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     style = TextStyle(
                         fontStyle = MaterialTheme.typography.subtitle1.fontStyle,
-//                                    fontFamily = abel_regular
+                        fontFamily = maven_pro_regular
                     ),
                     modifier = Modifier
                 )
                 Text(
                     text = "Remove Ads now!",
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     style = TextStyle(
                         fontStyle = MaterialTheme.typography.body1.fontStyle,
                         fontFamily = maven_pro_regular
                     ),
                     fontWeight = FontWeight.Bold,
                     color = Color.Red,
-                    modifier = Modifier.clickable { }
+                    modifier = Modifier.clickable {
+                        settingsViewModel.dialogState.value = true
+                    }
                 )
             }
 
@@ -158,20 +171,19 @@ fun SettingsScreen(
                 Text(
                     text = "App Version",
                     color = MaterialTheme.colors.textColor,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     style = TextStyle(
                         fontStyle = MaterialTheme.typography.subtitle1.fontStyle,
-//                                    fontFamily = abel_regular
+                        fontFamily = maven_pro_regular
                     ),
                     modifier = Modifier
                 )
                 Text(
                     text = "${BuildConfig.VERSION_CODE}",
                     color = MaterialTheme.colors.textColor,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     style = TextStyle(
                         fontStyle = MaterialTheme.typography.body1.fontStyle,
-//                                    fontFamily = abel_regular
                     ),
                     modifier = Modifier
                 )

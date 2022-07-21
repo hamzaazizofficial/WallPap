@@ -2,11 +2,11 @@ package com.hamza.wallpap.data.screens.common
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.widget.Toast
-import androidx.compose.foundation.Image
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -15,13 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,14 +25,24 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hamza.wallpap.BuildConfig
-import com.hamza.wallpap.R
-import com.hamza.wallpap.ui.theme.*
+import com.hamza.wallpap.data.screens.settings.SettingsViewModel
+import com.hamza.wallpap.ui.theme.iconColor
+import com.hamza.wallpap.ui.theme.maven_pro_regular
+import com.hamza.wallpap.ui.theme.navDrawerBgColor
+import com.hamza.wallpap.ui.theme.textColor
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun NavDrawer(scaffoldState: ScaffoldState) {
     val context = LocalContext.current
+    var settingsViewModel: SettingsViewModel = viewModel()
+
+    if (settingsViewModel.dialogState.value) {
+        GetProDialog(dialogState = settingsViewModel.dialogState, context = context)
+    }
 
     Column(
         modifier = Modifier
@@ -78,16 +84,6 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
                     .height(80.dp)
                     .layoutId("bgnavimg")
             )
-//            Image(
-//                painterResource(id = R.drawable.picture),
-//                contentDescription = null,
-//                contentScale = ContentScale.Fit,
-////                colorFilter = ColorFilter.tint(Color.Black),
-//                modifier = Modifier
-//                    .padding(start = 30.dp, top = 2.dp, bottom = 16.dp)
-//                    .height(70.dp)
-//                    .layoutId("logo")
-//            )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -123,7 +119,10 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
         NavOption(
             title = "Remove ads",
             scaffoldState = scaffoldState,
-            Icons.Default.DoNotDisturb
+            Icons.Default.DoNotDisturb,
+            modifier = Modifier.clickable {
+                settingsViewModel.dialogState.value = true
+            }
         )
 
         NavOption(

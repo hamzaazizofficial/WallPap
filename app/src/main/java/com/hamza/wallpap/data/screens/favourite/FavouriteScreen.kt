@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -27,7 +26,6 @@ import coil.compose.rememberImagePainter
 import com.hamza.wallpap.R
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
-import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.iconColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.textColor
@@ -75,7 +73,7 @@ fun FavouriteItem(
     val painter = rememberImagePainter(data = favUrl.full) {
         crossfade(durationMillis = 1000)
         error(R.drawable.ic_placeholder)
-        placeholder(R.drawable.ic_placeholder)
+//        placeholder(R.drawable.ic_placeholder)
     }
 
     val fullEncodedUrl = URLEncoder.encode(favUrl.full, StandardCharsets.UTF_8.toString())

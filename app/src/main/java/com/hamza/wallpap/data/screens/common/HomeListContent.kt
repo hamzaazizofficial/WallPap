@@ -79,8 +79,8 @@ fun UnsplashItem(
 
     val painter = rememberImagePainter(data = unsplashImage.urls.regular) {
         crossfade(durationMillis = 1000)
-//        error(R.drawable.ic_placeholder)
-        placeholder(R.drawable.ic_placeholder)
+        error(R.drawable.ic_placeholder)
+//        placeholder(R.drawable.ic_placeholder)
     }
 
     Card(

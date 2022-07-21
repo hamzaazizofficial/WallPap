@@ -37,7 +37,7 @@ fun CustomDialog(
 ) {
     Dialog(
         onDismissRequest = { dialogState.value = false },
-        properties = DialogProperties(usePlatformDefaultWidth = false),
+        properties = DialogProperties(usePlatformDefaultWidth = true),
     ) {
         CustomDialogUI(
             modifier = Modifier,

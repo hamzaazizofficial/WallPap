@@ -9,4 +9,6 @@ class SettingsViewModel : ViewModel() {
         "Dracula"
     )
     var value = mutableStateOf(themes[0])
+
+    var dialogState = mutableStateOf(false)
 }
