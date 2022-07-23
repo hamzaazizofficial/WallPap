@@ -26,7 +26,6 @@ class Repository @Inject constructor(
             SearchChip("Popular", "hd amoled wallpapers"),
             SearchChip("Night", "Night"),
             SearchChip("Mobile", "Android Wallpapers"),
-            SearchChip("Anime", "Anime"),
             SearchChip("Dark", "Dark"),
             SearchChip("Nature", "Nature"),
         )
