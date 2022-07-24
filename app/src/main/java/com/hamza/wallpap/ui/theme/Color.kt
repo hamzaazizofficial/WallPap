@@ -38,6 +38,9 @@ val Colors.bottomAppBarContentColor: Color
 val Colors.bottomAppBarBackgroundColor: Color
     get() = if (isLight) Color.White else Color(0xFF243447)
 
+val Colors.customDialogBottomColor: Color
+    get() = if (isLight) Color(0x1AFA5A4B) else Color(0xFF243447)
+
 val Colors.textColor: Color
     get() = if (isLight) Color.Black else Color.White
 

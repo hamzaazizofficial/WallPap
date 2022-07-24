@@ -17,6 +17,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -61,7 +62,7 @@ fun CustomDialogUI(
     Card(
         shape = RoundedCornerShape(0.dp),
         modifier = Modifier.padding(10.dp, 5.dp, 10.dp, 10.dp),
-        elevation = 30.dp,
+        elevation = 0.dp,
 //        border = BorderStroke(2.dp, color = if (isSystemInDarkTheme()) Color.White else Color.Black)
     ) {
         Column(
@@ -96,9 +97,10 @@ fun CustomDialogUI(
                     .fillMaxWidth()
                     .padding(top = 10.dp)
                     .background(
-                        color = MaterialTheme.colors.bottomAppBarBackgroundColor
+                        color = MaterialTheme.colors.customDialogBottomColor
                     )
-                    .border(BorderStroke(1.dp, MaterialTheme.colors.textColor)),
+//                    .border(BorderStroke(0.5.dp, MaterialTheme.colors.textColor))
+                ,
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
 
@@ -111,10 +113,11 @@ fun CustomDialogUI(
                         dialogState.value = false
                     }) {
                     Text(
+                        textAlign = TextAlign.Center,
                         text = "System",
                         color = MaterialTheme.colors.bottomAppBarContentColor,
                         modifier = Modifier,
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.subtitle1,
                         fontFamily = maven_pro_regular
                     )
                 }
@@ -130,7 +133,7 @@ fun CustomDialogUI(
                         text = "Lock Screen",
                         color = MaterialTheme.colors.bottomAppBarContentColor,
                         modifier = Modifier,
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.subtitle1,
                         fontFamily = maven_pro_regular
                     )
                 }
@@ -146,7 +149,7 @@ fun CustomDialogUI(
                         text = "Both",
                         color = MaterialTheme.colors.bottomAppBarContentColor,
                         modifier = Modifier,
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.subtitle1,
                         fontFamily = maven_pro_regular
                     )
                 }
