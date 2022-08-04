@@ -47,7 +47,6 @@ fun MainScreen(
         topBar = {
             if (
                 !currentRoute.equals(Screen.Search.route) &&
-                !currentRoute.equals(Screen.Splash.route) &&
                 !currentRoute.equals(Screen.WallPaperScreen.route) &&
                 !currentRoute.equals(Screen.FavouriteWallPaperScreen.route) &&
                 !currentRoute.equals(Screen.AmoledFullScreen.route)
@@ -81,7 +80,6 @@ fun MainScreen(
         bottomBar = {
             if (
                 !currentRoute.equals(Screen.Search.route) &&
-                !currentRoute.equals(Screen.Splash.route) &&
                 !currentRoute.equals(Screen.WallPaperScreen.route) &&
                 !currentRoute.equals(Screen.FavouriteWallPaperScreen.route) &&
                 !currentRoute.equals(Screen.AmoledFullScreen.route)

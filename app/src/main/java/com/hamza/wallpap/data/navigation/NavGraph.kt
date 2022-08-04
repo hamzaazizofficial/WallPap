@@ -27,7 +27,6 @@ import com.hamza.wallpap.data.screens.search.SearchScreen
 import com.hamza.wallpap.data.screens.search.SearchViewModel
 import com.hamza.wallpap.data.screens.settings.SettingsScreen
 import com.hamza.wallpap.data.screens.settings.SettingsViewModel
-import com.hamza.wallpap.data.screens.splash.SplashScreen
 import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreen
 import com.hamza.wallpap.util.WallPapTheme
 
@@ -47,13 +46,9 @@ fun NavGraph(
     val favUrlsViewModel: FavUrlsViewModel = viewModel()
     val amoledViewModel: AmoledViewModel = viewModel()
 
-    NavHost(navController, startDestination = Screen.Splash.route) {
+    NavHost(navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) {
             HomeScreen(navController, homeViewModel, scaffoldState)
-        }
-
-        composable(Screen.Splash.route) {
-            SplashScreen(navController)
         }
 
         composable(Screen.Search.route) {
