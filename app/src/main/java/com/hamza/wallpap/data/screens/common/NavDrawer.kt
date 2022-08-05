@@ -44,6 +44,10 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
         GetProDialog(dialogState = settingsViewModel.dialogState, context = context)
     }
 
+    if (settingsViewModel.dialogStateAbout.value) {
+        AboutDialog(dialogState = settingsViewModel.dialogStateAbout, context = context)
+    }
+
     Column(
         modifier = Modifier
             .background(color = MaterialTheme.colors.background)
@@ -129,7 +133,9 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
             title = "About Us",
             scaffoldState = scaffoldState,
             Icons.Default.Info,
-            modifier = Modifier.clickable { }
+            modifier = Modifier.clickable {
+                settingsViewModel.dialogStateAbout.value = true
+            }
         )
 
         Divider(color = MaterialTheme.colors.iconColor.copy(0.5f))

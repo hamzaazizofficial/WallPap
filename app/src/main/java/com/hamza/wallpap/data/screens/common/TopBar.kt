@@ -4,11 +4,11 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Dehaze
 import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
@@ -60,14 +60,14 @@ fun TopBar(
                 IconButton(onClick = onUserDetailsClicked) {
                     if (currentRoute.equals(Screen.Home.route)) {
                         Icon(
-                            imageVector = if (homeViewModel.showUserDetails) Icons.Outlined.AccountCircle else Icons.Default.AccountCircle,
+                            imageVector = if (homeViewModel.showUserDetails) Icons.Outlined.Info else Icons.Default.Info,
                             contentDescription = "Show user details icon",
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
                     if (currentRoute.equals(Screen.Random.route)) {
                         Icon(
-                            imageVector = if (randomScreenViewModel.showUserDetails) Icons.Outlined.AccountCircle else Icons.Default.AccountCircle,
+                            imageVector = if (randomScreenViewModel.showUserDetails) Icons.Outlined.Info else Icons.Default.Info,
                             contentDescription = "Show user details icon",
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )

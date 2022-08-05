@@ -11,4 +11,5 @@ class SettingsViewModel : ViewModel() {
     var value = mutableStateOf(themes[0])
 
     var dialogState = mutableStateOf(false)
+    var dialogStateAbout = mutableStateOf(false)
 }
