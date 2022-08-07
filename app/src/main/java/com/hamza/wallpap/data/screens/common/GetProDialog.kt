@@ -63,7 +63,7 @@ fun GetProDialogUI(
     Card(
         shape = RoundedCornerShape(0.dp),
         modifier = Modifier.padding(10.dp, 5.dp, 10.dp, 10.dp),
-        elevation = 0.dp,
+        elevation = 0.dp
     ) {
         Column(
             modifier
@@ -210,20 +210,28 @@ fun GetProDialogUI(
                         .width(80.dp),
                     onClick = {
                         dialogState.value = false
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data =
+                            Uri.parse("https://play.google.com/store/apps/dev?id=7870775867932667955")
+                        try {
+                            ContextCompat.startActivity(context, intent, null)
+                        } catch (e: Exception) {
+                            Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+                        }
                     }) {
                     Text(
                         text = "Get Pro",
                         color = MaterialTheme.colors.textColor,
-                        modifier = Modifier.clickable {
-                            val intent = Intent(Intent.ACTION_VIEW)
-                            intent.data =
-                                Uri.parse("https://play.google.com/store/apps/dev?id=7870775867932667955")
-                            try {
-                                ContextCompat.startActivity(context, intent, null)
-                            } catch (e: Exception) {
-                                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
-                            }
-                        },
+//                        modifier = Modifier.clickable {
+////                            val intent = Intent(Intent.ACTION_VIEW)
+////                            intent.data =
+////                                Uri.parse("https://play.google.com/store/apps/dev?id=7870775867932667955")
+////                            try {
+////                                ContextCompat.startActivity(context, intent, null)
+////                            } catch (e: Exception) {
+////                                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+////                            }
+//                        },
                         style = TextStyle(
                             fontSize = MaterialTheme.typography.subtitle1.fontSize,
                             fontWeight = FontWeight.Bold,

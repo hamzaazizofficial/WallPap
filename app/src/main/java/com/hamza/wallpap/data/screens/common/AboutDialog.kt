@@ -2,15 +2,11 @@ package com.hamza.wallpap.data.screens.common
 
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -19,7 +15,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -29,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.core.content.ContextCompat
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.textColor
@@ -212,7 +206,7 @@ fun AboutDialogUI(
                         dialogState.value = false
                     }) {
                     Text(
-                        text = "Ok",
+                        text = "Close",
                         color = MaterialTheme.colors.textColor,
 //                        modifier = Modifier.clickable {
 //                            val intent = Intent(Intent.ACTION_VIEW)

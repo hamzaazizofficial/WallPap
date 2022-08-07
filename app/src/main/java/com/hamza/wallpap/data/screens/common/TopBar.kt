@@ -60,14 +60,14 @@ fun TopBar(
                 IconButton(onClick = onUserDetailsClicked) {
                     if (currentRoute.equals(Screen.Home.route)) {
                         Icon(
-                            imageVector = if (homeViewModel.showUserDetails) Icons.Outlined.Info else Icons.Default.Info,
+                            imageVector = if (homeViewModel.showUserDetails) Icons.Default.Info else Icons.Outlined.Info,
                             contentDescription = "Show user details icon",
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
                     if (currentRoute.equals(Screen.Random.route)) {
                         Icon(
-                            imageVector = if (randomScreenViewModel.showUserDetails) Icons.Outlined.Info else Icons.Default.Info,
+                            imageVector = if (randomScreenViewModel.showUserDetails) Icons.Default.Info else Icons.Outlined.Info,
                             contentDescription = "Show user details icon",
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
