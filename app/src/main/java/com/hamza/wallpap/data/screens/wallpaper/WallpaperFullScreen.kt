@@ -37,6 +37,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.screens.common.CustomDialog
+import com.hamza.wallpap.data.screens.common.admob.BannerAd
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
