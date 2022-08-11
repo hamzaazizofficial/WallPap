@@ -26,6 +26,7 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.BuildConfig
 import com.hamza.wallpap.data.screens.common.GetProDialog
+import com.hamza.wallpap.data.screens.common.admob.BannerAd
 import com.hamza.wallpap.ui.theme.iconColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.systemBarColor
@@ -188,6 +189,8 @@ fun SettingsScreen(
                     modifier = Modifier
                 )
             }
+            Spacer(modifier = Modifier.padding(10.dp))
+            BannerAd(modifier = Modifier)
         }
     }
 }
