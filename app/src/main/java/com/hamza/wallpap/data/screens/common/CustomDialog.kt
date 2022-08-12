@@ -111,6 +111,7 @@ fun CustomDialogUI(
                         wallpaperFullScreenViewModel.setWallpaperAs = 1
                         setWallPaper(context, fullUrl, wallpaperFullScreenViewModel.setWallpaperAs)
                         dialogState.value = false
+                        wallpaperFullScreenViewModel.interstitalState.value = true
                     }) {
                     Text(
                         textAlign = TextAlign.Center,
@@ -128,6 +129,7 @@ fun CustomDialogUI(
                         wallpaperFullScreenViewModel.setWallpaperAs = 2
                         setWallPaper(context, fullUrl, wallpaperFullScreenViewModel.setWallpaperAs)
                         dialogState.value = false
+                        wallpaperFullScreenViewModel.interstitalState.value = true
                     }) {
                     Text(
                         text = "Lock Screen",
@@ -144,6 +146,7 @@ fun CustomDialogUI(
                         wallpaperFullScreenViewModel.setWallpaperAs = 3
                         setWallPaper(context, fullUrl, wallpaperFullScreenViewModel.setWallpaperAs)
                         dialogState.value = false
+                        wallpaperFullScreenViewModel.interstitalState.value = true
                     }) {
                     Text(
                         text = "Both",
