@@ -37,7 +37,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.screens.common.CustomDialog
-import com.hamza.wallpap.data.screens.common.admob.BannerAd
+import com.hamza.wallpap.data.screens.common.admob.MainInterstitialAd
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
@@ -53,6 +53,28 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
 
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
     var viewModel: FavUrlsViewModel = viewModel()
+//    val context: Context = LocalContext.current
+//
+//        DisposableEffect(key1 = "ad", effect = {
+//        var interstitialAd: InterstitialAd?
+//        val adRequest = AdRequest.Builder().build()
+//
+//        InterstitialAd.load(
+//            context,
+//            "ca-app-pub-3940256099942544/1033173712",
+//            adRequest,
+//            object : InterstitialAdLoadCallback() {
+//                override fun onAdFailedToLoad(p0: LoadAdError) {
+//                    interstitialAd = null
+//                }
+//
+//                override fun onAdLoaded(p0: InterstitialAd) {
+//                    interstitialAd = p0
+//                    interstitialAd?.show(context as Activity)
+//                }
+//            })
+//        onDispose { interstitialAd = null }
+//    })
 
     Box(
         Modifier
@@ -110,6 +132,12 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
 //                setToScale(sliderPosition1, sliderPosition2, sliderPosition3, 1f)
 //            })
         )
+
+
+        if (wallpaperFullScreenViewModel.interstitalState.value){
+            MainInterstitialAd()
+        }
+
 
         if (wallpaperFullScreenViewModel.dialogState.value) {
             CustomDialog(
@@ -221,6 +249,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
                                         it,
                                         context
                                     )
+                                    wallpaperFullScreenViewModel.interstitalState.value = true
                                 }
                             },
                         tint = Color.White
@@ -338,7 +367,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
                 onClick = {
 //                    setWallPaper(context, fullUrl)
                     wallpaperFullScreenViewModel.dialogState.value = true
-
+                    wallpaperFullScreenViewModel.interstitalState.value = true
                 },
                 modifier = Modifier
                     .padding(8.dp),
