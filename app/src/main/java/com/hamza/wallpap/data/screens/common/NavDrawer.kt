@@ -15,11 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -95,16 +99,40 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
                     .layoutId("appname")
             ) {
                 Text(
-                    text = "WallPap",
-                    fontSize = 29.sp,
-                    color = MaterialTheme.colors.textColor,
-                    style = TextStyle(
-                        fontSize = MaterialTheme.typography.subtitle1.fontSize,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = maven_pro_regular
-                    ),
-                    modifier = Modifier
-                )
+                    buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color(0xFF243447),
+                                fontSize = 29.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = maven_pro_regular
+                            )
+                        ) {
+                            append("Wall")
+                        }
+
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color(0xFFFF5252),
+                                fontSize = 29.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = maven_pro_regular
+                            )
+                        ) {
+                            append("Pap")
+                        }
+                    })
+//                Text(
+//                    text = "WallPap",
+//                    fontSize = 29.sp,
+//                    color = MaterialTheme.colors.textColor,
+//                    style = TextStyle(
+//                        fontSize = MaterialTheme.typography.subtitle1.fontSize,
+//                        fontWeight = FontWeight.Bold,
+//                        fontFamily = maven_pro_regular
+//                    ),
+//                    modifier = Modifier
+//                )
             }
         }
 
