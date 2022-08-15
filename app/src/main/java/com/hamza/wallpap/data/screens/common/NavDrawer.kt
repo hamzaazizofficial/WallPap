@@ -122,17 +122,6 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
                             append("Pap")
                         }
                     })
-//                Text(
-//                    text = "WallPap",
-//                    fontSize = 29.sp,
-//                    color = MaterialTheme.colors.textColor,
-//                    style = TextStyle(
-//                        fontSize = MaterialTheme.typography.subtitle1.fontSize,
-//                        fontWeight = FontWeight.Bold,
-//                        fontFamily = maven_pro_regular
-//                    ),
-//                    modifier = Modifier
-//                )
             }
         }
 
