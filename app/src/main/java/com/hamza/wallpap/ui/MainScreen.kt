@@ -46,12 +46,12 @@ fun MainScreen(
         scaffoldState = scaffoldState,
         topBar = {
             if (
-                !currentRoute.equals(Screen.Splash.route) &&
-                !currentRoute.equals(Screen.Main.route) &&
-                !currentRoute.equals(Screen.Search.route) &&
-                !currentRoute.equals(Screen.WallPaperScreen.route) &&
-                !currentRoute.equals(Screen.FavouriteWallPaperScreen.route) &&
-                !currentRoute.equals(Screen.AmoledFullScreen.route)
+                currentRoute.equals(Screen.Home.route) or
+                currentRoute.equals(Screen.Random.route) or
+                currentRoute.equals(Screen.Amoled.route) or
+                currentRoute.equals(Screen.Favourite.route) or
+                currentRoute.equals(Screen.Settings.route) or
+                currentRoute.equals(Screen.AmoledFullScreen.route)
             ) {
                 TopBar(
                     onNavButtonClick = {
@@ -81,12 +81,12 @@ fun MainScreen(
         },
         bottomBar = {
             if (
-                !currentRoute.equals(Screen.Splash.route) &&
-                !currentRoute.equals(Screen.Main.route) &&
-                !currentRoute.equals(Screen.Search.route) &&
-                !currentRoute.equals(Screen.WallPaperScreen.route) &&
-                !currentRoute.equals(Screen.FavouriteWallPaperScreen.route) &&
-                !currentRoute.equals(Screen.AmoledFullScreen.route)
+                currentRoute.equals(Screen.Home.route) or
+                currentRoute.equals(Screen.Random.route) or
+                currentRoute.equals(Screen.Amoled.route) or
+                currentRoute.equals(Screen.Favourite.route) or
+                currentRoute.equals(Screen.Settings.route) or
+                currentRoute.equals(Screen.AmoledFullScreen.route)
             ) {
                 BottomBar(navController = navController)
             }
