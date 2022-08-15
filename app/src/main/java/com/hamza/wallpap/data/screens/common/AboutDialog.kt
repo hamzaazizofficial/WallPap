@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -15,15 +16,24 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextGeometricTransform
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.textColor
@@ -73,29 +83,37 @@ fun AboutDialogUI(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Image(
+                        painterResource(id = R.drawable.letter_w),
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit, modifier = Modifier
+                            .padding(top = 0.dp, bottom = 10.dp)
+                            .size(60.dp)
+                    )
+
                     Text(
                         buildAnnotatedString {
                             withStyle(
                                 style = SpanStyle(
-                                    color = MaterialTheme.colors.textColor,
+                                    color = Color(0xFF243447),
                                     fontSize = 29.sp,
                                     fontWeight = FontWeight.Bold,
                                     fontFamily = maven_pro_regular
                                 )
                             ) {
-                                append("WallPap")
+                                append("Wall")
                             }
 
-//                            withStyle(
-//                                style = SpanStyle(
-//                                    color = Color.Red,
-//                                    fontSize = 29.sp,
-//                                    fontWeight = FontWeight.Bold,
-//                                    fontFamily = maven_pro_regular
-//                                )
-//                            ) {
-//                                append(" Pro")
-//                            }
+                            withStyle(
+                                style = SpanStyle(
+                                    color = Color(0xFFFF5252),
+                                    fontSize = 29.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = maven_pro_regular
+                                )
+                            ) {
+                                append("Pap")
+                            }
                         })
                     Divider(
                         Modifier.padding(10.dp),

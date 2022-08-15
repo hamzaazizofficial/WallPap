@@ -7,7 +7,10 @@ import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -30,7 +33,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import com.hamza.wallpap.R
-import com.hamza.wallpap.ui.theme.Shapes
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.textColor
@@ -83,17 +85,9 @@ fun GetProDialogUI(
                     Image(
                         painterResource(id = R.drawable.letter_w),
                         contentDescription = null,
-                        contentScale = ContentScale.Fit,
-//            colorFilter = ColorFilter.tint(
-//                if (!isSystemInDarkTheme()) onPrimary.copy(0.8f) else onPrimaryDark.copy(0.8f)
-//            ),
-                        modifier = Modifier
+                        contentScale = ContentScale.Fit, modifier = Modifier
                             .padding(top = 0.dp, bottom = 10.dp)
-//                .height(80.dp)
-//                .fillMaxWidth()
                             .size(60.dp)
-//                            .border(1.dp, Color.Black)
-//                .rotate(angle)
                     )
 
                     Text(
