@@ -46,6 +46,8 @@ fun MainScreen(
         scaffoldState = scaffoldState,
         topBar = {
             if (
+                !currentRoute.equals(Screen.Splash.route) &&
+                !currentRoute.equals(Screen.Main.route) &&
                 !currentRoute.equals(Screen.Search.route) &&
                 !currentRoute.equals(Screen.WallPaperScreen.route) &&
                 !currentRoute.equals(Screen.FavouriteWallPaperScreen.route) &&
@@ -79,6 +81,8 @@ fun MainScreen(
         },
         bottomBar = {
             if (
+                !currentRoute.equals(Screen.Splash.route) &&
+                !currentRoute.equals(Screen.Main.route) &&
                 !currentRoute.equals(Screen.Search.route) &&
                 !currentRoute.equals(Screen.WallPaperScreen.route) &&
                 !currentRoute.equals(Screen.FavouriteWallPaperScreen.route) &&

@@ -12,7 +12,7 @@ val lightTopBarBg = Color(0xFFCEE3FB)
 val transparentStatusBarColor = Color(0xFFFFFF)
 
 val Colors.navDrawerBgColor: Color
-    get() = if (isLight) Color.LightGray.copy(0.4f) else Color.LightGray.copy(0.1f)
+    get() = if (isLight) Color.LightGray.copy(0.4f) else Color.White
 
 val Colors.navOptionContentColor: Color
     get() = if (isLight) Color.White else Color.Black
@@ -46,3 +46,6 @@ val Colors.textColor: Color
 
 val Colors.iconColor: Color
     get() = if (isLight) Color.Gray else Color.White
+
+val Colors.splashBackgroundColor: Color
+    get() = if (isLight) Color(0xFFFF5252) else Color(0xFF243447)
