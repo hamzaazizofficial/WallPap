@@ -1,11 +1,12 @@
 package com.hamza.wallpap.data.screens.splash
 
-import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -14,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -27,10 +27,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.hamza.wallpap.R
 import com.hamza.wallpap.data.navigation.Screen
-import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.splashBackgroundColor
-import com.hamza.wallpap.ui.theme.textColor
 import kotlinx.coroutines.delay
 
 @Composable
@@ -87,15 +85,9 @@ fun Splash() {
                 painterResource(id = R.drawable.letter_w),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
-//            colorFilter = ColorFilter.tint(
-//                if (!isSystemInDarkTheme()) onPrimary.copy(0.8f) else onPrimaryDark.copy(0.8f)
-//            ),
                 modifier = Modifier
                     .padding(top = 35.dp, bottom = 0.dp)
-//                .height(80.dp)
-//                .fillMaxWidth()
                     .size(110.dp)
-//                .rotate(angle)
             )
 
             Text(
