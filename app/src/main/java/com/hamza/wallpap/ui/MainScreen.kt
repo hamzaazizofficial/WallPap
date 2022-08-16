@@ -50,8 +50,7 @@ fun MainScreen(
                 currentRoute.equals(Screen.Random.route) or
                 currentRoute.equals(Screen.Amoled.route) or
                 currentRoute.equals(Screen.Favourite.route) or
-                currentRoute.equals(Screen.Settings.route) or
-                currentRoute.equals(Screen.AmoledFullScreen.route)
+                currentRoute.equals(Screen.Settings.route)
             ) {
                 TopBar(
                     onNavButtonClick = {
@@ -85,8 +84,7 @@ fun MainScreen(
                 currentRoute.equals(Screen.Random.route) or
                 currentRoute.equals(Screen.Amoled.route) or
                 currentRoute.equals(Screen.Favourite.route) or
-                currentRoute.equals(Screen.Settings.route) or
-                currentRoute.equals(Screen.AmoledFullScreen.route)
+                currentRoute.equals(Screen.Settings.route)
             ) {
                 BottomBar(navController = navController)
             }
