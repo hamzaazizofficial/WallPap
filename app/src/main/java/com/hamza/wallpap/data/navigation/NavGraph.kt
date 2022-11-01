@@ -1,7 +1,9 @@
 package com.hamza.wallpap.data.navigation
 
+//import androidx.navigation.compose.composable
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,12 +34,13 @@ import com.hamza.wallpap.data.screens.wallpaper.WallpaperFullScreen
 import com.hamza.wallpap.util.WallPapTheme
 
 @RequiresApi(Build.VERSION_CODES.N)
-@OptIn(ExperimentalPagingApi::class, ExperimentalCoilApi::class)
+@OptIn(ExperimentalPagingApi::class, ExperimentalCoilApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun NavGraph(
     navController: NavHostController,
     scaffoldState: ScaffoldState,
-    onItemSelected: (WallPapTheme) -> Unit
+    onItemSelected: (WallPapTheme) -> Unit,
+    currentRoute: String?
 ) {
 
     val homeViewModel: HomeViewModel = hiltViewModel()
@@ -47,7 +50,9 @@ fun NavGraph(
     val favUrlsViewModel: FavUrlsViewModel = viewModel()
     val amoledViewModel: AmoledViewModel = viewModel()
 
-    NavHost(navController, startDestination = Screen.Splash.route) {
+    NavHost(
+        navController, startDestination = Screen.Splash.route,
+    ) {
         composable(Screen.Home.route) {
             HomeScreen(navController, homeViewModel, scaffoldState)
         }

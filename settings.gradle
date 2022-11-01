@@ -7,7 +7,8 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             if( requested.id.id == 'dagger.hilt.android.plugin') {
-                useModule("com.google.dagger:hilt-android-gradle-plugin:2.39.1")
+                useModule("com.google.dagger:hilt-android-gradle-plugin:2.42")
+//                useModule("com.google.dagger:hilt-android-gradle-plugin:2.412.1")
             }
             if (requested.id.id == 'kotlinx-serialization') {
                 useModule("org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:${requested.version}")
