@@ -53,7 +53,7 @@ fun HomeScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val activity = (context as? Activity)
-    val items = homeViewModel.itemsFlow.collectAsLazyPagingItems()
+//    val items = homeViewModel.itemsFlow.collectAsLazyPagingItems()
 
     BackHandler {
         if (scaffoldState.drawerState.isOpen) {
@@ -121,7 +121,6 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.background(MaterialTheme.colors.background)
         ) {
-
             Row(
                 modifier = Modifier
                     .padding(horizontal = 5.dp, vertical = 7.dp)
@@ -139,7 +138,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                 }
             }
-            HomeListContent(items = items, navController, homeViewModel)
+            HomeListContent(items = homeViewModel.itemsFlow.collectAsLazyPagingItems(), navController, homeViewModel)
         }
     }
 }
