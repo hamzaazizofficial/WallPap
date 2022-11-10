@@ -14,7 +14,6 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NetworkCheck
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -91,30 +90,6 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .padding(10.dp)
             )
-//
-//            Spacer(modifier = Modifier.padding(10.dp))
-//
-//
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.Center,
-//                modifier = Modifier.fillMaxWidth().padding(10.dp)
-//            ) {
-//                Text(
-//                    text = "Refresh",
-//                    color = Color.Red,
-//                    fontFamily = maven_pro_regular,
-//                    fontSize = 15.sp,
-////                    textAlign = TextAlign.Center,
-//                    modifier = Modifier
-//
-//                )
-//                Icon(
-//                    tint = Color.White,
-//                    imageVector = Icons.Default.Refresh, contentDescription = null,
-//                    modifier = Modifier.size(20.dp)
-//                )
-//            }
         }
     } else {
         Column(
@@ -138,7 +113,11 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                 }
             }
-            HomeListContent(items = homeViewModel.itemsFlow.collectAsLazyPagingItems(), navController, homeViewModel)
+            HomeListContent(
+                items = homeViewModel.itemsFlow.collectAsLazyPagingItems(),
+                navController,
+                homeViewModel
+            )
         }
     }
 }
