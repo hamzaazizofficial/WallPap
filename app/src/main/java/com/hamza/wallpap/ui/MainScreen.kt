@@ -90,7 +90,7 @@ fun MainScreen(
             }
         },
         drawerContent = {
-            NavDrawer(scaffoldState = scaffoldState)
+            NavDrawer(scaffoldState = scaffoldState, navController, scope)
         }
     ) { padding ->
         Column(Modifier.padding(padding)) {
