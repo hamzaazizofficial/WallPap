@@ -5,6 +5,9 @@ import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -37,10 +40,14 @@ import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.navDrawerBgColor
 import com.hamza.wallpap.ui.theme.textColor
 import kotlinx.coroutines.launch
+import androidx.compose.animation.*
+import androidx.navigation.NavHostController
+import kotlinx.coroutines.CoroutineScope
 
+@OptIn(ExperimentalAnimationApi::class)
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun NavDrawer(scaffoldState: ScaffoldState) {
+fun NavDrawer(scaffoldState: ScaffoldState, navController: NavHostController, scope: CoroutineScope) {
     val context = LocalContext.current
     var settingsViewModel: SettingsViewModel = viewModel()
 
@@ -94,7 +101,9 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 30.dp)
                     .layoutId("appname")
             ) {
@@ -122,6 +131,20 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
                             append("Pap")
                         }
                     })
+
+                AnimatedVisibility(
+                    visible = scaffoldState.drawerState.isOpen,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    IconButton(onClick = { scope.launch { scaffoldState.drawerState.close() } }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                            tint = Color(0xFF243447)
+                        )
+                    }
+                }
             }
         }
 
@@ -152,6 +175,18 @@ fun NavDrawer(scaffoldState: ScaffoldState) {
             Icons.Default.Info,
             modifier = Modifier.clickable {
                 settingsViewModel.dialogStateAbout.value = true
+            }
+        )
+
+        NavOption(
+            title = "Settings",
+            scaffoldState = scaffoldState,
+            Icons.Default.Settings,
+            modifier = Modifier.clickable {
+                navController.navigate("settings_screen")
+                scope.launch {
+                    scaffoldState.drawerState.close()
+                }
             }
         )
 
