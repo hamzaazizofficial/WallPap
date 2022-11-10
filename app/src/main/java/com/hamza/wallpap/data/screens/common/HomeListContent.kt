@@ -89,7 +89,16 @@ fun UnsplashItem(
         modifier = Modifier
             .padding(1.5.dp)
             .height(300.dp)
-            .clickable { navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl") },
+            .clickable {
+                navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl") {
+                    navController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) {
+                            saveState = true
+                        }
+                    }
+                    restoreState = true
+                }
+            },
     ) {
         Box(
             modifier = Modifier
