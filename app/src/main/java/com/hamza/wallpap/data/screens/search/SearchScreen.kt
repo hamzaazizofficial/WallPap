@@ -54,7 +54,7 @@ fun SearchScreen(
                     searchViewModel.searchHeroes(query = it)
                 },
                 onCloseClicked = {
-                    navController.popBackStack()
+                    navController.navigate("home_screen")
                 },
                 onNavBackPop = {
                     navController.popBackStack()

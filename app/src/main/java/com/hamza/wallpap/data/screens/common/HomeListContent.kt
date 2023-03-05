@@ -8,7 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,27 +46,19 @@ import java.nio.charset.StandardCharsets
 fun HomeListContent(
     items: LazyPagingItems<UnsplashImage>,
     navController: NavHostController,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
 ) {
     Log.d("Error", items.loadState.toString())
-
-    when {
-        items.itemCount == 0 -> Column(Modifier.fillMaxSize()) {
-            Text(text = "Loading...")
-        }
-        else -> {
-            LazyVerticalGrid(
-                state = rememberLazyListState(), cells = GridCells.Fixed(2)
-            ) {
-                items(items.itemCount) {
-                    items[it]?.let { unsplashImage ->
-                        UnsplashItem(
-                            unsplashImage = unsplashImage,
-                            navController,
-                            homeViewModel
-                        )
-                    }
-                }
+    LazyVerticalGrid(
+        state = rememberLazyListState(), cells = GridCells.Fixed(2)
+    ) {
+        items(items.itemCount) {
+            items[it]?.let { unsplashImage ->
+                UnsplashItem(
+                    unsplashImage = unsplashImage,
+                    navController,
+                    homeViewModel
+                )
             }
         }
     }
@@ -79,7 +70,7 @@ fun HomeListContent(
 fun UnsplashItem(
     unsplashImage: UnsplashImage,
     navController: NavHostController,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
 ) {
 
     val regularUrl = unsplashImage.urls.regular
@@ -180,7 +171,7 @@ fun UnsplashItem(
 fun LikeCounter(
     modifier: Modifier,
     painter: Painter,
-    likes: String
+    likes: String,
 ) {
     Row(
         modifier = modifier.fillMaxSize(),
