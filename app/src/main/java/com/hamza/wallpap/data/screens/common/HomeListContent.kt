@@ -8,7 +8,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -49,14 +51,23 @@ fun HomeListContent(
 ) {
     Log.d("Error", items.loadState.toString())
 
-    LazyVerticalGrid(cells = GridCells.Fixed(2)) {
-        items(items.itemCount) {
-            items[it]?.let { unsplashImage ->
-                UnsplashItem(
-                    unsplashImage = unsplashImage,
-                    navController,
-                    homeViewModel
-                )
+    when {
+        items.itemCount == 0 -> Column(Modifier.fillMaxSize()) {
+            Text(text = "Loading...")
+        }
+        else -> {
+            LazyVerticalGrid(
+                state = rememberLazyListState(), cells = GridCells.Fixed(2)
+            ) {
+                items(items.itemCount) {
+                    items[it]?.let { unsplashImage ->
+                        UnsplashItem(
+                            unsplashImage = unsplashImage,
+                            navController,
+                            homeViewModel
+                        )
+                    }
+                }
             }
         }
     }

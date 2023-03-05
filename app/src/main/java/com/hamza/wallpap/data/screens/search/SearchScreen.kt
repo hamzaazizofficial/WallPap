@@ -2,6 +2,8 @@ package com.hamza.wallpap.data.screens.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -38,6 +40,7 @@ fun SearchScreen(
     val searchQuery by searchViewModel.searchQuery
     val searchedImages = searchViewModel.searchedImages.collectAsLazyPagingItems()
     val context = LocalContext.current
+//    val listState: LazyListState = rememberLazyListState()
 
     Scaffold(
         topBar = {

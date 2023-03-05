@@ -14,13 +14,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.paging.ExperimentalPagingApi
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.data.screens.favourite.FavouriteScreen
 import com.hamza.wallpap.data.screens.favourite.FavouriteWallpaperFullScreen
-import com.hamza.wallpap.data.screens.firestore.amoled.AmoledFullScreen
-import com.hamza.wallpap.data.screens.firestore.amoled.AmoledScreen
-import com.hamza.wallpap.data.screens.firestore.amoled.AmoledViewModel
+import com.hamza.wallpap.data.screens.latest.LatestFullScreen
+import com.hamza.wallpap.data.screens.latest.LatestScreen
+import com.hamza.wallpap.data.screens.latest.LatestViewModel
 import com.hamza.wallpap.data.screens.home.HomeScreen
 import com.hamza.wallpap.data.screens.home.HomeViewModel
 import com.hamza.wallpap.data.screens.random.RandomScreen
@@ -48,13 +49,15 @@ fun NavGraph(
     val searchViewModel: SearchViewModel = hiltViewModel()
     val randomScreenViewModel: RandomScreenViewModel = viewModel()
     val favUrlsViewModel: FavUrlsViewModel = viewModel()
-    val amoledViewModel: AmoledViewModel = viewModel()
+    val amoledViewModel: LatestViewModel = viewModel()
+    val homeItems = homeViewModel.itemsFlow.collectAsLazyPagingItems()
+    val randomItems = randomScreenViewModel.itemsFlow.collectAsLazyPagingItems()
 
     NavHost(
         navController, startDestination = Screen.Splash.route,
     ) {
         composable(Screen.Home.route) {
-            HomeScreen(navController, homeViewModel, scaffoldState)
+            HomeScreen(navController, homeViewModel, scaffoldState, homeItems)
         }
 
         composable(Screen.Splash.route) {
@@ -74,7 +77,7 @@ fun NavGraph(
         }
 
         composable(Screen.Random.route) {
-            RandomScreen(navController, scaffoldState, randomScreenViewModel)
+            RandomScreen(navController, scaffoldState, randomScreenViewModel, randomItems)
         }
 
         composable(Screen.WallPaperScreen.route,
@@ -114,7 +117,7 @@ fun NavGraph(
 
         // FireStore Screens
         composable(Screen.Amoled.route) {
-            AmoledScreen(navController, amoledViewModel, scaffoldState)
+            LatestScreen(navController, amoledViewModel, scaffoldState)
         }
 
         composable(Screen.AmoledFullScreen.route,
@@ -126,7 +129,7 @@ fun NavGraph(
             )) {
             val amoledUrl = it.arguments?.getString("amoledUrl")
             if (amoledUrl != null) {
-                AmoledFullScreen(amoledUrl, navController)
+                LatestFullScreen(amoledUrl, navController)
             }
         }
     }
