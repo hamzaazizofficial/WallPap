@@ -4,13 +4,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
+import androidx.paging.cachedIn
 import com.hamza.wallpap.data.repository.Repository
-import com.hamza.wallpap.data.screens.search.SearchChip
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -20,7 +22,8 @@ class HomeViewModel @Inject constructor(
     repository: Repository
 ) : ViewModel() {
 
-//    val wallpaperItems =
+
+//    val clipItems =
 //        arrayListOf(
 //            SearchChip("Popular", "hd amoled wallpapers"),
 //            SearchChip("Night", "Night"),
@@ -37,14 +40,15 @@ class HomeViewModel @Inject constructor(
 
     val query = MutableStateFlow<String?>("hd amoled wallpapers")
 
+
     var showUserDetails by mutableStateOf(false)
 
     val itemsFlow =
         query.flatMapLatest {
         if (it.isNullOrEmpty()) {
-            repository.getAllImages()
+            repository.getAllImages().cachedIn(viewModelScope)
         } else {
-            repository.searchImages(it)
+            repository.searchImages(it).cachedIn(viewModelScope)
         }
     }
 }

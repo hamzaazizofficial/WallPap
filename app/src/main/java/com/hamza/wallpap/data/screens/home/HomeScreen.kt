@@ -25,11 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.screens.common.HomeListContent
 import com.hamza.wallpap.data.screens.search.SearchChips
+import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.ui.theme.textColor
@@ -43,7 +44,8 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     navController: NavHostController,
     homeViewModel: HomeViewModel,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
+    items: LazyPagingItems<UnsplashImage>,
 ) {
 
     val systemUiController = rememberSystemUiController()
@@ -52,7 +54,6 @@ fun HomeScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val activity = (context as? Activity)
-//    val items = homeViewModel.itemsFlow.collectAsLazyPagingItems()
 
     BackHandler {
         if (scaffoldState.drawerState.isOpen) {
@@ -114,7 +115,7 @@ fun HomeScreen(
                 }
             }
             HomeListContent(
-                items = homeViewModel.itemsFlow.collectAsLazyPagingItems(),
+                items = items,
                 navController,
                 homeViewModel
             )

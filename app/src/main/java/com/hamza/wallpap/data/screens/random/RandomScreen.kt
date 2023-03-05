@@ -21,8 +21,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import com.hamza.wallpap.data.screens.common.RandomListContent
+import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.textColor
 import com.hamza.wallpap.util.isOnline
@@ -33,11 +34,11 @@ import kotlinx.coroutines.launch
 fun RandomScreen(
     navController: NavHostController,
     scaffoldState: ScaffoldState,
-    randomScreenViewModel: RandomScreenViewModel
+    randomScreenViewModel: RandomScreenViewModel,
+    items: LazyPagingItems<UnsplashImage>
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val items = randomScreenViewModel.itemsFlow.collectAsLazyPagingItems()
     BackHandler {
         if (scaffoldState.drawerState.isOpen) {
             scope.launch {

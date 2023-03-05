@@ -1,14 +1,14 @@
 package com.hamza.wallpap.data.repository
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.*
 import com.hamza.wallpap.data.local.UnsplashDatabase
 import com.hamza.wallpap.data.paging.SearchPagingSource
 import com.hamza.wallpap.data.paging.UnsplashRemoteMediator
 import com.hamza.wallpap.data.remote.UnsplashApi
+import com.hamza.wallpap.data.screens.home.HomeViewModel
 import com.hamza.wallpap.data.screens.search.SearchChip
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.util.Constants.ITEMS_PER_PAGE
@@ -20,7 +20,7 @@ class Repository @Inject constructor(
     private val unsplashApi: UnsplashApi,
     private val unsplashDatabase: UnsplashDatabase
 ) {
-
+//    val homeViewModel: HomeViewModel by viewModels()
     val wallpaperItems =
         arrayListOf(
             SearchChip("Popular", "hd amoled wallpapers"),
