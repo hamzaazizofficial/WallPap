@@ -16,13 +16,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
-import com.hamza.wallpap.data.navigation.NavGraph
-import com.hamza.wallpap.data.navigation.Screen
-import com.hamza.wallpap.data.screens.common.BottomBar
-import com.hamza.wallpap.data.screens.common.NavDrawer
-import com.hamza.wallpap.data.screens.common.TopBar
-import com.hamza.wallpap.data.screens.home.HomeViewModel
-import com.hamza.wallpap.data.screens.random.RandomScreenViewModel
+import com.hamza.wallpap.navigation.NavGraph
+import com.hamza.wallpap.navigation.Screen
+import com.hamza.wallpap.ui.screens.common.BottomBar
+import com.hamza.wallpap.ui.screens.common.NavDrawer
+import com.hamza.wallpap.ui.screens.common.TopBar
+import com.hamza.wallpap.ui.screens.home.HomeViewModel
+import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
 
