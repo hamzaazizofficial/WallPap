@@ -6,4 +6,5 @@
         <item name="android:navigationBarColor">@color/purple_700</item>
         <!--        <item name="android:fitsSystemWindows">true</item>-->
     </style>
+
 </resources>
