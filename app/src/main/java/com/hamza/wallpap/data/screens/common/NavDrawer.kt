@@ -5,9 +5,7 @@ import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -33,21 +31,24 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.hamza.wallpap.BuildConfig
 import com.hamza.wallpap.data.screens.settings.SettingsViewModel
 import com.hamza.wallpap.ui.theme.iconColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.navDrawerBgColor
 import com.hamza.wallpap.ui.theme.textColor
-import kotlinx.coroutines.launch
-import androidx.compose.animation.*
-import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun NavDrawer(scaffoldState: ScaffoldState, navController: NavHostController, scope: CoroutineScope) {
+fun NavDrawer(
+    scaffoldState: ScaffoldState,
+    navController: NavHostController,
+    scope: CoroutineScope,
+) {
     val context = LocalContext.current
     var settingsViewModel: SettingsViewModel = viewModel()
 
