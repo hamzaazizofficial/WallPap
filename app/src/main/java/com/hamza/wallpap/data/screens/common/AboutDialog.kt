@@ -16,18 +16,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextGeometricTransform
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,7 +57,7 @@ fun AboutDialog(
 fun AboutDialogUI(
     modifier: Modifier = Modifier,
     dialogState: MutableState<Boolean>,
-    context: Context
+    context: Context,
 ) {
     Card(
         shape = RoundedCornerShape(0.dp),
@@ -128,17 +123,6 @@ fun AboutDialogUI(
 
                         Text(
                             buildAnnotatedString {
-//                                withStyle(
-//                                    style = SpanStyle(
-//                                        color = MaterialTheme.colors.textColor,
-//                                        fontSize = 16.sp,
-//                                        fontWeight = FontWeight.ExtraBold,
-//                                        fontFamily = maven_pro_regular
-//                                    )
-//                                ) {
-//                                    append("-")
-//                                }
-
                                 withStyle(
                                     style = SpanStyle(
                                         color = MaterialTheme.colors.textColor,
@@ -150,57 +134,6 @@ fun AboutDialogUI(
                                     append("WallPap is a Wallpaper app which provides HD and 4K wallpapers for mobile.")
                                 }
                             })
-
-//                        Text(
-//                            buildAnnotatedString {
-//                                withStyle(
-//                                    style = SpanStyle(
-//                                        color = MaterialTheme.colors.textColor,
-//                                        fontSize = 16.sp,
-//                                        fontWeight = FontWeight.ExtraBold,
-//                                        fontFamily = maven_pro_regular
-//                                    )
-//                                ) {
-//                                    append("-")
-//                                }
-//
-//                                withStyle(
-//                                    style = SpanStyle(
-//                                        color = MaterialTheme.colors.textColor,
-//                                        fontSize = 16.sp,
-//                                        fontWeight = FontWeight.Bold,
-//                                        fontFamily = maven_pro_regular
-//                                    )
-//                                ) {
-//                                    append("\t\tUnlimited Wallpapers")
-//                                }
-//                            })
-//
-//                        Text(
-//                            buildAnnotatedString {
-//                                withStyle(
-//                                    style = SpanStyle(
-//                                        color = MaterialTheme.colors.textColor,
-//                                        fontSize = 16.sp,
-//                                        fontWeight = FontWeight.ExtraBold,
-//                                        fontFamily = maven_pro_regular
-//                                    )
-//                                ) {
-//                                    append("-")
-//                                }
-//
-//                                withStyle(
-//                                    style = SpanStyle(
-//                                        color = MaterialTheme.colors.textColor,
-//                                        fontSize = 16.sp,
-//                                        fontWeight = FontWeight.Bold,
-//                                        fontFamily = maven_pro_regular
-//                                    )
-//                                ) {
-//                                    append("\t\tExtra Features")
-//                                }
-//                            })
-
                     }
                 }
             }
@@ -226,16 +159,6 @@ fun AboutDialogUI(
                     Text(
                         text = "Close",
                         color = MaterialTheme.colors.textColor,
-//                        modifier = Modifier.clickable {
-//                            val intent = Intent(Intent.ACTION_VIEW)
-//                            intent.data =
-//                                Uri.parse("https://play.google.com/store/apps/dev?id=7870775867932667955")
-//                            try {
-//                                ContextCompat.startActivity(context, intent, null)
-//                            } catch (e: Exception) {
-//                                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
-//                            }
-//                        },
                         style = TextStyle(
                             fontSize = MaterialTheme.typography.subtitle1.fontSize,
                             fontWeight = FontWeight.Bold,

@@ -3,10 +3,7 @@ package com.hamza.wallpap.data.screens.common
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -16,8 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -34,7 +29,7 @@ fun CustomDialog(
     dialogState: MutableState<Boolean>,
     context: Context,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
-    fullUrl: String
+    fullUrl: String,
 ) {
     Dialog(
         onDismissRequest = { dialogState.value = false },
@@ -63,7 +58,6 @@ fun CustomDialogUI(
         shape = RoundedCornerShape(0.dp),
         modifier = Modifier.padding(10.dp, 5.dp, 10.dp, 10.dp),
         elevation = 0.dp,
-//        border = BorderStroke(2.dp, color = if (isSystemInDarkTheme()) Color.White else Color.Black)
     ) {
         Column(
             modifier
@@ -98,14 +92,11 @@ fun CustomDialogUI(
                     .padding(top = 10.dp)
                     .background(
                         color = MaterialTheme.colors.customDialogBottomColor
-                    )
-//                    .border(BorderStroke(0.5.dp, MaterialTheme.colors.textColor))
-                ,
+                    ),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
 
                 TextButton(
-//                    colors = ButtonDefaults.textButtonColors(backgroundColor =),
                     modifier = Modifier.padding(5.dp),
                     onClick = {
                         wallpaperFullScreenViewModel.setWallpaperAs = 1

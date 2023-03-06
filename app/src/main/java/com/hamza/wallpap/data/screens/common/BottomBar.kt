@@ -35,7 +35,6 @@ fun BottomBar(
                     icon = {
                         Icon(imageVector = item.icon, item.title)
                     },
-//                    label = { Text(text = item.title) },
                     selected = currentRoute == item.route,
                     onClick = {
                         if (currentRoute != item.route) {
