@@ -40,7 +40,7 @@ fun SettingsScreen(
     settingsViewModel: SettingsViewModel,
     navController: NavHostController,
     scaffoldState: ScaffoldState,
-    onItemSelected: (WallPapTheme) -> Unit
+    onItemSelected: (WallPapTheme) -> Unit,
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
@@ -71,8 +71,7 @@ fun SettingsScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         scaffoldState
-    ) {
-
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()

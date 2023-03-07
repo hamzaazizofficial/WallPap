@@ -5,9 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -36,7 +36,7 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun FavouriteScreen(
     favUrlsViewModel: FavUrlsViewModel,
-    navController: NavHostController, scaffoldState: ScaffoldState
+    navController: NavHostController, scaffoldState: ScaffoldState,
 ) {
     val data = favUrlsViewModel.getAllFavUrls.observeAsState(listOf())
 
@@ -57,7 +57,7 @@ fun FavouriteScreen(
         }
     }
 
-    LazyVerticalGrid(cells = GridCells.Fixed(2)) {
+    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
         items(data.value) { favUrl ->
             FavouriteItem(favUrl, favUrlsViewModel, navController)
         }
@@ -68,7 +68,7 @@ fun FavouriteScreen(
 fun FavouriteItem(
     favUrl: FavouriteUrls,
     favUrlsViewModel: FavUrlsViewModel,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     val painter = rememberImagePainter(data = favUrl.full) {
         crossfade(durationMillis = 1000)

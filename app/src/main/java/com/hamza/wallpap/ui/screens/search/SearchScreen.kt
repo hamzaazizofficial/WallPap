@@ -1,5 +1,7 @@
 package com.hamza.wallpap.ui.screens.search
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -27,6 +29,7 @@ import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.textColor
 import com.hamza.wallpap.util.isOnline
 
+@RequiresApi(Build.VERSION_CODES.M)
 @ExperimentalPagingApi
 @ExperimentalCoilApi
 @Composable
@@ -58,7 +61,7 @@ fun SearchScreen(
                 }
             )
         },
-        content = {
+        content = { padding->
             if (!isOnline(context)) {
                 Column(
                     verticalArrangement = Arrangement.Center,

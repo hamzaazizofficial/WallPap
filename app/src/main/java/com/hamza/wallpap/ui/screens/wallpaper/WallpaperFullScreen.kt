@@ -46,7 +46,6 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.net.URL
 
-
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavHostController) {
@@ -134,7 +133,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
         )
 
 
-        if (wallpaperFullScreenViewModel.interstitalState.value){
+        if (wallpaperFullScreenViewModel.interstitalState.value) {
             MainInterstitialAd()
         }
 
