@@ -3,8 +3,10 @@ package com.hamza.wallpap.ui.screens.random
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
@@ -29,13 +31,15 @@ import com.hamza.wallpap.ui.theme.textColor
 import com.hamza.wallpap.util.isOnline
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun RandomScreen(
     navController: NavHostController,
     scaffoldState: ScaffoldState,
     randomScreenViewModel: RandomScreenViewModel,
-    items: LazyPagingItems<UnsplashImage>
+    items: LazyPagingItems<UnsplashImage>,
+    lazyStaggeredGridState: LazyStaggeredGridState
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -81,7 +85,7 @@ fun RandomScreen(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.background(MaterialTheme.colors.background)
         ) {
-            RandomListContent(items = items, navController, randomScreenViewModel)
+            RandomListContent(items = items, navController, randomScreenViewModel, lazyStaggeredGridState)
         }
     }
 }

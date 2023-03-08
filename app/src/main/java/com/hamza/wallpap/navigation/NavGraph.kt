@@ -3,6 +3,8 @@ package com.hamza.wallpap.navigation
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,8 +35,11 @@ import com.hamza.wallpap.ui.screens.splash.SplashScreen
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreen
 import com.hamza.wallpap.util.WallPapTheme
 
+
 @RequiresApi(Build.VERSION_CODES.N)
-@OptIn(ExperimentalPagingApi::class, ExperimentalCoilApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalPagingApi::class, ExperimentalCoilApi::class, ExperimentalAnimationApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 fun NavGraph(
     navController: NavHostController,
@@ -42,7 +47,6 @@ fun NavGraph(
     onItemSelected: (WallPapTheme) -> Unit,
     currentRoute: String?,
 ) {
-
     val homeViewModel: HomeViewModel = hiltViewModel()
     val settingsViewModel: SettingsViewModel = hiltViewModel()
     val searchViewModel: SearchViewModel = hiltViewModel()
@@ -51,12 +55,13 @@ fun NavGraph(
     val amoledViewModel: LatestViewModel = viewModel()
     val homeItems = homeViewModel.itemsFlow.collectAsLazyPagingItems()
     val randomItems = randomScreenViewModel.itemsFlow.collectAsLazyPagingItems()
+    val lazyStaggeredGridState = rememberLazyStaggeredGridState()
 
     NavHost(
         navController, startDestination = Screen.Splash.route,
     ) {
         composable(Screen.Home.route) {
-            HomeScreen(navController, homeViewModel, scaffoldState, homeItems)
+            HomeScreen(navController, homeViewModel, scaffoldState, homeItems, lazyStaggeredGridState)
         }
 
         composable(Screen.Splash.route) {
@@ -64,7 +69,7 @@ fun NavGraph(
         }
 
         composable(Screen.Search.route) {
-            SearchScreen(navController = navController, searchViewModel, homeViewModel)
+            SearchScreen(navController = navController, searchViewModel, homeViewModel, lazyStaggeredGridState)
         }
 
         composable(Screen.Settings.route) {
@@ -72,11 +77,11 @@ fun NavGraph(
         }
 
         composable(Screen.Favourite.route) {
-            FavouriteScreen(favUrlsViewModel, navController, scaffoldState)
+            FavouriteScreen(favUrlsViewModel, navController, scaffoldState, lazyStaggeredGridState)
         }
 
         composable(Screen.Random.route) {
-            RandomScreen(navController, scaffoldState, randomScreenViewModel, randomItems)
+            RandomScreen(navController, scaffoldState, randomScreenViewModel, randomItems, lazyStaggeredGridState)
         }
 
         composable(

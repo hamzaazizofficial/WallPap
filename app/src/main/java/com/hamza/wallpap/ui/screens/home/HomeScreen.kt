@@ -4,9 +4,11 @@ import android.app.Activity
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -28,15 +30,16 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.LazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.screens.common.HomeListContent
 import com.hamza.wallpap.ui.screens.search.SearchChips
-import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.ui.theme.textColor
 import com.hamza.wallpap.util.isOnline
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @RequiresApi(Build.VERSION_CODES.M)
 @ExperimentalCoilApi
 @ExperimentalPagingApi
@@ -46,6 +49,7 @@ fun HomeScreen(
     homeViewModel: HomeViewModel,
     scaffoldState: ScaffoldState,
     items: LazyPagingItems<UnsplashImage>,
+    state: LazyStaggeredGridState,
 ) {
 
     val systemUiController = rememberSystemUiController()
@@ -99,7 +103,7 @@ fun HomeScreen(
         ) {
             Row(
                 modifier = Modifier
-                    .padding(horizontal = 5.dp, vertical = 7.dp)
+                    .padding(horizontal = 5.dp, vertical = 4.dp)
                     .horizontalScroll(rememberScrollState())
             ) {
                 homeViewModel.wallpaperItems.forEachIndexed { index, s ->
@@ -117,7 +121,8 @@ fun HomeScreen(
             HomeListContent(
                 items = items,
                 navController,
-                homeViewModel
+                homeViewModel,
+                state
             )
         }
     }
