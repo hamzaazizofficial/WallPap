@@ -1,8 +1,10 @@
 package com.hamza.wallpap
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.collectAsState
@@ -20,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private lateinit var themeSetting: ThemeSetting
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @OptIn(ExperimentalPagingApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

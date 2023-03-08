@@ -17,7 +17,7 @@ fun SearchChips(
 ) {
     if (selected) {
         TextButton(
-            modifier = Modifier.padding(vertical = 6.dp),
+            modifier = Modifier.padding(vertical = 2.dp),
             onClick = { },
             colors = ButtonDefaults.buttonColors(
                 contentColor = MaterialTheme.colors.onSecondary,
@@ -63,7 +63,7 @@ fun SearchChips(
 //            Text(text = text, fontSize = 12.sp)
 //        }
         TextButton(
-            modifier = Modifier.padding(vertical = 6.dp),
+            modifier = Modifier.padding(vertical = 2.dp),
             onClick = {
                 onClick()
             },

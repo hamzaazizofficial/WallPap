@@ -2,17 +2,18 @@ package com.hamza.wallpap.ui.screens.common
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
+import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavHostController
@@ -39,6 +41,8 @@ import com.hamza.wallpap.ui.theme.HeartRed
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import kotlin.random.Random
+
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalPagingApi::class)
 @ExperimentalCoilApi
@@ -47,17 +51,24 @@ fun HomeListContent(
     items: LazyPagingItems<UnsplashImage>,
     navController: NavHostController,
     homeViewModel: HomeViewModel,
+    state: LazyStaggeredGridState,
 ) {
-    Log.d("Error", items.loadState.toString())
-    LazyVerticalGrid(
-        state = rememberLazyGridState(), columns = GridCells.Fixed(2)
+    LazyVerticalStaggeredGrid(
+        state = state,
+        columns = StaggeredGridCells.Fixed(2),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(2.dp)
     ) {
         items(items.itemCount) {
+            val height = remember {
+                Random.nextInt(140, 380).dp
+            }
             items[it]?.let { unsplashImage ->
                 UnsplashItem(
                     unsplashImage = unsplashImage,
                     navController,
-                    homeViewModel
+                    homeViewModel,
+                    height
                 )
             }
         }
@@ -71,8 +82,8 @@ fun UnsplashItem(
     unsplashImage: UnsplashImage,
     navController: NavHostController,
     homeViewModel: HomeViewModel,
+    height: Dp,
 ) {
-
     val regularUrl = unsplashImage.urls.regular
     val fullUrl = unsplashImage.urls.full
     val regularEncodedUrl = URLEncoder.encode(regularUrl, StandardCharsets.UTF_8.toString())
@@ -90,7 +101,7 @@ fun UnsplashItem(
         shape = RoundedCornerShape(2.dp),
         modifier = Modifier
             .padding(1.5.dp)
-            .height(300.dp)
+            .height(height)
             .clickable {
                 navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl") {
                     navController.graph.startDestinationRoute?.let { route ->
@@ -103,9 +114,7 @@ fun UnsplashItem(
             },
     ) {
         Box(
-            modifier = Modifier
-                .height(300.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter
         ) {
 
@@ -121,8 +130,11 @@ fun UnsplashItem(
                 contentScale = ContentScale.Crop
             )
 
-            if (homeViewModel.showUserDetails) {
-
+            AnimatedVisibility(
+                visible = homeViewModel.showUserDetails,
+                enter = slideInHorizontally() + fadeIn(),
+                exit = slideOutHorizontally() + fadeOut(),
+            ) {
                 Surface(
                     modifier = Modifier
                         .height(40.dp)

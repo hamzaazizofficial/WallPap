@@ -15,5 +15,6 @@ data class UnsplashImage(
     val urls: Urls,
     val likes: Int,
     @Embedded
-    val user: User
+    val user: User,
+    val height: Int
 )

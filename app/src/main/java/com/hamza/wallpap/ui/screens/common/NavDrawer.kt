@@ -6,6 +6,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,8 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -33,6 +36,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.hamza.wallpap.BuildConfig
+import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.screens.settings.SettingsViewModel
 import com.hamza.wallpap.ui.theme.iconColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
@@ -105,33 +109,47 @@ fun NavDrawer(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 30.dp)
+                    .padding(horizontal = 0.dp)
                     .layoutId("appname")
             ) {
-                Text(
-                    buildAnnotatedString {
-                        withStyle(
-                            style = SpanStyle(
-                                color = Color(0xFF243447),
-                                fontSize = 29.sp,
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = maven_pro_regular
-                            )
-                        ) {
-                            append("Wall")
-                        }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.padding(horizontal = 26.dp)
+                ) {
+//                    Image(
+//                        painterResource(id = R.drawable.wattpad_2),
+//                        contentDescription = null,
+//                        contentScale = ContentScale.Fit,
+//                        modifier = Modifier
+//                            .size(80.dp)
+//                            .padding(vertical = 10.dp)
+//                    )
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(
+                                style = SpanStyle(
+                                    color = Color(0xFF243447),
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = maven_pro_regular
+                                )
+                            ) {
+                                append("Wall")
+                            }
 
-                        withStyle(
-                            style = SpanStyle(
-                                color = Color(0xFFFF5252),
-                                fontSize = 29.sp,
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = maven_pro_regular
-                            )
-                        ) {
-                            append("Pap")
-                        }
-                    })
+                            withStyle(
+                                style = SpanStyle(
+                                    color = Color(0xFFFF5252),
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = maven_pro_regular
+                                )
+                            ) {
+                                append("Pap")
+                            }
+                        })
+                }
 
                 AnimatedVisibility(
                     visible = scaffoldState.drawerState.isOpen,
