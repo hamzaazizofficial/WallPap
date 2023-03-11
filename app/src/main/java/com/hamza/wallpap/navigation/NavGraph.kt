@@ -18,6 +18,8 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
+import com.hamza.wallpap.ui.screens.editor.CustomWallpaperScreen
+import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.screens.favourite.FavouriteScreen
 import com.hamza.wallpap.ui.screens.favourite.FavouriteWallpaperFullScreen
 import com.hamza.wallpap.ui.screens.home.HomeScreen
@@ -56,6 +58,7 @@ fun NavGraph(
     val homeItems = homeViewModel.itemsFlow.collectAsLazyPagingItems()
     val randomItems = randomScreenViewModel.itemsFlow.collectAsLazyPagingItems()
     val lazyStaggeredGridState = rememberLazyStaggeredGridState()
+    val customWallpaperViewModel : CustomWallpaperViewModel = viewModel()
 
     NavHost(
         navController, startDestination = Screen.Splash.route,
@@ -119,6 +122,11 @@ fun NavGraph(
             if (fullUrl != null) {
                 FavouriteWallpaperFullScreen(fullUrl, navController)
             }
+        }
+
+        // Custom Wallpaper Screens
+        composable(Screen.CustomWallpaperScreen.route) {
+            CustomWallpaperScreen(navController, scaffoldState, customWallpaperViewModel)
         }
 
         // FireStore Screens

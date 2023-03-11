@@ -3,6 +3,7 @@ package com.hamza.wallpap.ui.screens.common
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -122,7 +123,11 @@ fun RandomUnsplashItem(
                 contentScale = ContentScale.Crop
             )
 
-            if (hotViewModel.showUserDetails) {
+            AnimatedVisibility(
+                visible = hotViewModel.showUserDetails,
+                enter = slideInHorizontally() + fadeIn(),
+                exit = slideOutHorizontally() + fadeOut(),
+            ) {
                 Surface(
                     modifier = Modifier
                         .height(40.dp)
