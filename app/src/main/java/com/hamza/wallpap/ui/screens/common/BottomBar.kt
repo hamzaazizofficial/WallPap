@@ -19,6 +19,7 @@ fun BottomBar(
         Screen.Home,
         Screen.Amoled,
         Screen.Random,
+        Screen.CustomWallpaperScreen,
         Screen.Favourite,
         Screen.Settings,
     )
