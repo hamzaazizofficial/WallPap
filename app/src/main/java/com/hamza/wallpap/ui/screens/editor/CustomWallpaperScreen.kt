@@ -1,96 +1,115 @@
 package com.hamza.wallpap.ui.screens.editor
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.CoroutineScope
+import androidx.paging.compose.LazyPagingItems
+import coil.compose.rememberImagePainter
+import com.hamza.wallpap.R
+import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
+import com.hamza.wallpap.model.UnsplashImage
 import kotlinx.coroutines.launch
 
-data class ItemList(val color: Color, val size: Int)
-
+@RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CustomWallpaperScreen(
     navController: NavHostController,
     scaffoldState: ScaffoldState,
     customWallpaperViewModel: CustomWallpaperViewModel,
+    randomItems: LazyPagingItems<UnsplashImage>,
+    context: Context,
 ) {
-    val itemList = mutableListOf<ItemList>()
-    itemList.add(ItemList(Color(0xFFFFFFFF), 8))
-    itemList.add(ItemList(Color(0xFF485049), 8))
-    itemList.add(ItemList(Color(0xFF41FDF7), 8))
-    itemList.add(ItemList(Color(0xFFFF5722), 8))
-    itemList.add(ItemList(Color(0xFFE91E63), 8))
-    itemList.add(ItemList(Color(0xFF8BC34A), 8))
-    itemList.add(ItemList(Color(0xFF3F51B5), 8))
-    itemList.add(ItemList(Color(0xFF9C27B0), 8))
+    val itemList = mutableListOf<CustomWallpaperBackgroundColor>()
+    itemList.add(CustomWallpaperBackgroundColor(Color(0xFFFFFFFF), 8))
+    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF485049), 8))
+    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF41FDF7), 8))
+    itemList.add(CustomWallpaperBackgroundColor(Color(0xFFFF5722), 8))
+    itemList.add(CustomWallpaperBackgroundColor(Color(0xFFE91E63), 8))
+    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF8BC34A), 8))
+    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF3F51B5), 8))
+    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF9C27B0), 8))
 
-    var bottomSheetState = rememberModalBottomSheetState(
+    var modalBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
     )
-
-    var wallpaperText by remember {
-        mutableStateOf("")
-    }
 
     val scope = rememberCoroutineScope()
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp),
-        sheetState = bottomSheetState,
+        sheetState = modalBottomSheetState,
         sheetContent = {
             EditorBottomSheet(
                 navController,
                 itemList,
                 customWallpaperViewModel,
-                bottomSheetState,
-                scope
+                modalBottomSheetState,
+                scope,
+                randomItems,
+                context
             )
-        }, content = {
+        },
+        content = {
             androidx.compose.material3.Scaffold(
                 bottomBar = {
                     androidx.compose.material3.BottomAppBar(
                         floatingActionButton = {
                             androidx.compose.material3.SmallFloatingActionButton(
                                 shape = RoundedCornerShape(4.dp),
-                                onClick = { /*TODO*/ }) {
+                                onClick = {}) {
                                 Icon(Icons.Default.Add, contentDescription = null)
                             }
                         },
                         actions = {
                             androidx.compose.material3.IconButton(
                                 onClick = {
-                                    scope.launch { bottomSheetState.show() }
+                                    customWallpaperViewModel.bgColorBottomSheet.value = true
+                                    scope.launch {
+                                        modalBottomSheetState.show()
+                                    }
                                 }) {
                                 Icon(
                                     Icons.Outlined.Palette,
                                     contentDescription = null
                                 )
                             }
-                            androidx.compose.material3.IconButton(onClick = { /*TODO*/ }) {
+
+                            androidx.compose.material3.IconButton(
+                                onClick = {
+                                    customWallpaperViewModel.textBottomSheet.value = true
+                                    scope.launch {
+                                        modalBottomSheetState.show()
+                                    }
+                                }) {
                                 Icon(Icons.Default.TextFields, contentDescription = null)
                             }
-                            androidx.compose.material3.IconButton(onClick = { /*TODO*/ }) {
+
+                            androidx.compose.material3.IconButton(
+                                onClick = {
+                                    customWallpaperViewModel.bgImageBottomSheet.value = true
+                                    scope.launch {
+                                        modalBottomSheetState.show()
+                                    }
+                                }) {
                                 Icon(Icons.Default.Image, contentDescription = null)
                             }
                         }
@@ -112,81 +131,51 @@ fun CustomWallpaperScreen(
                             .border(border = BorderStroke(1.dp, Color.Black))
                             .background(customWallpaperViewModel.boxColor.value)
                     ) {
-                        Text(text = wallpaperText, color = Color.Black, fontSize = 22.sp)
+                        if (customWallpaperViewModel.bgImageUrl.value != null) {
+                            val painter =
+                                rememberImagePainter(data = customWallpaperViewModel.bgImageUrl.value) {
+                                    crossfade(durationMillis = 1000)
+                                    error(R.drawable.ic_placeholder)
+                                }
+                            Image(
+                                modifier = Modifier.fillMaxSize(),
+                                painter = painter,
+                                contentDescription = "Unsplash Image",
+                                contentScale = ContentScale.Crop,
+                                alpha = customWallpaperViewModel.bgImageTransparency.value
+                            )
+                        }
+
+                        Text(
+                            text = customWallpaperViewModel.wallpaperText.value,
+//                            color = customWallpaperViewModel.wallpaperTextColor.value,
+//                            fontSize = customWallpaperViewModel.wallpaperTextSize.value,
+//                            textDecoration = customWallpaperViewModel.wallpaperTextDecoration.value,
+//                            fontWeight = customWallpaperViewModel.wallpaperTextFontWeight.value,
+//                            textAlign = customWallpaperViewModel.wallpaperTextAlign.value,
+                            style = TextStyle(
+                                fontStyle = customWallpaperViewModel.wallpaperTextFontStyle.value,
+                                color = customWallpaperViewModel.wallpaperTextColor.value,
+                                fontSize = customWallpaperViewModel.wallpaperTextSize.value,
+                                textDecoration = customWallpaperViewModel.wallpaperTextDecoration.value,
+                                fontWeight = customWallpaperViewModel.wallpaperTextFontWeight.value,
+                                textAlign = customWallpaperViewModel.wallpaperTextAlign.value,
+                            ),
+                            modifier = Modifier
+                                .padding(12.dp)
+                                .clickable {
+                                    if (customWallpaperViewModel.wallpaperText.value.isNotEmpty()) {
+                                        customWallpaperViewModel.textBottomSheet.value = true
+                                        scope.launch {
+                                            modalBottomSheetState.show()
+                                        }
+                                    }
+                                }
+                        )
                     }
                 }
             }
         })
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun EditorBottomSheet(
-    navController: NavHostController,
-    itemList: MutableList<ItemList>,
-    customWallpaperViewModel: CustomWallpaperViewModel,
-    bottomSheetState: ModalBottomSheetState,
-    scope: CoroutineScope,
-) {
-    Surface {
-        Card {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.padding(vertical = 2.dp))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 12.dp, end = 10.dp)
-                ) {
-                    Text(
-                        textAlign = TextAlign.Start,
-                        text = "Background Color",
-                        color = Color.Black,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 16.sp
-                    )
-                    androidx.compose.material3.IconButton(
-                        onClick = {
-                            scope.launch {
-                                bottomSheetState.hide()
-                            }
-                        }
-                    ) {
-                        Icon(imageVector = Icons.Default.Close, contentDescription = null)
-                    }
-                }
-
-                Spacer(modifier = Modifier.padding(vertical = 2.dp))
-
-                LazyRow(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp)
-                ) {
-                    items(itemList) { item ->
-                        Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .clip(CircleShape)
-                                .border(1.dp, Color.Black, CircleShape)
-                                .background(item.color)
-                                .clickable {
-                                    customWallpaperViewModel.boxColor.value = item.color
-                                }
-                        )
-                        Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                    }
-
-                }
-                Spacer(modifier = Modifier.padding(vertical = 6.dp))
-            }
-        }
-    }
-}

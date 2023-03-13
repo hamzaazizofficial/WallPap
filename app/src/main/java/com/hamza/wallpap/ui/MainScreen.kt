@@ -94,7 +94,7 @@ fun MainScreen(
         }
     ) { padding ->
         Column(Modifier.padding(padding)) {
-            NavGraph(navController = navController, scaffoldState, onItemSelected, currentRoute)
+            NavGraph(navController = navController, scaffoldState, onItemSelected, currentRoute, context)
         }
     }
 }
