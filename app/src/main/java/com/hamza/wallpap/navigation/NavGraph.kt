@@ -1,5 +1,6 @@
 package com.hamza.wallpap.navigation
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -48,6 +49,7 @@ fun NavGraph(
     scaffoldState: ScaffoldState,
     onItemSelected: (WallPapTheme) -> Unit,
     currentRoute: String?,
+    context: Context,
 ) {
     val homeViewModel: HomeViewModel = hiltViewModel()
     val settingsViewModel: SettingsViewModel = hiltViewModel()
@@ -126,7 +128,7 @@ fun NavGraph(
 
         // Custom Wallpaper Screens
         composable(Screen.CustomWallpaperScreen.route) {
-            CustomWallpaperScreen(navController, scaffoldState, customWallpaperViewModel)
+            CustomWallpaperScreen(navController, scaffoldState, customWallpaperViewModel, randomItems, context)
         }
 
         // FireStore Screens
