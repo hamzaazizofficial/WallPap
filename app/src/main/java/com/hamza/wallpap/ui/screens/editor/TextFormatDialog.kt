@@ -51,6 +51,7 @@ fun TextFormatDialog(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun TextFormatDialogUI(
@@ -60,6 +61,18 @@ fun TextFormatDialogUI(
     itemList: MutableList<CustomWallpaperBackgroundColor>,
     customWallpaperViewModel: CustomWallpaperViewModel,
 ) {
+    var expanded by remember { mutableStateOf(false) }
+    val options = listOf(
+        "1secmail.com",
+        "1secmail.org",
+        "1secmail.net",
+        "xojze.com",
+        "oosln.com",
+        "yoggm.com",
+        "wwjmp.com",
+        "esiix.com",
+        "vddaz.com"
+    )
     Card(
         shape = RoundedCornerShape(4.dp),
         modifier = Modifier
@@ -114,7 +127,8 @@ fun TextFormatDialogUI(
                 onValueChange = { customWallpaperViewModel.textSliderPosition.value = it },
                 valueRange = 12f..100f,
                 onValueChangeFinished = {
-                    customWallpaperViewModel.wallpaperTextSize.value = customWallpaperViewModel.textSliderPosition.value.sp
+                    customWallpaperViewModel.wallpaperTextSize.value =
+                        customWallpaperViewModel.textSliderPosition.value.sp
                 }
             )
 

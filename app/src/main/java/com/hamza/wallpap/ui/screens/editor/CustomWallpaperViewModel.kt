@@ -1,9 +1,6 @@
 package com.hamza.wallpap.ui.screens.editor
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,7 +21,7 @@ class CustomWallpaperViewModel : ViewModel() {
     var wallpaperTextDecoration = mutableStateOf(TextDecoration.None)
     var wallpaperTextFontStyle = mutableStateOf(FontStyle.Normal)
     var textSliderPosition = mutableStateOf(0f)
-    var transparencySliderPosition = mutableStateOf(0f)
+    var transparencySliderPosition = mutableStateOf(0.4f)
 
     /* Text Format Icons Checked */
     var textAlignCenterChecked = mutableStateOf(false)
@@ -41,5 +38,4 @@ class CustomWallpaperViewModel : ViewModel() {
     var bgImageBottomSheet = mutableStateOf(false)
     var bgImageUrl = mutableStateOf<String?>(null)
     var bgImageTransparency = mutableStateOf(0.4f)
-
 }

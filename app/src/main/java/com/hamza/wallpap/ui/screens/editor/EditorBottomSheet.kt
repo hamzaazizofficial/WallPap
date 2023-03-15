@@ -276,7 +276,7 @@ fun EditorBottomSheet(
                     onValueChange = {
                         customWallpaperViewModel.transparencySliderPosition.value = it
                     },
-                    valueRange = 0.4f..1f,
+                    valueRange = 0.3f..1f,
                     onValueChangeFinished = {
                         customWallpaperViewModel.bgImageTransparency.value =
                             customWallpaperViewModel.transparencySliderPosition.value

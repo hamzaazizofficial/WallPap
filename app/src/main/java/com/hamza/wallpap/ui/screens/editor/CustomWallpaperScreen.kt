@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.TextFields
+import androidx.compose.material.icons.outlined.FormatColorFill
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -88,7 +89,7 @@ fun CustomWallpaperScreen(
                                     }
                                 }) {
                                 Icon(
-                                    Icons.Outlined.Palette,
+                                    Icons.Outlined.FormatColorFill,
                                     contentDescription = null
                                 )
                             }
@@ -118,6 +119,7 @@ fun CustomWallpaperScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(padding)
                         .background(Color.White),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -148,11 +150,6 @@ fun CustomWallpaperScreen(
 
                         Text(
                             text = customWallpaperViewModel.wallpaperText.value,
-//                            color = customWallpaperViewModel.wallpaperTextColor.value,
-//                            fontSize = customWallpaperViewModel.wallpaperTextSize.value,
-//                            textDecoration = customWallpaperViewModel.wallpaperTextDecoration.value,
-//                            fontWeight = customWallpaperViewModel.wallpaperTextFontWeight.value,
-//                            textAlign = customWallpaperViewModel.wallpaperTextAlign.value,
                             style = TextStyle(
                                 fontStyle = customWallpaperViewModel.wallpaperTextFontStyle.value,
                                 color = customWallpaperViewModel.wallpaperTextColor.value,
