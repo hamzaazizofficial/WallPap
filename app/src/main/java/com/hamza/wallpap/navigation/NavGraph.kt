@@ -128,7 +128,7 @@ fun NavGraph(
 
         // Custom Wallpaper Screens
         composable(Screen.CustomWallpaperScreen.route) {
-            CustomWallpaperScreen(navController, scaffoldState, customWallpaperViewModel, randomItems, context)
+            CustomWallpaperScreen(navController, scaffoldState, customWallpaperViewModel, homeItems, context)
         }
 
         // FireStore Screens

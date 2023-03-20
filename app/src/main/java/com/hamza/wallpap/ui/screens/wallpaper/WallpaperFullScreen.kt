@@ -17,7 +17,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -35,12 +34,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
-import com.hamza.wallpap.ui.screens.common.CustomDialog
-import com.hamza.wallpap.ui.screens.common.admob.MainInterstitialAd
 import com.hamza.wallpap.model.FavouriteUrls
+import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
+import com.hamza.wallpap.ui.screens.common.admob.MainInterstitialAd
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
+import com.hamza.wallpap.ui.theme.systemBarColor
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -50,6 +51,8 @@ import java.net.URL
 @Composable
 fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavHostController) {
 
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
     var viewModel: FavUrlsViewModel = viewModel()
 //    val context: Context = LocalContext.current
@@ -115,21 +118,11 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
             )
         }
 
-//        var sliderPosition1 by remember { mutableStateOf(1f) }
-//        var sliderPosition2 by remember { mutableStateOf(1f) }
-//        var sliderPosition3 by remember { mutableStateOf(1f) }
-//
         Image(
             contentScale = scale,
             modifier = Modifier.fillMaxSize(),
             painter = painter,
-            contentDescription = "Unsplash Image",
-//            colorFilter = androidx.compose.ui.graphics.ColorFilter.colorMatrix(colorMatrix = ColorMatrix().apply {
-////                setToRotateRed(sliderPosition1)
-////                setToRotateGreen(sliderPosition2)
-////                setToRotateBlue(sliderPosition3)
-//                setToScale(sliderPosition1, sliderPosition2, sliderPosition3, 1f)
-//            })
+            contentDescription = "Unsplash Image"
         )
 
 
@@ -139,76 +132,13 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
 
 
         if (wallpaperFullScreenViewModel.dialogState.value) {
-            CustomDialog(
+            SetWallpaperDialog(
                 dialogState = wallpaperFullScreenViewModel.dialogState,
                 context = context,
                 wallpaperFullScreenViewModel,
                 fullUrl
             )
         }
-
-//
-//
-//        Text(text = sliderPosition1.toString())
-//        Spacer(modifier = Modifier.padding(bottom = 30.dp))
-//        Text(text = sliderPosition2.toString())
-//        Spacer(modifier = Modifier.padding(bottom = 30.dp))
-//        Text(text = sliderPosition3.toString())
-//        Slider(
-//            value = sliderPosition1,
-//            onValueChange = { it1->
-//                sliderPosition1 = it1
-//            },
-//            valueRange = 1f..3f,
-//            onValueChangeFinished = {
-//                // launch some business logic update with the state you hold
-//                // viewModel.updateSelectedSliderValue(sliderPosition)
-//            },
-//            steps = 3,
-//            colors = SliderDefaults.colors(
-//                thumbColor = MaterialTheme.colors.secondary,
-//                activeTrackColor = MaterialTheme.colors.secondary
-//            ),
-//            modifier = Modifier.padding(bottom = 200.dp)
-//        )
-//
-////        Spacer(modifier = Modifier.padding(30.dp))
-//
-//        Slider(
-//            value = sliderPosition2,
-//            onValueChange = {it2-> sliderPosition2 = it2 },
-//            valueRange = 1f..3f,
-//            onValueChangeFinished = {
-//                                    sliderPosition2 = sliderPosition2
-//                // launch some business logic update with the state you hold
-//                // viewModel.updateSelectedSliderValue(sliderPosition)
-//            },
-//            steps = 3,
-//            colors = SliderDefaults.colors(
-//                thumbColor = MaterialTheme.colors.secondary,
-//                activeTrackColor = MaterialTheme.colors.secondary
-//            ),
-//            modifier = Modifier.padding(bottom = 150.dp)
-//        )
-//
-////        Spacer(modifier = Modifier.padding(bottom = 30.dp))
-//
-//        Slider(
-//            value = sliderPosition3,
-//            onValueChange = {it3-> sliderPosition3 = it3 },
-//            valueRange = 1f..3f,
-//            onValueChangeFinished = {
-//                                    sliderPosition3 = sliderPosition3
-//                // launch some business logic update with the state you hold
-//                // viewModel.updateSelectedSliderValue(sliderPosition)
-//            },
-//            steps = 3,
-//            colors = SliderDefaults.colors(
-//                thumbColor = MaterialTheme.colors.secondary,
-//                activeTrackColor = MaterialTheme.colors.secondary
-//            ),
-//            modifier = Modifier.padding(bottom = 100.dp)
-//        )
 
         Surface(
             modifier = Modifier
@@ -221,80 +151,87 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(18.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            navController.popBackStack()
-                        },
-                    tint = Color.White
-                )
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
 
                 Row {
 
-                    Icon(
-                        imageVector = Icons.Rounded.Download,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                image?.let {
-                                    saveMediaToStorage(
-                                        it,
-                                        context
-                                    )
-                                    wallpaperFullScreenViewModel.interstitalState.value = true
-                                }
-                            },
-                        tint = Color.White
-                    )
-
-                    Spacer(modifier = Modifier.padding(end = 10.dp))
-
-                    if (showFitScreenBtn) {
+                    IconButton(
+                        onClick = {
+                            image?.let {
+                                saveMediaToStorage(
+                                    it,
+                                    context
+                                )
+                                wallpaperFullScreenViewModel.interstitalState.value = true
+                            }
+                        }) {
                         Icon(
-                            imageVector = Icons.Default.Fullscreen,
+                            imageVector = Icons.Rounded.Download,
                             contentDescription = null,
-                            modifier = Modifier
-                                .clickable {
-                                    scale = ContentScale.Fit
-                                    showFitScreenBtn = false
-                                    showCropScreenBtn = true
-                                },
                             tint = Color.White
                         )
+                    }
+
+                    if (showFitScreenBtn) {
+                        IconButton(
+                            onClick = {
+                                scale = ContentScale.Fit
+                                showFitScreenBtn = false
+                                showCropScreenBtn = true
+                            }) {
+                            Icon(
+                                imageVector = Icons.Default.Fullscreen,
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                        }
                     }
 
                     if (showCropScreenBtn) {
-                        Icon(
-                            imageVector = Icons.Rounded.Fullscreen,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .clickable {
-                                    scale = ContentScale.Crop
-                                    showCropScreenBtn = false
-                                    showFitScreenBtn = true
-                                },
-                            tint = Color.White
-                        )
+                        IconButton(
+                            onClick = {
+                                scale = ContentScale.Crop
+                                showCropScreenBtn = false
+                                showFitScreenBtn = true
+                            }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Fullscreen,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.bottomAppBarContentColor
+                            )
+                        }
                     }
 
-                    Spacer(modifier = Modifier.padding(end = 10.dp))
-
-                    Icon(
-                        imageVector = Icons.Default.HighQuality,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                data = fullUrl
-                            },
-                        tint = Color.White
-                    )
+                    IconButton(
+                        onClick = {
+                            data = fullUrl
+                            wallpaperFullScreenViewModel.turnHdWallpaperChecked.value = true
+                        }) {
+                        if (wallpaperFullScreenViewModel.turnHdWallpaperChecked.value) {
+                            Icon(
+                                imageVector = Icons.Default.HighQuality,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.bottomAppBarContentColor
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Default.HighQuality,
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -329,9 +266,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
                     }
                 },
                 modifier = Modifier
-                    .padding(8.dp)
-//                    .alpha(0.6f)
-                ,
+                    .padding(8.dp),
                 backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
             ) {
                 Icon(
@@ -350,9 +285,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
                     Toast.makeText(context, "Added to Favourites!", Toast.LENGTH_SHORT).show()
                 },
                 modifier = Modifier
-                    .padding(8.dp)
-//                    .alpha(0.6f)
-                ,
+                    .padding(8.dp),
                 backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
             ) {
                 Icon(
@@ -364,13 +297,11 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
 
             FloatingActionButton(
                 onClick = {
-//                    setWallPaper(context, fullUrl)
                     wallpaperFullScreenViewModel.dialogState.value = true
                     wallpaperFullScreenViewModel.interstitalState.value = true
                 },
                 modifier = Modifier
                     .padding(8.dp),
-//                    .alpha(0.5f),
                 backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
             ) {
                 Icon(

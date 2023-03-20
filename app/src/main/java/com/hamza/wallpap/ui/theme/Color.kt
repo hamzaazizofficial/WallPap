@@ -35,6 +35,9 @@ val Colors.systemBarColor: Color
 val Colors.bottomAppBarContentColor: Color
     get() = if (isLight) Color(0xFFFF5252) else Color(0xFFF50057)
 
+val Colors.editorBottomAppBarContentColor: Color
+    get() = if (isLight) Color(0xFF000000) else Color.LightGray
+
 val Colors.bottomAppBarBackgroundColor: Color
     get() = if (isLight) Color.White else Color(0xFF243447)
 

@@ -18,10 +18,10 @@ fun BottomBar(
     val items = listOf(
         Screen.Home,
         Screen.Amoled,
-        Screen.Random,
         Screen.CustomWallpaperScreen,
+        Screen.Random,
         Screen.Favourite,
-        Screen.Settings,
+//        Screen.Settings,
     )
     CompositionLocalProvider(LocalElevationOverlay provides null) {
         BottomNavigation(

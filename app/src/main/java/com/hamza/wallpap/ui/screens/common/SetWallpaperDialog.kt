@@ -25,7 +25,7 @@ import com.hamza.wallpap.ui.theme.*
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun CustomDialog(
+fun SetWallpaperDialog(
     dialogState: MutableState<Boolean>,
     context: Context,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
@@ -35,7 +35,7 @@ fun CustomDialog(
         onDismissRequest = { dialogState.value = false },
         properties = DialogProperties(usePlatformDefaultWidth = true),
     ) {
-        CustomDialogUI(
+        SetWallpaperDialogUI(
             modifier = Modifier,
             dialogState,
             context,
@@ -47,7 +47,7 @@ fun CustomDialog(
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun CustomDialogUI(
+fun SetWallpaperDialogUI(
     modifier: Modifier = Modifier,
     dialogState: MutableState<Boolean>,
     context: Context,
