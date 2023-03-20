@@ -3,35 +3,45 @@ package com.hamza.wallpap.ui.screens.editor
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.TextFields
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.FormatColorFill
-import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.rememberImagePainter
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.R
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.screens.common.AboutDialog
+import com.hamza.wallpap.ui.screens.latest.saveMediaToStorage
+import com.hamza.wallpap.ui.theme.*
+import dev.shreyaspatil.capturable.Capturable
+import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.N)
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalFoundationApi::class, ExperimentalAnimationApi::class
+)
 @Composable
 fun CustomWallpaperScreen(
     navController: NavHostController,
@@ -40,6 +50,8 @@ fun CustomWallpaperScreen(
     randomItems: LazyPagingItems<UnsplashImage>,
     context: Context,
 ) {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     val itemList = mutableListOf<CustomWallpaperBackgroundColor>()
     itemList.add(CustomWallpaperBackgroundColor(Color(0xFFFFFFFF), 8))
     itemList.add(CustomWallpaperBackgroundColor(Color(0xFF485049), 8))
@@ -53,8 +65,9 @@ fun CustomWallpaperScreen(
     var modalBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
     )
-
+    val captureController = rememberCaptureController()
     val scope = rememberCoroutineScope()
+
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp),
         sheetState = modalBottomSheetState,
@@ -73,11 +86,31 @@ fun CustomWallpaperScreen(
             androidx.compose.material3.Scaffold(
                 bottomBar = {
                     androidx.compose.material3.BottomAppBar(
+                        containerColor = MaterialTheme.colors.bottomAppBarBackgroundColor,
+                        contentColor = MaterialTheme.colors.editorBottomAppBarContentColor,
                         floatingActionButton = {
-                            androidx.compose.material3.SmallFloatingActionButton(
-                                shape = RoundedCornerShape(4.dp),
-                                onClick = {}) {
-                                Icon(Icons.Default.Add, contentDescription = null)
+                            AnimatedVisibility(
+                                visible = customWallpaperViewModel.bgImageUrl.value != null
+                                        || customWallpaperViewModel.boxColor.value != Color(
+                                    0xF1FFFFFF
+                                )
+                                        || customWallpaperViewModel.wallpaperText.value != "",
+                                enter = scaleIn() + fadeIn(),
+                                exit = scaleOut() + fadeOut()
+                            )
+                            {
+                                androidx.compose.material3.SmallFloatingActionButton(
+                                    containerColor = MaterialTheme.colors.bottomAppBarContentColor,
+                                    contentColor = Color.White,
+                                    shape = RoundedCornerShape(4.dp),
+                                    onClick = { captureController.capture() })
+                                {
+                                    Icon(
+                                        Icons.Default.Download,
+                                        contentDescription = null,
+                                        tint = Color.White
+                                    )
+                                }
                             }
                         },
                         actions = {
@@ -90,7 +123,8 @@ fun CustomWallpaperScreen(
                                 }) {
                                 Icon(
                                     Icons.Outlined.FormatColorFill,
-                                    contentDescription = null
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colors.editorBottomAppBarContentColor
                                 )
                             }
 
@@ -101,7 +135,11 @@ fun CustomWallpaperScreen(
                                         modalBottomSheetState.show()
                                     }
                                 }) {
-                                Icon(Icons.Default.TextFields, contentDescription = null)
+                                Icon(
+                                    Icons.Default.TextFields,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colors.editorBottomAppBarContentColor
+                                )
                             }
 
                             androidx.compose.material3.IconButton(
@@ -111,7 +149,11 @@ fun CustomWallpaperScreen(
                                         modalBottomSheetState.show()
                                     }
                                 }) {
-                                Icon(Icons.Default.Image, contentDescription = null)
+                                Icon(
+                                    Icons.Default.Image,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colors.editorBottomAppBarContentColor
+                                )
                             }
                         }
                     )
@@ -120,59 +162,81 @@ fun CustomWallpaperScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(padding)
-                        .background(Color.White),
+                        .background(MaterialTheme.colors.background),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Spacer(modifier = Modifier.padding(vertical = 22.dp))
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .width(300.dp)
-                            .height(600.dp)
-                            .border(border = BorderStroke(1.dp, Color.Black))
-                            .background(customWallpaperViewModel.boxColor.value)
-                    ) {
-                        if (customWallpaperViewModel.bgImageUrl.value != null) {
-                            val painter =
-                                rememberImagePainter(data = customWallpaperViewModel.bgImageUrl.value) {
-                                    crossfade(durationMillis = 1000)
-                                    error(R.drawable.ic_placeholder)
-                                }
-                            Image(
-                                modifier = Modifier.fillMaxSize(),
-                                painter = painter,
-                                contentDescription = "Unsplash Image",
-                                contentScale = ContentScale.Crop,
-                                alpha = customWallpaperViewModel.bgImageTransparency.value
+                    Capturable(controller = captureController, onCaptured = { bitmap, error ->
+                        if (bitmap != null) {
+                            saveMediaToStorage(bitmap.asAndroidBitmap(), context)
+                        }
+                    }) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(customWallpaperViewModel.boxColor.value)
+                        ) {
+                            if (
+                                customWallpaperViewModel.bgImageUrl.value == null
+                                && customWallpaperViewModel.boxColor.value == Color(0xF1FFFFFF)
+                                && customWallpaperViewModel.wallpaperText.value == ""
+                            ) {
+                                Text(
+                                    text = "Add something here.",
+                                    fontSize = 22.sp,
+                                    fontFamily = maven_pro_regular
+                                )
+                            }
+                            if (customWallpaperViewModel.bgImageUrl.value != null) {
+                                val painter =
+                                    rememberImagePainter(data = customWallpaperViewModel.bgImageUrl.value) {
+                                        crossfade(durationMillis = 1000)
+                                        error(R.drawable.ic_placeholder)
+                                    }
+                                Image(
+                                    modifier = Modifier.fillMaxSize(),
+                                    painter = painter,
+                                    contentDescription = "Unsplash Image",
+                                    contentScale = ContentScale.Crop,
+                                    alpha = customWallpaperViewModel.bgImageTransparency.value
+                                )
+                            }
+
+                            Text(
+                                text = customWallpaperViewModel.wallpaperText.value,
+                                style = TextStyle(
+                                    fontStyle = customWallpaperViewModel.wallpaperTextFontStyle.value,
+                                    color = customWallpaperViewModel.wallpaperTextColor.value,
+                                    fontSize = customWallpaperViewModel.wallpaperTextSize.value,
+                                    textDecoration = customWallpaperViewModel.wallpaperTextDecoration.value,
+                                    fontWeight = customWallpaperViewModel.wallpaperTextFontWeight.value,
+                                    textAlign = customWallpaperViewModel.wallpaperTextAlign.value,
+                                    fontFamily = customWallpaperViewModel.textFontFamily.value
+                                ),
+                                modifier = Modifier
+                                    .padding(12.dp)
+                                    .combinedClickable(
+                                        onClick = {
+                                            if (customWallpaperViewModel.wallpaperText.value.isNotEmpty()) {
+                                                customWallpaperViewModel.textBottomSheet.value =
+                                                    true
+                                                scope.launch {
+                                                    modalBottomSheetState.show()
+                                                }
+                                            }
+                                        },
+//                                        onLongClick = {
+//                                            customWallpaperViewModel.wallpaperText.value = ""
+//                                        }
+                                    )
                             )
                         }
-
-                        Text(
-                            text = customWallpaperViewModel.wallpaperText.value,
-                            style = TextStyle(
-                                fontStyle = customWallpaperViewModel.wallpaperTextFontStyle.value,
-                                color = customWallpaperViewModel.wallpaperTextColor.value,
-                                fontSize = customWallpaperViewModel.wallpaperTextSize.value,
-                                textDecoration = customWallpaperViewModel.wallpaperTextDecoration.value,
-                                fontWeight = customWallpaperViewModel.wallpaperTextFontWeight.value,
-                                textAlign = customWallpaperViewModel.wallpaperTextAlign.value,
-                            ),
-                            modifier = Modifier
-                                .padding(12.dp)
-                                .clickable {
-                                    if (customWallpaperViewModel.wallpaperText.value.isNotEmpty()) {
-                                        customWallpaperViewModel.textBottomSheet.value = true
-                                        scope.launch {
-                                            modalBottomSheetState.show()
-                                        }
-                                    }
-                                }
-                        )
                     }
                 }
             }
         })
 }
+
 
 

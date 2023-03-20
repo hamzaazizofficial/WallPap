@@ -16,7 +16,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -34,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.hamza.wallpap.ui.screens.common.CustomDialog
+import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
@@ -49,7 +48,6 @@ fun LatestFullScreen(
     amoledUrl: String,
     navController: NavHostController,
 ) {
-    val scope = rememberCoroutineScope()
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
     Box(
         Modifier
@@ -64,8 +62,6 @@ fun LatestFullScreen(
 
         val painter = rememberImagePainter(data = data) {
             crossfade(durationMillis = 1)
-//            error(R.drawable.ic_placeholder)
-//            placeholder(R.drawable.ic_placeholder)
         }
 
         val thread = Thread {
@@ -98,7 +94,7 @@ fun LatestFullScreen(
         )
 
         if (wallpaperFullScreenViewModel.dialogState.value) {
-            CustomDialog(
+            SetWallpaperDialog(
                 dialogState = wallpaperFullScreenViewModel.dialogState,
                 context = context,
                 wallpaperFullScreenViewModel,
@@ -117,79 +113,65 @@ fun LatestFullScreen(
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(18.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            navController.popBackStack()
-                        },
-                    tint = Color.White
-                )
-
-                Row {
-
+                IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
-                        imageVector = Icons.Rounded.Download,
+                        imageVector = Icons.Default.ArrowBack,
                         contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                image?.let {
-                                    saveMediaToStorage(
-                                        it,
-                                        context
-                                    )
-                                }
-                            },
                         tint = Color.White
                     )
+                }
 
-                    Spacer(modifier = Modifier.padding(end = 10.dp))
-
-                    if (showFitScreenBtn) {
+                Row {
+                    IconButton(
+                        onClick = {
+                            image?.let {
+                                saveMediaToStorage(
+                                    it,
+                                    context
+                                )
+                            }
+                        }) {
                         Icon(
-                            imageVector = Icons.Default.Fullscreen,
+                            imageVector = Icons.Rounded.Download,
                             contentDescription = null,
-                            modifier = Modifier
-                                .clickable {
-                                    scale = ContentScale.Fit
-                                    showFitScreenBtn = false
-                                    showCropScreenBtn = true
-                                },
                             tint = Color.White
                         )
+                    }
+
+                    if (showFitScreenBtn) {
+                        IconButton(
+                            onClick = {
+                                scale = ContentScale.Fit
+                                showFitScreenBtn = false
+                                showCropScreenBtn = true
+                            }) {
+                            Icon(
+                                imageVector = Icons.Default.Fullscreen,
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                        }
                     }
 
                     if (showCropScreenBtn) {
-                        Icon(
-                            imageVector = Icons.Rounded.Fullscreen,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .clickable {
-                                    scale = ContentScale.Crop
-                                    showCropScreenBtn = false
-                                    showFitScreenBtn = true
-                                },
-                            tint = Color.White
-                        )
+                        IconButton(
+                            onClick = {
+                                scale = ContentScale.Crop
+                                showCropScreenBtn = false
+                                showFitScreenBtn = true
+                            }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Fullscreen,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.bottomAppBarContentColor
+                            )
+                        }
                     }
-
-//                    Spacer(modifier = Modifier.padding(end = 10.dp))
-//
-//                    Icon(
-//                        imageVector = Icons.Default.HighQuality,
-//                        contentDescription = null,
-//                        modifier = Modifier
-//                            .clickable {
-//                                data = amoledUrl
-//                            },
-//                        tint = Color.White
-//                    )
                 }
             }
         }
@@ -202,67 +184,9 @@ fun LatestFullScreen(
             horizontalArrangement = Arrangement.Center
         ) {
 
-//            FloatingActionButton(
-//                onClick = {
-//                    image?.let { saveMediaToStorage(it, context) }
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp)
-////                    .alpha(0.5f)
-//                ,
-//                backgroundColor = Color.White
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.Download,
-//                    contentDescription = null,
-//                    tint = Color.Black
-//                )
-//            }
-//
-//            FloatingActionButton(
-//                onClick = {
-//                    favUrlsViewModel.deleteFavouriteUrl(
-//                        FavouriteUrls(
-//                            wallpaperFullScreenViewModel.id,
-//                            fullUrl
-//                        )
-//                    )
-//                    Toast.makeText(context, "Removed!", Toast.LENGTH_SHORT).show()
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp)
-////                    .alpha(0.6f)
-//                ,
-//                backgroundColor = Color.White
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.Delete,
-//                    contentDescription = null,
-//                    tint = Color.Red
-//                )
-//            }
-//
-//            FloatingActionButton(
-//                onClick = {
-//                    setWallPaper(context, fullUrl)
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp),
-////                    .alpha(0.5f),
-//                backgroundColor = Color.White
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.ImagesearchRoller,
-//                    contentDescription = null,
-//                    tint = Color.Black
-//                )
-//            }
-
             FloatingActionButton(
                 onClick = {
-//                   favShareImage(context, data, image)
                     val intent = Intent(Intent.ACTION_SEND).setType("image/*")
-
                     val path = MediaStore.Images.Media.insertImage(
                         context.contentResolver,
                         image,
@@ -279,10 +203,7 @@ fun LatestFullScreen(
                         context.startActivity(intent)
                     }
                 },
-                modifier = Modifier
-                    .padding(8.dp)
-//                    .alpha(0.6f)
-                ,
+                modifier = Modifier.padding(8.dp),
                 backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
             ) {
                 Icon(
@@ -292,33 +213,12 @@ fun LatestFullScreen(
                 )
             }
 
-
-//            FloatingActionButton(
-//                onClick = {
-//
-////                    Toast.makeText(context, "Removed!", Toast.LENGTH_SHORT).show()
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp)
-////                    .alpha(0.6f)
-//                ,
-//                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.Delete,
-//                    contentDescription = null,
-//                    tint = MaterialTheme.colors.bottomAppBarContentColor
-//                )
-//            }
-
             FloatingActionButton(
                 onClick = {
-//                    setWallPaper(context, amoledUrl)
                     wallpaperFullScreenViewModel.dialogState.value = true
                 },
                 modifier = Modifier
                     .padding(8.dp),
-//                    .alpha(0.5f),
                 backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
             ) {
                 Icon(
@@ -327,7 +227,6 @@ fun LatestFullScreen(
                     tint = MaterialTheme.colors.bottomAppBarContentColor
                 )
             }
-
         }
     }
 }
@@ -409,7 +308,6 @@ fun saveMediaToStorage(bitmap: Bitmap, context: Context) {
     fos?.use {
         //Finally writing the bitmap to the output stream that we opened
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-//        context?.toast("Saved to Photos")
         Toast.makeText(context, "Saved to Gallery!", Toast.LENGTH_SHORT).show()
     }
 }

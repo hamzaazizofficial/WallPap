@@ -28,8 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.theme.maven_pro_regular
+import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.ui.theme.textColor
 import com.hamza.wallpap.util.isOnline
 import kotlinx.coroutines.launch
@@ -45,6 +47,8 @@ fun LatestScreen(
     amoledViewModel: LatestViewModel,
     scaffoldState: ScaffoldState,
 ) {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     val data = amoledViewModel.wallpaperItems
     val scope = rememberCoroutineScope()
     val context = LocalContext.current

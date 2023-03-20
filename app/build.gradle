@@ -92,6 +92,9 @@ dependencies {
     // KotlinX Serialization
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
 
+    // Screenshot
+    implementation "dev.shreyaspatil:capturable:1.0.3"
+
     // Room components
     implementation "androidx.room:room-runtime:2.5.0"
     kapt "androidx.room:room-compiler:2.5.0"

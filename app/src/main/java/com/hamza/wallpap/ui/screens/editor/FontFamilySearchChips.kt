@@ -1,4 +1,4 @@
-package com.hamza.wallpap.ui.screens.search
+package com.hamza.wallpap.ui.screens.editor
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 import com.hamza.wallpap.ui.theme.textColor
 
 @Composable
-fun SearchChips(
+fun FontFamilySearchChips(
     text: String,
     selected: Boolean,
     onClick: () -> Unit,

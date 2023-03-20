@@ -21,6 +21,7 @@ import com.hamza.wallpap.navigation.Screen
 import com.hamza.wallpap.ui.screens.common.BottomBar
 import com.hamza.wallpap.ui.screens.common.NavDrawer
 import com.hamza.wallpap.ui.screens.common.TopBar
+import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.util.WallPapTheme
@@ -34,7 +35,8 @@ fun MainScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     randomScreenViewModel: RandomScreenViewModel = hiltViewModel(),
     favUrlsViewModel: FavUrlsViewModel = hiltViewModel(),
-    onItemSelected: (WallPapTheme) -> Unit
+    customWallpaperViewModel: CustomWallpaperViewModel = hiltViewModel(),
+    onItemSelected: (WallPapTheme) -> Unit,
 ) {
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
@@ -50,12 +52,17 @@ fun MainScreen(
                 currentRoute.equals(Screen.Random.route) or
                 currentRoute.equals(Screen.Amoled.route) or
                 currentRoute.equals(Screen.Favourite.route) or
-                currentRoute.equals(Screen.Settings.route)
+                currentRoute.equals(Screen.Settings.route) or
+                currentRoute.equals(Screen.CustomWallpaperScreen.route)
             ) {
                 TopBar(
                     onNavButtonClick = {
-                        scope.launch {
-                            scaffoldState.drawerState.open()
+                        if (!currentRoute.equals(Screen.CustomWallpaperScreen.route)) {
+                            scope.launch {
+                                scaffoldState.drawerState.open()
+                            }
+                        } else {
+                            navController.popBackStack()
                         }
                     },
                     currentRoute,
@@ -74,7 +81,8 @@ fun MainScreen(
                     homeViewModel,
                     randomScreenViewModel,
                     favUrlsViewModel,
-                    context
+                    context,
+                    customWallpaperViewModel
                 )
             }
         },
@@ -94,7 +102,13 @@ fun MainScreen(
         }
     ) { padding ->
         Column(Modifier.padding(padding)) {
-            NavGraph(navController = navController, scaffoldState, onItemSelected, currentRoute, context)
+            NavGraph(
+                navController = navController,
+                scaffoldState,
+                onItemSelected,
+                currentRoute,
+                context
+            )
         }
     }
 }

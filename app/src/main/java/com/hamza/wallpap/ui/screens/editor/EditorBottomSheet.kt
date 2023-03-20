@@ -29,11 +29,14 @@ import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.theme.textColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.N)
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class
+)
 @Composable
 fun EditorBottomSheet(
     navController: NavHostController,
@@ -44,7 +47,6 @@ fun EditorBottomSheet(
     randomItems: LazyPagingItems<UnsplashImage>,
     context: Context,
 ) {
-
     if (customWallpaperViewModel.wallpaperDialogState.value) {
         TextFormatDialog(
             dialogState = customWallpaperViewModel.wallpaperDialogState,
@@ -60,77 +62,11 @@ fun EditorBottomSheet(
         customWallpaperViewModel.bgColorBottomSheet.value = false
     }
     if (customWallpaperViewModel.bgColorBottomSheet.value) {
-        Surface {
-            Card {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(modifier = Modifier.padding(vertical = 2.dp))
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 12.dp, end = 10.dp)
-                    ) {
-                        Text(
-                            textAlign = TextAlign.Start,
-                            text = "Background Color",
-                            color = Color.Black,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 16.sp
-                        )
-                        androidx.compose.material3.IconButton(
-                            onClick = {
-                                scope.launch {
-                                    bottomSheetState.hide()
-                                }
-                                customWallpaperViewModel.bgColorBottomSheet.value = false
-                                customWallpaperViewModel.textBottomSheet.value = false
-                                customWallpaperViewModel.bgImageBottomSheet.value = false
-                            }
-                        ) {
-                            Icon(imageVector = Icons.Default.Close, contentDescription = null)
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.padding(vertical = 2.dp))
-
-                    LazyRow(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp)
-                    ) {
-                        items(itemList) { item ->
-                            Box(
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .clip(CircleShape)
-                                    .border(1.dp, Color.Black, CircleShape)
-                                    .background(item.color)
-                                    .clickable {
-                                        customWallpaperViewModel.bgImageUrl.value = null
-                                        customWallpaperViewModel.boxColor.value = item.color
-                                    }
-                            )
-                            Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                        }
-                    }
-                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
-                }
-            }
-        }
-    }
-
-    if (customWallpaperViewModel.textBottomSheet.value) {
-        Card {
+        Card(modifier = Modifier.background(MaterialTheme.colors.background)) {
             Column(
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.background(MaterialTheme.colors.background)
             ) {
                 Spacer(modifier = Modifier.padding(vertical = 2.dp))
 
@@ -143,8 +79,8 @@ fun EditorBottomSheet(
                 ) {
                     Text(
                         textAlign = TextAlign.Start,
-                        text = "Custom Text",
-                        color = Color.Black,
+                        text = "Background Color",
+                        color = MaterialTheme.colors.textColor,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 16.sp
                     )
@@ -158,7 +94,82 @@ fun EditorBottomSheet(
                             customWallpaperViewModel.bgImageBottomSheet.value = false
                         }
                     ) {
-                        Icon(imageVector = Icons.Default.Close, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.textColor,
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.padding(vertical = 2.dp))
+
+                LazyRow(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                ) {
+                    items(itemList) { item ->
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape)
+                                .border(1.dp, Color.Black, CircleShape)
+                                .background(item.color)
+                                .clickable {
+                                    customWallpaperViewModel.bgImageUrl.value = null
+                                    customWallpaperViewModel.boxColor.value = item.color
+                                }
+                        )
+                        Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+                    }
+                }
+
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            }
+        }
+    }
+
+    if (customWallpaperViewModel.textBottomSheet.value) {
+        Card(modifier = Modifier.background(MaterialTheme.colors.background)) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.background(MaterialTheme.colors.background)
+            ) {
+                Spacer(modifier = Modifier.padding(vertical = 2.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 12.dp, end = 10.dp)
+                ) {
+                    Text(
+                        textAlign = TextAlign.Start,
+                        text = "Text",
+                        color = MaterialTheme.colors.textColor,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 16.sp
+                    )
+                    androidx.compose.material3.IconButton(
+                        onClick = {
+                            scope.launch {
+                                bottomSheetState.hide()
+                            }
+                            customWallpaperViewModel.bgColorBottomSheet.value = false
+                            customWallpaperViewModel.textBottomSheet.value = false
+                            customWallpaperViewModel.bgImageBottomSheet.value = false
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.textColor,
+                        )
                     }
                 }
 
@@ -171,10 +182,13 @@ fun EditorBottomSheet(
                     maxLines = 1,
                     onValueChange = { customWallpaperViewModel.wallpaperText.value = it },
                     label = {
-                        androidx.compose.material3.Text("Enter text here")
+                        androidx.compose.material3.Text(
+                            "Enter text here",
+                            color = MaterialTheme.colors.textColor
+                        )
                     },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedLabelColor = Color.Black
+                        focusedLabelColor = MaterialTheme.colors.textColor,
                     ),
                     trailingIcon = {
                         IconButton(
@@ -182,40 +196,26 @@ fun EditorBottomSheet(
                                 customWallpaperViewModel.wallpaperDialogState.value = true
                             }
                         ) {
-                            Icon(imageVector = Icons.Default.TextFormat, contentDescription = null)
+                            Icon(
+                                imageVector = Icons.Default.TextFormat,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.textColor
+                            )
                         }
                     }
                 )
 
-//                Text(
-//                    textAlign = TextAlign.Start,
-//                    text = "Text Opacity",
-//                    color = Color.Black,
-//                    fontWeight = FontWeight.Bold,
-//                    fontSize = 12.sp,
-//                    modifier = Modifier.fillMaxWidth()
-//                    .padding(top = 10.dp, start = 12.dp, end = 10.dp)
-//                )
-//
-//                Slider(
-//                    modifier = Modifier.padding(20.dp),
-//                    value = textSliderPosition,
-//                    onValueChange = { textSliderPosition = it },
-//                    valueRange = 12f..100f,
-//                    onValueChangeFinished = {
-//                        customWallpaperViewModel.wallpaperTextSize.value = textSliderPosition.sp
-//                    }
-//                )
                 Spacer(modifier = Modifier.padding(vertical = 4.dp))
             }
         }
     }
 
     if (customWallpaperViewModel.bgImageBottomSheet.value) {
-        Card {
+        Card(modifier = Modifier.background(MaterialTheme.colors.background)) {
             Column(
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.background(MaterialTheme.colors.background)
             ) {
                 Spacer(modifier = Modifier.padding(vertical = 2.dp))
 
@@ -229,7 +229,7 @@ fun EditorBottomSheet(
                     Text(
                         textAlign = TextAlign.Start,
                         text = "Background Image",
-                        color = Color.Black,
+                        color = MaterialTheme.colors.textColor,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 16.sp
                     )
@@ -243,7 +243,11 @@ fun EditorBottomSheet(
                             customWallpaperViewModel.bgImageBottomSheet.value = false
                         }
                     ) {
-                        Icon(imageVector = Icons.Default.Close, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.textColor,
+                        )
                     }
                 }
 
@@ -262,7 +266,7 @@ fun EditorBottomSheet(
                 Text(
                     textAlign = TextAlign.Start,
                     text = "Image Opacity",
-                    color = Color.Black,
+                    color = MaterialTheme.colors.textColor,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 16.sp,
                     modifier = Modifier
@@ -272,14 +276,14 @@ fun EditorBottomSheet(
 
                 Slider(
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp),
-                    value = customWallpaperViewModel.transparencySliderPosition.value,
+                    value = customWallpaperViewModel.imageTransparencySliderPosition.value,
                     onValueChange = {
-                        customWallpaperViewModel.transparencySliderPosition.value = it
+                        customWallpaperViewModel.imageTransparencySliderPosition.value = it
                     },
-                    valueRange = 0.3f..1f,
+                    valueRange = 0.5f..1f,
                     onValueChangeFinished = {
                         customWallpaperViewModel.bgImageTransparency.value =
-                            customWallpaperViewModel.transparencySliderPosition.value
+                            customWallpaperViewModel.imageTransparencySliderPosition.value
                     }
                 )
 

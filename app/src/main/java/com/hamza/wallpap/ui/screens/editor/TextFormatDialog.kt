@@ -3,9 +3,7 @@ package com.hamza.wallpap.ui.screens.editor
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -19,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -28,6 +28,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
+import com.hamza.wallpap.ui.theme.textColor
+
+data class FontFamilySearchChip(val fontTitle: String, val font: FontFamily)
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
@@ -51,7 +54,6 @@ fun TextFormatDialog(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun TextFormatDialogUI(
@@ -61,20 +63,9 @@ fun TextFormatDialogUI(
     itemList: MutableList<CustomWallpaperBackgroundColor>,
     customWallpaperViewModel: CustomWallpaperViewModel,
 ) {
-    var expanded by remember { mutableStateOf(false) }
-    val options = listOf(
-        "1secmail.com",
-        "1secmail.org",
-        "1secmail.net",
-        "xojze.com",
-        "oosln.com",
-        "yoggm.com",
-        "wwjmp.com",
-        "esiix.com",
-        "vddaz.com"
-    )
+    var fontFamilyName by remember { mutableStateOf("Roboto") }
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(20.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp, 10.dp, 10.dp, 10.dp),
@@ -90,7 +81,7 @@ fun TextFormatDialogUI(
             Text(
                 textAlign = TextAlign.Start,
                 text = "Font Color",
-                color = Color.Black,
+                color = MaterialTheme.colors.textColor,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.sp,
                 modifier = Modifier
@@ -113,7 +104,7 @@ fun TextFormatDialogUI(
             Text(
                 textAlign = TextAlign.Start,
                 text = "Font Size",
-                color = Color.Black,
+                color = MaterialTheme.colors.textColor,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 modifier = Modifier
@@ -132,10 +123,60 @@ fun TextFormatDialogUI(
                 }
             )
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Text(
+                    textAlign = TextAlign.Start,
+                    text = "Font Family",
+                    color = MaterialTheme.colors.textColor,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 16.sp
+                )
+
+                Text(
+                    textAlign = TextAlign.Start,
+                    text = fontFamilyName,
+                    style = TextStyle(
+                        fontStyle = customWallpaperViewModel.wallpaperTextFontStyle.value,
+                        color = customWallpaperViewModel.wallpaperTextColor.value,
+                        fontSize = 14.sp,
+                        textDecoration = customWallpaperViewModel.wallpaperTextDecoration.value,
+                        fontWeight = customWallpaperViewModel.wallpaperTextFontWeight.value,
+                        textAlign = customWallpaperViewModel.wallpaperTextAlign.value,
+                        fontFamily = customWallpaperViewModel.textFontFamily.value
+                    )
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 6.dp, vertical = 6.dp)
+                    .horizontalScroll(rememberScrollState())
+            ) {
+                customWallpaperViewModel.fontFamilyItems.forEachIndexed { index, s ->
+                    FontFamilySearchChips(
+                        text = s.fontTitle,
+                        selected = customWallpaperViewModel.selectedIndex.value == index,
+                        onClick = {
+                            fontFamilyName = s.fontTitle
+                            customWallpaperViewModel.selectedIndex.value = index
+                            customWallpaperViewModel.textFontFamily.value = s.font
+                        }
+                    )
+                    Spacer(modifier = Modifier.padding(horizontal = 6.dp))
+                }
+            }
+
             Text(
                 textAlign = TextAlign.Start,
-                text = "Text Style",
-                color = Color.Black,
+                text = "Font Style",
+                color = MaterialTheme.colors.textColor,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.sp,
                 modifier = Modifier
@@ -237,17 +278,6 @@ fun TextFormatDialogUI(
                 }
             }
 
-//            Text(
-//                textAlign = TextAlign.Start,
-//                text = "Text Weight",
-//                color = Color.Black,
-//                fontWeight = FontWeight.ExtraBold,
-//                fontSize = 16.sp,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(start = 12.dp)
-//            )
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,
@@ -255,12 +285,6 @@ fun TextFormatDialogUI(
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp)
             ) {
-//                IconButton(
-//                    onClick = {
-//                        customWallpaperViewModel.wallpaperTextFontWeight.value = FontWeight.Bold
-//                    }) {
-//                    Icon(imageVector = Icons.Default.FormatBold, contentDescription = null)
-//                }
 
                 IconToggleButton(
                     checked = customWallpaperViewModel.textFontBoldChecked.value,
@@ -308,29 +332,6 @@ fun TextFormatDialogUI(
 
                 Spacer(modifier = Modifier.padding(horizontal = 4.dp))
 
-//                IconToggleButton(
-//                    checked = customWallpaperViewModel.textFontUnderlinedChecked.value,
-//                    onCheckedChange = {
-//                        customWallpaperViewModel.textFontUnderlinedChecked.value = it
-//                    }) {
-//                    if (customWallpaperViewModel.textFontUnderlinedChecked.value) {
-//                        customWallpaperViewModel.wallpaperTextDecoration.value = TextDecoration.Underline
-//                        Icon(
-//                            imageVector = Icons.Filled.FormatUnderlined,
-//                            contentDescription = null,
-//                            tint = Color.Red
-//                        )
-//                    } else {
-//                        customWallpaperViewModel.wallpaperTextDecoration.value = TextDecoration.None
-//                        Icon(
-//                            imageVector = Icons.Default.FormatUnderlined,
-//                            contentDescription = null
-//                        )
-//                    }
-//                }
-//
-//                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
-
                 IconToggleButton(
                     checked = customWallpaperViewModel.textFontStrikethroughChecked.value,
                     onCheckedChange = {
@@ -354,68 +355,31 @@ fun TextFormatDialogUI(
                 }
 
                 Spacer(modifier = Modifier.padding(horizontal = 4.dp))
-
-//                IconButton(
-//                    onClick = {
-//                        customWallpaperViewModel.wallpaperTextFontStyle.value = FontStyle.Italic
-//                    }) {
-//                    Icon(imageVector = Icons.Default.FormatItalic, contentDescription = null)
-//                }
-//
-//                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
-//
-//                IconButton(
-//                    onClick = {
-//                        customWallpaperViewModel.wallpaperTextDecoration.value =
-//                            TextDecoration.Underline
-//                    }) {
-//                    Icon(imageVector = Icons.Default.FormatUnderlined, contentDescription = null)
-//                }
-//
-//                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
-//
-//                IconButton(
-//                    onClick = {
-//                        customWallpaperViewModel.wallpaperTextDecoration.value =
-//                            TextDecoration.LineThrough
-//                    }) {
-//                    Icon(imageVector = Icons.Default.FormatStrikethrough, contentDescription = null)
-//                }
             }
-
-//            var checked by remember { mutableStateOf(false) }
-//            IconToggleButton(checked = checked, onCheckedChange = { checked = it }) {
-//                if (checked) {
-//                    Icon(Icons.Filled.Lock, contentDescription = "Localized description")
-//                } else {
-//                    Icon(Icons.Outlined.Lock, contentDescription = "Localized description")
-//                }
-//            }
-
-//            Spacer(modifier = Modifier.padding(6.dp))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 4.dp)
+                    .padding(4.dp)
             ) {
                 TextButton(
                     onClick = { dialogState.value = false }
                 ) {
                     Text(text = "Done")
-//                    Icon(imageVector = Icons.Default.Done, contentDescription = null)
                 }
             }
-
-//            Spacer(modifier = Modifier.padding(6.dp))
         }
     }
 }
 
 @Composable
-fun TextColorListItem(color: Color, customWallpaperViewModel: CustomWallpaperViewModel) {
+fun TextColorListItem(
+    color: Color,
+    customWallpaperViewModel: CustomWallpaperViewModel,
+) {
+
     Card(
         shape = CircleShape,
         modifier = Modifier

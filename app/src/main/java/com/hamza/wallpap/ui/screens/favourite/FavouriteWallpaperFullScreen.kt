@@ -37,7 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
-import com.hamza.wallpap.ui.screens.common.CustomDialog
+import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
@@ -85,7 +85,7 @@ fun FavouriteWallpaperFullScreen(
         thread.start()
 
         if (wallpaperFullScreenViewModel.dialogState.value) {
-            CustomDialog(
+            SetWallpaperDialog(
                 dialogState = wallpaperFullScreenViewModel.dialogState,
                 context = context,
                 wallpaperFullScreenViewModel,
@@ -124,7 +124,7 @@ fun FavouriteWallpaperFullScreen(
         )
 
         if (wallpaperFullScreenViewModel.dialogState.value) {
-            CustomDialog(
+            SetWallpaperDialog(
                 dialogState = wallpaperFullScreenViewModel.dialogState,
                 context = context,
                 wallpaperFullScreenViewModel,

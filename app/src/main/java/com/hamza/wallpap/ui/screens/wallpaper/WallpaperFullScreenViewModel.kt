@@ -10,4 +10,7 @@ class WallpaperFullScreenViewModel: ViewModel() {
     var dialogState = mutableStateOf(false)
     var setWallpaperAs by mutableStateOf(1)
     var interstitalState = mutableStateOf(false)
+    var downloadWallpaperChecked = mutableStateOf(false)
+    var zoomOutWallpaperChecked = mutableStateOf(false)
+    var turnHdWallpaperChecked = mutableStateOf(false)
 }
