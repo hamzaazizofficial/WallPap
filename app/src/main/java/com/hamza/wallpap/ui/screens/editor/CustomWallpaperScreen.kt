@@ -23,16 +23,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.rememberImagePainter
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.R
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.model.UnsplashImage
-import com.hamza.wallpap.ui.screens.common.AboutDialog
-import com.hamza.wallpap.ui.screens.latest.saveMediaToStorage
 import com.hamza.wallpap.ui.theme.*
+import com.hamza.wallpap.util.saveMediaToStorage
 import dev.shreyaspatil.capturable.Capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
@@ -54,7 +52,7 @@ fun CustomWallpaperScreen(
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     val itemList = mutableListOf<CustomWallpaperBackgroundColor>()
     itemList.add(CustomWallpaperBackgroundColor(Color(0xFFFFFFFF), 8))
-    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF485049), 8))
+    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF000000), 8))
     itemList.add(CustomWallpaperBackgroundColor(Color(0xFF41FDF7), 8))
     itemList.add(CustomWallpaperBackgroundColor(Color(0xFFFF5722), 8))
     itemList.add(CustomWallpaperBackgroundColor(Color(0xFFE91E63), 8))
@@ -103,7 +101,10 @@ fun CustomWallpaperScreen(
                                     containerColor = MaterialTheme.colors.bottomAppBarContentColor,
                                     contentColor = Color.White,
                                     shape = RoundedCornerShape(4.dp),
-                                    onClick = { captureController.capture() })
+                                    onClick = {
+                                        captureController.capture()
+                                        customWallpaperViewModel.shareWallpaperVisible.value = true
+                                    })
                                 {
                                     Icon(
                                         Icons.Default.Download,
@@ -169,6 +170,8 @@ fun CustomWallpaperScreen(
                     Capturable(controller = captureController, onCaptured = { bitmap, error ->
                         if (bitmap != null) {
                             saveMediaToStorage(bitmap.asAndroidBitmap(), context)
+                            customWallpaperViewModel.savedImageBitmap.value =
+                                bitmap.asAndroidBitmap()
                         }
                     }) {
                         Box(

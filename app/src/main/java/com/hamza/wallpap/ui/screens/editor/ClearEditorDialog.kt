@@ -11,7 +11,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -117,9 +116,7 @@ fun ClearEditorDialogUI(
                     .fillMaxWidth()
                     .background(
                         color = MaterialTheme.colors.bottomAppBarBackgroundColor
-                    )
-//                    .border(BorderStroke(1.dp, MaterialTheme.colors.textColor)),
-                , horizontalArrangement = Arrangement.SpaceAround
+                    ), horizontalArrangement = Arrangement.SpaceAround
             ) {
 
                 TextButton(
@@ -131,6 +128,7 @@ fun ClearEditorDialogUI(
                         customWallpaperViewModel.bgImageUrl.value = null
                         customWallpaperViewModel.boxColor.value = Color(0xF1FFFFFF)
                         customWallpaperViewModel.wallpaperText.value = ""
+                        customWallpaperViewModel.shareWallpaperVisible.value = false
                         dialogState.value = false
                     }) {
                     Text(

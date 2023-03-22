@@ -19,11 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
-import com.hamza.wallpap.ui.screens.wallpaper.setWallPaper
 import com.hamza.wallpap.ui.theme.*
+import com.hamza.wallpap.util.setWallPaper
 
 @RequiresApi(Build.VERSION_CODES.N)
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SetWallpaperDialog(
     dialogState: MutableState<Boolean>,
