@@ -21,6 +21,7 @@ import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.topAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.topAppBarContentColor
 import com.hamza.wallpap.ui.theme.topAppBarTitle
+import com.hamza.wallpap.util.shareWallpaper
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalPagingApi::class, ExperimentalAnimationApi::class)
@@ -115,18 +116,37 @@ fun TopBar(
                 }
 
                 AnimatedVisibility(
+                    visible = currentRoute.equals(Screen.CustomWallpaperScreen.route) && customWallpaperViewModel.savedImageBitmap.value != null
+                            && customWallpaperViewModel.shareWallpaperVisible.value,
+                    enter = scaleIn() + fadeIn(),
+                    exit = scaleOut() + fadeOut()
+                ) {
+                    IconButton(onClick = {
+                        shareWallpaper(context, customWallpaperViewModel.savedImageBitmap.value)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Share,
+                            contentDescription = "Share wallpaper",
+                            tint = MaterialTheme.colors.topAppBarContentColor
+                        )
+                    }
+                }
+
+                AnimatedVisibility(
                     visible = currentRoute.equals(Screen.CustomWallpaperScreen.route) && (customWallpaperViewModel.bgImageUrl.value != null
                             || customWallpaperViewModel.boxColor.value != Color(0xF1FFFFFF)
                             || customWallpaperViewModel.wallpaperText.value != ""),
                     enter = scaleIn() + fadeIn(),
                     exit = scaleOut() + fadeOut()
                 ) {
-                    IconButton(onClick = {
-                        customWallpaperViewModel.clearEditorDialogState.value = true
-                    }) {
+
+                    IconButton(
+                        onClick = {
+                            customWallpaperViewModel.clearEditorDialogState.value = true
+                        }) {
                         Icon(
                             imageVector = Icons.Default.DeleteSweep,
-                            contentDescription = "Show user details icon",
+                            contentDescription = "Clear Screen",
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }

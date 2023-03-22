@@ -28,6 +28,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
+import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
+import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
+import com.hamza.wallpap.ui.theme.iconColor
 import com.hamza.wallpap.ui.theme.textColor
 
 data class FontFamilySearchChip(val fontTitle: String, val font: FontFamily)
@@ -139,19 +142,27 @@ fun TextFormatDialogUI(
                     fontSize = 16.sp
                 )
 
-                Text(
-                    textAlign = TextAlign.Start,
-                    text = fontFamilyName,
-                    style = TextStyle(
-                        fontStyle = customWallpaperViewModel.wallpaperTextFontStyle.value,
-                        color = customWallpaperViewModel.wallpaperTextColor.value,
-                        fontSize = 14.sp,
-                        textDecoration = customWallpaperViewModel.wallpaperTextDecoration.value,
-                        fontWeight = customWallpaperViewModel.wallpaperTextFontWeight.value,
-                        textAlign = customWallpaperViewModel.wallpaperTextAlign.value,
-                        fontFamily = customWallpaperViewModel.textFontFamily.value
+                Card(
+                    backgroundColor =
+                    if (customWallpaperViewModel.wallpaperTextColor.value == Color(0xFF000000)) Color.White
+                    else if (customWallpaperViewModel.wallpaperTextColor.value == Color(0xFFFFFFFF)) Color.Black
+                    else MaterialTheme.colors.background
+                ) {
+                    Text(
+                        modifier = Modifier.padding(4.dp),
+                        textAlign = TextAlign.Start,
+                        text = fontFamilyName,
+                        style = TextStyle(
+                            fontStyle = customWallpaperViewModel.wallpaperTextFontStyle.value,
+                            color = customWallpaperViewModel.wallpaperTextColor.value,
+                            fontSize = 14.sp,
+                            textDecoration = customWallpaperViewModel.wallpaperTextDecoration.value,
+                            fontWeight = customWallpaperViewModel.wallpaperTextFontWeight.value,
+                            textAlign = customWallpaperViewModel.wallpaperTextAlign.value,
+                            fontFamily = customWallpaperViewModel.textFontFamily.value
+                        )
                     )
-                )
+                }
             }
 
             Row(
@@ -201,12 +212,13 @@ fun TextFormatDialogUI(
                         Icon(
                             imageVector = Icons.Filled.FormatAlignCenter,
                             contentDescription = null,
-                            tint = Color.Red
+                            tint = MaterialTheme.colors.bottomAppBarContentColor
                         )
                     } else {
                         Icon(
                             imageVector = Icons.Default.FormatAlignCenter,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.iconColor
                         )
                     }
                 }
@@ -223,12 +235,13 @@ fun TextFormatDialogUI(
                         Icon(
                             imageVector = Icons.Filled.FormatAlignJustify,
                             contentDescription = null,
-                            tint = Color.Red
+                            tint = MaterialTheme.colors.bottomAppBarContentColor
                         )
                     } else {
                         Icon(
                             imageVector = Icons.Default.FormatAlignJustify,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.iconColor
                         )
                     }
                 }
@@ -245,12 +258,13 @@ fun TextFormatDialogUI(
                         Icon(
                             imageVector = Icons.Filled.FormatAlignRight,
                             contentDescription = null,
-                            tint = Color.Red
+                            tint = MaterialTheme.colors.bottomAppBarContentColor
                         )
                     } else {
                         Icon(
                             imageVector = Icons.Default.FormatAlignRight,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.iconColor
                         )
                     }
                 }
@@ -267,12 +281,13 @@ fun TextFormatDialogUI(
                         Icon(
                             imageVector = Icons.Filled.FormatAlignLeft,
                             contentDescription = null,
-                            tint = Color.Red
+                            tint = MaterialTheme.colors.bottomAppBarContentColor
                         )
                     } else {
                         Icon(
                             imageVector = Icons.Default.FormatAlignLeft,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.iconColor
                         )
                     }
                 }
@@ -296,13 +311,14 @@ fun TextFormatDialogUI(
                         Icon(
                             imageVector = Icons.Filled.FormatBold,
                             contentDescription = null,
-                            tint = Color.Red
+                            tint = MaterialTheme.colors.bottomAppBarContentColor
                         )
                     } else {
                         customWallpaperViewModel.wallpaperTextFontWeight.value = FontWeight.Normal
                         Icon(
                             imageVector = Icons.Default.FormatBold,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.iconColor
                         )
                     }
                 }
@@ -319,13 +335,14 @@ fun TextFormatDialogUI(
                         Icon(
                             imageVector = Icons.Filled.FormatItalic,
                             contentDescription = null,
-                            tint = Color.Red
+                            tint = MaterialTheme.colors.bottomAppBarContentColor
                         )
                     } else {
                         customWallpaperViewModel.wallpaperTextFontStyle.value = FontStyle.Normal
                         Icon(
                             imageVector = Icons.Default.FormatItalic,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.iconColor
                         )
                     }
                 }
@@ -343,13 +360,14 @@ fun TextFormatDialogUI(
                         Icon(
                             imageVector = Icons.Filled.FormatStrikethrough,
                             contentDescription = null,
-                            tint = Color.Red
+                            tint = MaterialTheme.colors.bottomAppBarContentColor
                         )
                     } else {
                         customWallpaperViewModel.wallpaperTextDecoration.value = TextDecoration.None
                         Icon(
                             imageVector = Icons.Default.FormatStrikethrough,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.iconColor
                         )
                     }
                 }
@@ -367,7 +385,7 @@ fun TextFormatDialogUI(
                 TextButton(
                     onClick = { dialogState.value = false }
                 ) {
-                    Text(text = "Done")
+                    Text(text = "Done", color = MaterialTheme.colors.textColor)
                 }
             }
         }

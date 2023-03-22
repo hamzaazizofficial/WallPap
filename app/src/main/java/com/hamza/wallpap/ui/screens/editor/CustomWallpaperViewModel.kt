@@ -1,5 +1,6 @@
 package com.hamza.wallpap.ui.screens.editor
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
@@ -67,6 +68,9 @@ class CustomWallpaperViewModel : ViewModel() {
     var selectedIndex = mutableStateOf(0)
 
     var clearEditorDialogState = mutableStateOf(false)
+    var shareWallpaperVisible = mutableStateOf(false)
+
+    var savedImageBitmap = mutableStateOf<Bitmap?>(null)
 
     var boxColor = mutableStateOf(Color(0xF1FFFFFF))
     var wallpaperText = mutableStateOf("")
@@ -88,7 +92,6 @@ class CustomWallpaperViewModel : ViewModel() {
     var textAlignJustifyChecked = mutableStateOf(false)
     var textFontBoldChecked = mutableStateOf(false)
     var textFontItalicChecked = mutableStateOf(false)
-    var textFontUnderlinedChecked = mutableStateOf(false)
     var textFontStrikethroughChecked = mutableStateOf(false)
     var textFontFamily = mutableStateOf(roboto)
 
@@ -97,6 +100,4 @@ class CustomWallpaperViewModel : ViewModel() {
     var bgImageBottomSheet = mutableStateOf(false)
     var bgImageUrl = mutableStateOf<String?>(null)
     var bgImageTransparency = mutableStateOf(0.4f)
-    var bgColorTransparency = mutableStateOf(0.4f)
-
 }

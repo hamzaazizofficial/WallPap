@@ -29,6 +29,7 @@ import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.theme.iconColor
 import com.hamza.wallpap.ui.theme.textColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -97,7 +98,7 @@ fun EditorBottomSheet(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = null,
-                            tint = MaterialTheme.colors.textColor,
+                            tint = MaterialTheme.colors.iconColor,
                         )
                     }
                 }
@@ -168,7 +169,7 @@ fun EditorBottomSheet(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = null,
-                            tint = MaterialTheme.colors.textColor,
+                            tint = MaterialTheme.colors.iconColor,
                         )
                     }
                 }
@@ -199,7 +200,7 @@ fun EditorBottomSheet(
                             Icon(
                                 imageVector = Icons.Default.TextFormat,
                                 contentDescription = null,
-                                tint = MaterialTheme.colors.textColor
+                                tint = MaterialTheme.colors.iconColor,
                             )
                         }
                     }
@@ -246,7 +247,7 @@ fun EditorBottomSheet(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = null,
-                            tint = MaterialTheme.colors.textColor,
+                            tint = MaterialTheme.colors.iconColor,
                         )
                     }
                 }
