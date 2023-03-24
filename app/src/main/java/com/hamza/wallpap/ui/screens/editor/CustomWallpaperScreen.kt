@@ -194,7 +194,7 @@ fun CustomWallpaperScreen(
                             if (customWallpaperViewModel.bgImageUrl.value != null) {
                                 val painter =
                                     rememberImagePainter(data = customWallpaperViewModel.bgImageUrl.value) {
-                                        crossfade(durationMillis = 1000)
+                                        crossfade(durationMillis = 500)
                                         error(R.drawable.ic_placeholder)
                                     }
                                 Image(
@@ -238,7 +238,8 @@ fun CustomWallpaperScreen(
                     }
                 }
             }
-        })
+        }
+    )
 }
 
 

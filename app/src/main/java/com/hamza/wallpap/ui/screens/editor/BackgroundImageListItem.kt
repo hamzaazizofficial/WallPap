@@ -43,7 +43,7 @@ fun BackgroundImageListItem(
                 .width(80.dp)
                 .clickable {
                     customWallpaperViewModel.boxColor.value = Color(0xF1FFFFFF)
-                    customWallpaperViewModel.bgImageUrl.value = unsplashImage.urls.regular
+                    customWallpaperViewModel.bgImageUrl.value = unsplashImage.urls.full
                 },
             contentAlignment = Alignment.BottomCenter
         ) {

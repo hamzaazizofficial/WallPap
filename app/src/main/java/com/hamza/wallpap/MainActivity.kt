@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.ui.MainScreen
@@ -27,6 +28,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+//                val splashScreen = installSplashScreen()
+//                splashScreen.setKeepOnScreenCondition { true }
+//            }
             themeSetting = ThemeSettingPreference(context = LocalContext.current)
             val theme = themeSetting.themeStream.collectAsState()
             val useDarkColors = when (theme.value) {

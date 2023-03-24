@@ -29,14 +29,14 @@ import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.model.UnsplashImage
-import com.hamza.wallpap.ui.theme.iconColor
-import com.hamza.wallpap.ui.theme.textColor
+import com.hamza.wallpap.ui.theme.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(
-    ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class
+    ExperimentalMaterialApi::class,
+    ExperimentalMaterial3Api::class
 )
 @Composable
 fun EditorBottomSheet(
@@ -81,7 +81,7 @@ fun EditorBottomSheet(
                     Text(
                         textAlign = TextAlign.Start,
                         text = "Background Color",
-                        color = MaterialTheme.colors.textColor,
+                        color = MaterialTheme.colors.topAppBarTitle,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 16.sp
                     )
@@ -98,7 +98,7 @@ fun EditorBottomSheet(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = null,
-                            tint = MaterialTheme.colors.iconColor,
+                            tint = MaterialTheme.colors.topAppBarTitle,
                         )
                     }
                 }
@@ -152,7 +152,7 @@ fun EditorBottomSheet(
                     Text(
                         textAlign = TextAlign.Start,
                         text = "Text",
-                        color = MaterialTheme.colors.textColor,
+                        color = MaterialTheme.colors.topAppBarTitle,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 16.sp
                     )
@@ -169,7 +169,7 @@ fun EditorBottomSheet(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = null,
-                            tint = MaterialTheme.colors.iconColor,
+                            tint = MaterialTheme.colors.topAppBarTitle,
                         )
                     }
                 }
@@ -190,6 +190,9 @@ fun EditorBottomSheet(
                     },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedLabelColor = MaterialTheme.colors.textColor,
+                        focusedBorderColor = MaterialTheme.colors.textColor,
+                        unfocusedBorderColor = MaterialTheme.colors.iconColor,
+                        textColor = MaterialTheme.colors.textColor
                     ),
                     trailingIcon = {
                         IconButton(
@@ -200,7 +203,7 @@ fun EditorBottomSheet(
                             Icon(
                                 imageVector = Icons.Default.TextFormat,
                                 contentDescription = null,
-                                tint = MaterialTheme.colors.iconColor,
+                                tint = MaterialTheme.colors.topAppBarTitle,
                             )
                         }
                     }
@@ -230,7 +233,7 @@ fun EditorBottomSheet(
                     Text(
                         textAlign = TextAlign.Start,
                         text = "Background Image",
-                        color = MaterialTheme.colors.textColor,
+                        color = MaterialTheme.colors.topAppBarTitle,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 16.sp
                     )
@@ -247,7 +250,7 @@ fun EditorBottomSheet(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = null,
-                            tint = MaterialTheme.colors.iconColor,
+                            tint = MaterialTheme.colors.topAppBarTitle,
                         )
                     }
                 }
@@ -267,7 +270,7 @@ fun EditorBottomSheet(
                 Text(
                     textAlign = TextAlign.Start,
                     text = "Image Opacity",
-                    color = MaterialTheme.colors.textColor,
+                    color = MaterialTheme.colors.topAppBarTitle,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 16.sp,
                     modifier = Modifier
@@ -275,8 +278,8 @@ fun EditorBottomSheet(
                         .padding(start = 12.dp)
                 )
 
-                Slider(
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp),
+                androidx.compose.material3.Slider(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
                     value = customWallpaperViewModel.imageTransparencySliderPosition.value,
                     onValueChange = {
                         customWallpaperViewModel.imageTransparencySliderPosition.value = it
@@ -285,7 +288,11 @@ fun EditorBottomSheet(
                     onValueChangeFinished = {
                         customWallpaperViewModel.bgImageTransparency.value =
                             customWallpaperViewModel.imageTransparencySliderPosition.value
-                    }
+                    },
+                    colors = androidx.compose.material3.SliderDefaults.colors(
+                        activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(0.5f),
+                        thumbColor = MaterialTheme.colors.bottomAppBarContentColor
+                    )
                 )
 
                 Spacer(modifier = Modifier.padding(vertical = 6.dp))

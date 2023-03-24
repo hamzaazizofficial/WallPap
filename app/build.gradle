@@ -126,8 +126,8 @@ dependencies {
     // WindowManager
     implementation("androidx.window:window:1.1.0-alpha06")
 
-//    // Splash Api
-//    implementation "androidx.core:core-splashscreen:1.0.0"
+    // Splash Api
+    implementation "androidx.core:core-splashscreen:1.0.0"
 
     // Material 3
     implementation 'androidx.compose.material3:material3:1.1.0-alpha03'

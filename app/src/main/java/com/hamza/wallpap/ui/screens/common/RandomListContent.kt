@@ -96,7 +96,7 @@ fun RandomUnsplashItem(
         backgroundColor = Color.Black,
         shape = RoundedCornerShape(2.dp),
         modifier = Modifier
-            .padding(1.5.dp)
+            .padding(2.5.dp)
             .height(height)
             .clickable {
                 navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl") {
