@@ -119,7 +119,7 @@ fun LatestItem(amoledUrl: String, navController: NavHostController, height: Dp) 
         backgroundColor = Color.Black,
         shape = RoundedCornerShape(2.dp),
         modifier = Modifier
-            .padding(1.5.dp)
+            .padding(2.5.dp)
             .height(height)
             .clickable { navController.navigate("amoled_full_screen/$fullEncodedUrl") },
     ) {

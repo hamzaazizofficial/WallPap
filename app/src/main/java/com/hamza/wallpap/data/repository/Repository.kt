@@ -22,10 +22,11 @@ class Repository @Inject constructor(
 ) {
     val wallpaperItems =
         arrayListOf(
-            SearchChip("Popular", "hd amoled wallpapers"),
-            SearchChip("Night", "Night"),
+            SearchChip("Popular", "4k wallpapers"),
+            SearchChip("Amoled", "amoled hd wallpapers"),
+            SearchChip("Night", "night wallpapers"),
             SearchChip("Mobile", "Android Wallpapers"),
-            SearchChip("Dark", "Dark"),
+            SearchChip("Dark", "dark wallpapers"),
             SearchChip("Nature", "Nature"),
         )
 

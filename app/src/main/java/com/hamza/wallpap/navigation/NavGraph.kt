@@ -3,7 +3,6 @@ package com.hamza.wallpap.navigation
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ScaffoldState
@@ -34,15 +33,15 @@ import com.hamza.wallpap.ui.screens.search.SearchScreen
 import com.hamza.wallpap.ui.screens.search.SearchViewModel
 import com.hamza.wallpap.ui.screens.settings.SettingsScreen
 import com.hamza.wallpap.ui.screens.settings.SettingsViewModel
-import com.hamza.wallpap.ui.screens.splash.SplashScreen
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreen
 import com.hamza.wallpap.util.WallPapTheme
 
-
 @RequiresApi(Build.VERSION_CODES.N)
-@OptIn(ExperimentalPagingApi::class, ExperimentalCoilApi::class, ExperimentalAnimationApi::class,
+@OptIn(
+    ExperimentalPagingApi::class, ExperimentalCoilApi::class,
     ExperimentalFoundationApi::class
 )
+
 @Composable
 fun NavGraph(
     navController: NavHostController,
@@ -60,21 +59,28 @@ fun NavGraph(
     val homeItems = homeViewModel.itemsFlow.collectAsLazyPagingItems()
     val randomItems = randomScreenViewModel.itemsFlow.collectAsLazyPagingItems()
     val lazyStaggeredGridState = rememberLazyStaggeredGridState()
-    val customWallpaperViewModel : CustomWallpaperViewModel = viewModel()
+    val customWallpaperViewModel: CustomWallpaperViewModel = viewModel()
 
     NavHost(
-        navController, startDestination = Screen.Splash.route,
+        navController, startDestination = Screen.Home.route,
     ) {
         composable(Screen.Home.route) {
-            HomeScreen(navController, homeViewModel, scaffoldState, homeItems, lazyStaggeredGridState)
-        }
-
-        composable(Screen.Splash.route) {
-            SplashScreen(navController = navController)
+            HomeScreen(
+                navController,
+                homeViewModel,
+                scaffoldState,
+                homeItems,
+                lazyStaggeredGridState
+            )
         }
 
         composable(Screen.Search.route) {
-            SearchScreen(navController = navController, searchViewModel, homeViewModel, lazyStaggeredGridState)
+            SearchScreen(
+                navController = navController,
+                searchViewModel,
+                homeViewModel,
+                lazyStaggeredGridState
+            )
         }
 
         composable(Screen.Settings.route) {
@@ -86,7 +92,13 @@ fun NavGraph(
         }
 
         composable(Screen.Random.route) {
-            RandomScreen(navController, scaffoldState, randomScreenViewModel, randomItems, lazyStaggeredGridState)
+            RandomScreen(
+                navController,
+                scaffoldState,
+                randomScreenViewModel,
+                randomItems,
+                lazyStaggeredGridState
+            )
         }
 
         composable(
@@ -128,7 +140,13 @@ fun NavGraph(
 
         // Custom Wallpaper Screens
         composable(Screen.CustomWallpaperScreen.route) {
-            CustomWallpaperScreen(navController, scaffoldState, customWallpaperViewModel, homeItems, context)
+            CustomWallpaperScreen(
+                navController,
+                scaffoldState,
+                customWallpaperViewModel,
+                homeItems,
+                context
+            )
         }
 
         // FireStore Screens

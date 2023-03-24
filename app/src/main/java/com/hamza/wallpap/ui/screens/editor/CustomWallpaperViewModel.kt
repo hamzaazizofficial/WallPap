@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import com.hamza.wallpap.ui.theme.*
 
 class CustomWallpaperViewModel : ViewModel() {
+    var fontFamilyName = mutableStateOf("Roboto")
     val fontFamilyItems =
         arrayListOf(
             FontFamilySearchChip("Roboto", roboto),

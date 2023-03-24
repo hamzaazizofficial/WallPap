@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
-import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.iconColor
 import com.hamza.wallpap.ui.theme.textColor
@@ -66,7 +65,6 @@ fun TextFormatDialogUI(
     itemList: MutableList<CustomWallpaperBackgroundColor>,
     customWallpaperViewModel: CustomWallpaperViewModel,
 ) {
-    var fontFamilyName by remember { mutableStateOf("Roboto") }
     Card(
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
@@ -115,7 +113,7 @@ fun TextFormatDialogUI(
                     .padding(start = 12.dp)
             )
 
-            Slider(
+            androidx.compose.material3.Slider(
                 modifier = Modifier.padding(horizontal = 10.dp),
                 value = customWallpaperViewModel.textSliderPosition.value,
                 onValueChange = { customWallpaperViewModel.textSliderPosition.value = it },
@@ -123,7 +121,11 @@ fun TextFormatDialogUI(
                 onValueChangeFinished = {
                     customWallpaperViewModel.wallpaperTextSize.value =
                         customWallpaperViewModel.textSliderPosition.value.sp
-                }
+                },
+                colors = androidx.compose.material3.SliderDefaults.colors(
+                    activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(0.5f),
+                    thumbColor = MaterialTheme.colors.bottomAppBarContentColor
+                )
             )
 
             Row(
@@ -151,7 +153,7 @@ fun TextFormatDialogUI(
                     Text(
                         modifier = Modifier.padding(4.dp),
                         textAlign = TextAlign.Start,
-                        text = fontFamilyName,
+                        text = customWallpaperViewModel.fontFamilyName.value,
                         style = TextStyle(
                             fontStyle = customWallpaperViewModel.wallpaperTextFontStyle.value,
                             color = customWallpaperViewModel.wallpaperTextColor.value,
@@ -175,7 +177,7 @@ fun TextFormatDialogUI(
                         text = s.fontTitle,
                         selected = customWallpaperViewModel.selectedIndex.value == index,
                         onClick = {
-                            fontFamilyName = s.fontTitle
+                            customWallpaperViewModel.fontFamilyName.value = s.fontTitle
                             customWallpaperViewModel.selectedIndex.value = index
                             customWallpaperViewModel.textFontFamily.value = s.font
                         }
