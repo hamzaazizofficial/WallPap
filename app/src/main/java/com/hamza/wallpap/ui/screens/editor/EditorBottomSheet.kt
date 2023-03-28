@@ -3,13 +3,9 @@ package com.hamza.wallpap.ui.screens.editor
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -19,8 +15,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -105,28 +99,45 @@ fun EditorBottomSheet(
 
                 Spacer(modifier = Modifier.padding(vertical = 2.dp))
 
-                LazyRow(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp)
+                        .padding(horizontal = 6.dp)
+                        .horizontalScroll(rememberScrollState())
                 ) {
-                    items(itemList) { item ->
-                        Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .clip(CircleShape)
-                                .border(1.dp, Color.Black, CircleShape)
-                                .background(item.color)
-                                .clickable {
-                                    customWallpaperViewModel.bgImageUrl.value = null
-                                    customWallpaperViewModel.boxColor.value = item.color
-                                }
-                        )
-                        Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+                    itemList.forEachIndexed { index, s ->
+                        ColorChips(
+                            color = s.color,
+                            selected = customWallpaperViewModel.selectedBgColorIndex.value == index,
+                            onClick = {
+                                customWallpaperViewModel.selectedBgColorIndex.value = index
+                                customWallpaperViewModel.bgImageFullUrl.value = null
+                                customWallpaperViewModel.boxColor.value = s.color
+                            })
                     }
                 }
+
+//                LazyRow(
+//                    verticalAlignment = Alignment.CenterVertically,
+//                    horizontalArrangement = Arrangement.Start,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = 12.dp)
+//                ) {
+//                    items(itemList) { item ->
+//                        Box(
+//                            modifier = Modifier
+//                                .size(46.dp)
+//                                .clip(CircleShape)
+//                                .border(1.dp, MaterialTheme.colors.textColor, CircleShape)
+//                                .background(item.color)
+//                                .clickable {
+//                                    customWallpaperViewModel.bgImageUrl.value = null
+//                                    customWallpaperViewModel.boxColor.value = item.color
+//                                }
+//                        )
+//                        Spacer(modifier = Modifier.padding(horizontal = 6.dp))
+//                    }
+//                }
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
             }
@@ -203,7 +214,7 @@ fun EditorBottomSheet(
                             Icon(
                                 imageVector = Icons.Default.TextFormat,
                                 contentDescription = null,
-                                tint = MaterialTheme.colors.topAppBarTitle,
+                                tint = MaterialTheme.colors.bottomAppBarContentColor,
                             )
                         }
                     }
@@ -260,7 +271,7 @@ fun EditorBottomSheet(
                     content = {
                         items(randomItems.itemCount) {
                             randomItems[it]?.let { unsplashImage ->
-                                BackgroundImageListItem(unsplashImage, customWallpaperViewModel)
+                                BackgroundImageListItem(unsplashImage, customWallpaperViewModel, context)
                             }
                         }
                     })
@@ -269,7 +280,7 @@ fun EditorBottomSheet(
 
                 Text(
                     textAlign = TextAlign.Start,
-                    text = "Image Opacity",
+                    text = "Image Clarity",
                     color = MaterialTheme.colors.topAppBarTitle,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 16.sp,
@@ -284,7 +295,7 @@ fun EditorBottomSheet(
                     onValueChange = {
                         customWallpaperViewModel.imageTransparencySliderPosition.value = it
                     },
-                    valueRange = 0.5f..1f,
+                    valueRange = 0f..1f,
                     onValueChangeFinished = {
                         customWallpaperViewModel.bgImageTransparency.value =
                             customWallpaperViewModel.imageTransparencySliderPosition.value

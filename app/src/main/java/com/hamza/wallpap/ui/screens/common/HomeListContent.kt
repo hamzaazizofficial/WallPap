@@ -33,7 +33,11 @@ import androidx.navigation.NavHostController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.LazyPagingItems
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.hamza.wallpap.R
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
@@ -90,11 +94,12 @@ fun UnsplashItem(
     val fullEncodedUrl = URLEncoder.encode(fullUrl, StandardCharsets.UTF_8.toString())
     val context = LocalContext.current
 
-    val painter = rememberImagePainter(data = unsplashImage.urls.regular) {
-        crossfade(durationMillis = 1000)
-        error(R.drawable.ic_placeholder)
-//        placeholder(R.drawable.ic_placeholder)
-    }
+//    val painter = rememberImagePainter(data = unsplashImage.urls.regular) {
+//        crossfade(durationMillis = 1000)
+//        error(R.drawable.ic_placeholder)
+////        placeholder(R.drawable.ic_placeholder)
+//    }
+
 
     Card(
         backgroundColor = Color.Black,
@@ -103,14 +108,15 @@ fun UnsplashItem(
             .padding(2.5.dp)
             .height(height)
             .clickable {
-                navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl") {
-                    navController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) {
-                            saveState = true
-                        }
-                    }
-                    restoreState = true
-                }
+                navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl")
+//                {
+//                    navController.graph.startDestinationRoute?.let { route ->
+//                        popUpTo(route) {
+//                            saveState = true
+//                        }
+//                    }
+//                    restoreState = true
+//                }
             },
     ) {
         Box(
@@ -118,17 +124,37 @@ fun UnsplashItem(
             contentAlignment = Alignment.BottomCenter
         ) {
 
-            LinearProgressIndicator(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                color = MaterialTheme.colors.secondary
-            )
+//            LinearProgressIndicator(
+//                modifier = Modifier.align(Alignment.BottomCenter),
+//                color = MaterialTheme.colors.secondary
+//            )
 
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = painter,
-                contentDescription = "Unsplash Image",
-                contentScale = ContentScale.Crop
-            )
+//            Image(
+//                modifier = Modifier.fillMaxSize(),
+//                painter = painter,
+//                contentDescription = "Unsplash Image",
+//                contentScale = ContentScale.Crop
+//            )
+
+            SubcomposeAsyncImage(
+                model = ImageRequest
+                    .Builder(context)
+                    .data(unsplashImage.urls.regular)
+                    .crossfade(1000)
+                    .build(),
+                contentScale = ContentScale.Crop,
+                contentDescription = null
+            ) {
+                val state = painter.state
+                if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                    LinearProgressIndicator(
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        color = MaterialTheme.colors.secondary
+                    )
+                } else {
+                    SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
+                }
+            }
 
             AnimatedVisibility(
                 visible = homeViewModel.showUserDetails,

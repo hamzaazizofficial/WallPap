@@ -8,8 +8,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.textColor
 
 @Composable
@@ -23,8 +26,10 @@ fun FontFamilySearchChips(
             modifier = Modifier.padding(vertical = 2.dp),
             onClick = { },
             colors = ButtonDefaults.buttonColors(
-                contentColor = MaterialTheme.colors.onSecondary,
-                backgroundColor = MaterialTheme.colors.secondary
+                //contentColor = MaterialTheme.colors.onSecondary,
+                //backgroundColor = MaterialTheme.colors.secondary
+                contentColor = Color.White,
+                backgroundColor = MaterialTheme.colors.bottomAppBarContentColor
             ),
             shape = RoundedCornerShape(12.dp)
         ) {

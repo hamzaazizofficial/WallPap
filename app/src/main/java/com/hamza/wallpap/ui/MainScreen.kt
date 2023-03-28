@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.paging.ExperimentalPagingApi
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.navigation.NavGraph
 import com.hamza.wallpap.navigation.Screen
@@ -24,6 +26,7 @@ import com.hamza.wallpap.ui.screens.common.TopBar
 import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
+import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
 
@@ -38,6 +41,8 @@ fun MainScreen(
     customWallpaperViewModel: CustomWallpaperViewModel = hiltViewModel(),
     onItemSelected: (WallPapTheme) -> Unit,
 ) {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()

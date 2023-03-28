@@ -5,8 +5,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -92,13 +90,23 @@ fun TextFormatDialogUI(
 
             Spacer(modifier = Modifier.padding(2.dp))
 
-            LazyRow(
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-                content = {
-                    items(itemList) {
-                        TextColorListItem(color = it.color, customWallpaperViewModel)
-                    }
-                })
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 6.dp, vertical = 6.dp)
+                    .horizontalScroll(rememberScrollState())
+            ) {
+                itemList.forEachIndexed { index, s ->
+                    ColorChips(
+                        color = s.color,
+                        selected = customWallpaperViewModel.selectedTextColorIndex.value == index,
+                        onClick = {
+                            customWallpaperViewModel.selectedTextColorIndex.value = index
+                            customWallpaperViewModel.colorItem.value = s.color
+                            customWallpaperViewModel.wallpaperTextColor.value = s.color
+                        })
+                }
+            }
+
 
             Spacer(modifier = Modifier.padding(6.dp))
 
@@ -175,13 +183,12 @@ fun TextFormatDialogUI(
                 customWallpaperViewModel.fontFamilyItems.forEachIndexed { index, s ->
                     FontFamilySearchChips(
                         text = s.fontTitle,
-                        selected = customWallpaperViewModel.selectedIndex.value == index,
-                        onClick = {
-                            customWallpaperViewModel.fontFamilyName.value = s.fontTitle
-                            customWallpaperViewModel.selectedIndex.value = index
-                            customWallpaperViewModel.textFontFamily.value = s.font
-                        }
-                    )
+                        selected = customWallpaperViewModel.selectedFontFamilyIndex.value == index
+                    ) {
+                        customWallpaperViewModel.fontFamilyName.value = s.fontTitle
+                        customWallpaperViewModel.selectedFontFamilyIndex.value = index
+                        customWallpaperViewModel.textFontFamily.value = s.font
+                    }
                     Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                 }
             }
@@ -411,7 +418,7 @@ fun TextColorListItem(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
-                .border(1.dp, Color.Black, CircleShape)
+                .border(1.dp, MaterialTheme.colors.textColor, CircleShape)
                 .background(color)
                 .clickable {
                     customWallpaperViewModel.wallpaperTextColor.value = color

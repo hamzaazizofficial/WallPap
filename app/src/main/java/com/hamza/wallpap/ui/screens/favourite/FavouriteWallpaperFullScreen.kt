@@ -30,6 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
@@ -61,11 +64,11 @@ fun FavouriteWallpaperFullScreen(
 
         val context = LocalContext.current
 
-        val painter = rememberImagePainter(data = data) {
-            crossfade(durationMillis = 1)
-//            error(R.drawable.ic_placeholder)
-//            placeholder(R.drawable.loading)
-        }
+//        val painter = rememberImagePainter(data = data) {
+//            crossfade(durationMillis = 1)
+////            error(R.drawable.ic_placeholder)
+////            placeholder(R.drawable.loading)
+//        }
 
         val thread = Thread {
             try {
@@ -104,18 +107,34 @@ fun FavouriteWallpaperFullScreen(
         var showCropScreenBtn by remember { mutableStateOf(false) }
 
         if (showFitScreenBtn) {
-            LinearProgressIndicator(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                color = MaterialTheme.colors.secondary
-            )
+//            LinearProgressIndicator(
+//                modifier = Modifier.align(Alignment.BottomCenter),
+//                color = MaterialTheme.colors.secondary
+//            )
         }
 
-        Image(
+        SubcomposeAsyncImage(
+            model = data,
             contentScale = scale,
-            modifier = Modifier.fillMaxSize(),
-            painter = painter,
-            contentDescription = "Unsplash Image",
-        )
+            contentDescription = null
+        ) {
+            val state = painter.state
+            if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                LinearProgressIndicator(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    color = MaterialTheme.colors.secondary
+                )
+            } else {
+                SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
+            }
+        }
+
+//        Image(
+//            contentScale = scale,
+//            modifier = Modifier.fillMaxSize(),
+//            painter = painter,
+//            contentDescription = "Unsplash Image",
+//        )
 
         if (wallpaperFullScreenViewModel.dialogState.value) {
             SetWallpaperDialog(

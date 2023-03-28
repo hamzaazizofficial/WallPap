@@ -1,20 +1,11 @@
 package com.hamza.wallpap.ui.screens.wallpaper
 
-import android.app.WallpaperManager
-import android.content.ContentValues
-import android.content.Context
-import android.content.Context.WINDOW_SERVICE
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
-import android.util.DisplayMetrics
-import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -30,9 +21,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
@@ -43,19 +35,44 @@ import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.util.saveMediaToStorage
 import com.hamza.wallpap.util.shareWallpaper
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 import java.net.URL
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavHostController) {
+fun WallpaperFullScreen(
+    regularUrl: String,
+    fullUrl: String,
+    navController: NavHostController,
+    currentRoute: String?,
+    favUrlsViewModel: FavUrlsViewModel,
+    wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
+) {
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
-    val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
-    var viewModel: FavUrlsViewModel = viewModel()
+
+    var image: Bitmap? = null
+    val context = LocalContext.current
+
+    val thread = Thread {
+        try {
+            val url = URL(fullUrl)
+            image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    thread.start()
+
+    var scale by remember { mutableStateOf(ContentScale.Crop) }
+    var showFitScreenBtn by remember { mutableStateOf(true) }
+    var showCropScreenBtn by remember { mutableStateOf(false) }
+
+    BackHandler {
+        navController.popBackStack()
+    }
+
 //    val context: Context = LocalContext.current
 //
 //        DisposableEffect(key1 = "ad", effect = {
@@ -85,43 +102,24 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
             .background(MaterialTheme.colors.background),
         contentAlignment = Alignment.BottomCenter
     ) {
-        var image: Bitmap? = null
-        var data by remember { mutableStateOf(regularUrl) }
-        val context = LocalContext.current
 
-        val painter = rememberImagePainter(data = data) {
-            crossfade(durationMillis = 1)
-        }
-
-        val thread = Thread {
-            try {
-                val url = URL(fullUrl)
-                image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
+        SubcomposeAsyncImage(
+            model = fullUrl,
+            contentScale = scale,
+            contentDescription = null
+        ) {
+            val state = painter.state
+            if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                SubcomposeAsyncImage(
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = scale,
+                    model = regularUrl,
+                    contentDescription = null
+                )
+            } else {
+                SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
             }
         }
-
-        thread.start()
-
-        var scale by remember { mutableStateOf(ContentScale.Crop) }
-        var showFitScreenBtn by remember { mutableStateOf(true) }
-        var showCropScreenBtn by remember { mutableStateOf(false) }
-
-        if (showFitScreenBtn) {
-            LinearProgressIndicator(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                color = MaterialTheme.colors.secondary
-            )
-        }
-
-        Image(
-            contentScale = scale,
-            modifier = Modifier.fillMaxSize(),
-            painter = painter,
-            contentDescription = "Unsplash Image"
-        )
-
 
         if (wallpaperFullScreenViewModel.interstitalState.value) {
             MainInterstitialAd()
@@ -209,26 +207,6 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
                             )
                         }
                     }
-
-                    IconButton(
-                        onClick = {
-                            data = fullUrl
-                            wallpaperFullScreenViewModel.turnHdWallpaperChecked.value = true
-                        }) {
-                        if (wallpaperFullScreenViewModel.turnHdWallpaperChecked.value) {
-                            Icon(
-                                imageVector = Icons.Default.HighQuality,
-                                contentDescription = null,
-                                tint = MaterialTheme.colors.bottomAppBarContentColor
-                            )
-                        } else {
-                            Icon(
-                                imageVector = Icons.Default.HighQuality,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                        }
-                    }
                 }
             }
         }
@@ -261,7 +239,7 @@ fun WallpaperFullScreen(regularUrl: String, fullUrl: String, navController: NavH
                 onClick = {
                     wallpaperFullScreenViewModel.id += 1
                     val favUrl = FavouriteUrls(wallpaperFullScreenViewModel.id, fullUrl)
-                    viewModel.addToFav(favUrl)
+                    favUrlsViewModel.addToFav(favUrl)
                     Toast.makeText(context, "Added to Favourites!", Toast.LENGTH_SHORT).show()
                 },
                 modifier = Modifier

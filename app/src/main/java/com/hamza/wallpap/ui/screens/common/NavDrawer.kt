@@ -38,14 +38,10 @@ import androidx.navigation.NavHostController
 import com.hamza.wallpap.BuildConfig
 import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.screens.settings.SettingsViewModel
-import com.hamza.wallpap.ui.theme.iconColor
-import com.hamza.wallpap.ui.theme.maven_pro_regular
-import com.hamza.wallpap.ui.theme.navDrawerBgColor
-import com.hamza.wallpap.ui.theme.textColor
+import com.hamza.wallpap.ui.theme.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalAnimationApi::class)
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun NavDrawer(
@@ -101,7 +97,7 @@ fun NavDrawer(
                     .background(
                         color = MaterialTheme.colors.navDrawerBgColor
                     )
-                    .height(80.dp)
+                    .height(90.dp)
                     .layoutId("bgnavimg")
             )
             Row(
@@ -117,19 +113,19 @@ fun NavDrawer(
                     horizontalArrangement = Arrangement.Start,
                     modifier = Modifier.padding(horizontal = 26.dp)
                 ) {
-//                    Image(
-//                        painterResource(id = R.drawable.wattpad_2),
-//                        contentDescription = null,
-//                        contentScale = ContentScale.Fit,
-//                        modifier = Modifier
-//                            .size(80.dp)
-//                            .padding(vertical = 10.dp)
-//                    )
+                    Image(
+                        painterResource(id = R.drawable.wattpad),
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .padding(vertical = 10.dp)
+                    )
                     Text(
-                        buildAnnotatedString {
+                        text = buildAnnotatedString {
                             withStyle(
                                 style = SpanStyle(
-                                    color = Color(0xFF243447),
+                                    color = MaterialTheme.colors.iconColor,
                                     fontSize = 22.sp,
                                     fontWeight = FontWeight.Bold,
                                     fontFamily = maven_pro_regular
@@ -140,7 +136,7 @@ fun NavDrawer(
 
                             withStyle(
                                 style = SpanStyle(
-                                    color = Color(0xFFFF5252),
+                                    color = Color(0xFFfe6c40),
                                     fontSize = 22.sp,
                                     fontWeight = FontWeight.Bold,
                                     fontFamily = maven_pro_regular
@@ -148,7 +144,8 @@ fun NavDrawer(
                             ) {
                                 append("Pap")
                             }
-                        })
+                        }
+                    )
                 }
 
                 AnimatedVisibility(
@@ -160,7 +157,7 @@ fun NavDrawer(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = null,
-                            tint = Color(0xFF243447)
+                            tint = MaterialTheme.colors.iconColor
                         )
                     }
                 }
@@ -213,7 +210,7 @@ fun NavDrawer(
 
         Text(
             text = "More",
-            color = MaterialTheme.colors.textColor,
+            color = MaterialTheme.colors.topAppBarTitle,
             fontSize = 17.sp,
             style = TextStyle(
                 fontSize = MaterialTheme.typography.subtitle1.fontSize,
@@ -273,7 +270,8 @@ fun NavOption(
     val scope = rememberCoroutineScope()
 
     Row(
-        modifier
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
             .clickable(onClick = {
                 scope.launch {
                     scaffoldState.drawerState.close()
@@ -282,8 +280,9 @@ fun NavOption(
     )
     {
         Row(
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
-            modifier = modifier.padding(10.dp)
+            modifier = modifier.padding(14.dp)
         ) {
             Icon(
                 imageVector = icon,
@@ -293,12 +292,10 @@ fun NavOption(
             Spacer(modifier = Modifier.padding(end = 20.dp))
             Text(
                 text = title,
-                color = MaterialTheme.colors.textColor,
-                fontSize = 16.sp,
+                color = MaterialTheme.colors.topAppBarTitle,
                 style = MaterialTheme.typography.subtitle1,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 4.dp)
             )
         }
     }

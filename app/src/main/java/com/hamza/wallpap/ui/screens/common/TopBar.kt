@@ -2,7 +2,6 @@ package com.hamza.wallpap.ui.screens.common
 
 import android.content.Context
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
 import androidx.compose.material.*
@@ -10,11 +9,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.navigation.Screen
-import com.hamza.wallpap.ui.screens.editor.ClearEditorDialog
 import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
@@ -38,10 +37,24 @@ fun TopBar(
     customWallpaperViewModel: CustomWallpaperViewModel,
 ) {
     if (customWallpaperViewModel.clearEditorDialogState.value) {
-        ClearEditorDialog(
+        ClearAllDialog(
             dialogState = customWallpaperViewModel.clearEditorDialogState,
             context = context,
-            customWallpaperViewModel
+            customWallpaperViewModel,
+            "Are you sure want to clear the screen?",
+            currentRoute,
+            favUrlsViewModel
+        )
+    }
+
+    if (favUrlsViewModel.clearAllImagesDialogState.value) {
+        ClearAllDialog(
+            dialogState = favUrlsViewModel.clearAllImagesDialogState,
+            context = context,
+            customWallpaperViewModel,
+            "Are you sure want to remove all images?",
+            currentRoute,
+            favUrlsViewModel
         )
     }
 
@@ -102,10 +115,15 @@ fun TopBar(
                     }
                 }
 
-                if (currentRoute.equals(Screen.Favourite.route)) {
-                    IconButton(onClick = {
-                        favUrlsViewModel.deleteAllFavouriteUrls()
-                        Toast.makeText(context, "Removed all images!", Toast.LENGTH_SHORT).show()
+                AnimatedVisibility(
+                    visible = currentRoute.equals(Screen.Favourite.route) &&
+                            favUrlsViewModel.getAllFavUrls.observeAsState(listOf()).value.isNotEmpty(),
+                    enter = scaleIn() + fadeIn(),
+                    exit = scaleOut() + fadeOut()
+                ) {
+                    IconButton(
+                        onClick = {
+                        favUrlsViewModel.clearAllImagesDialogState.value = true
                     }) {
                         Icon(
                             imageVector = Icons.Default.DeleteSweep,
@@ -116,7 +134,8 @@ fun TopBar(
                 }
 
                 AnimatedVisibility(
-                    visible = currentRoute.equals(Screen.CustomWallpaperScreen.route) && customWallpaperViewModel.savedImageBitmap.value != null
+                    visible = currentRoute.equals(Screen.CustomWallpaperScreen.route) &&
+                            customWallpaperViewModel.savedImageBitmap.value != null
                             && customWallpaperViewModel.shareWallpaperVisible.value,
                     enter = scaleIn() + fadeIn(),
                     exit = scaleOut() + fadeOut()
@@ -133,7 +152,8 @@ fun TopBar(
                 }
 
                 AnimatedVisibility(
-                    visible = currentRoute.equals(Screen.CustomWallpaperScreen.route) && (customWallpaperViewModel.bgImageUrl.value != null
+                    visible = currentRoute.equals(Screen.CustomWallpaperScreen.route) &&
+                            (customWallpaperViewModel.bgImageFullUrl.value != null
                             || customWallpaperViewModel.boxColor.value != Color(0xF1FFFFFF)
                             || customWallpaperViewModel.wallpaperText.value != ""),
                     enter = scaleIn() + fadeIn(),
@@ -152,9 +172,9 @@ fun TopBar(
                     }
                 }
 
-                if (!currentRoute.equals(Screen.Settings.route) && !currentRoute.equals(Screen.CustomWallpaperScreen.route) && !currentRoute.equals(
-                        Screen.Favourite.route
-                    )
+                if (!currentRoute.equals(Screen.Settings.route) &&
+                    !currentRoute.equals(Screen.CustomWallpaperScreen.route) &&
+                    !currentRoute.equals(Screen.Favourite.route)
                 ) {
                     IconButton(onClick = onSearchClicked) {
                         Icon(
