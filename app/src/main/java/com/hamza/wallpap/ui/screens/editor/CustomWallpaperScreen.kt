@@ -2,6 +2,7 @@ package com.hamza.wallpap.ui.screens.editor
 
 import android.content.Context
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
@@ -24,10 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.hamza.wallpap.R
-import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.theme.*
 import com.hamza.wallpap.util.saveMediaToStorage
@@ -50,15 +51,6 @@ fun CustomWallpaperScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
-    val itemList = mutableListOf<CustomWallpaperBackgroundColor>()
-    itemList.add(CustomWallpaperBackgroundColor(Color(0xFFFFFFFF), 8))
-    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF000000), 8))
-    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF41FDF7), 8))
-    itemList.add(CustomWallpaperBackgroundColor(Color(0xFFFF5722), 8))
-    itemList.add(CustomWallpaperBackgroundColor(Color(0xFFE91E63), 8))
-    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF8BC34A), 8))
-    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF3F51B5), 8))
-    itemList.add(CustomWallpaperBackgroundColor(Color(0xFF9C27B0), 8))
 
     var modalBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -66,13 +58,17 @@ fun CustomWallpaperScreen(
     val captureController = rememberCaptureController()
     val scope = rememberCoroutineScope()
 
+    BackHandler {
+        navController.popBackStack()
+    }
+
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp),
         sheetState = modalBottomSheetState,
         sheetContent = {
             EditorBottomSheet(
                 navController,
-                itemList,
+                customWallpaperViewModel.colorItems,
                 customWallpaperViewModel,
                 modalBottomSheetState,
                 scope,
@@ -88,7 +84,7 @@ fun CustomWallpaperScreen(
                         contentColor = MaterialTheme.colors.editorBottomAppBarContentColor,
                         floatingActionButton = {
                             AnimatedVisibility(
-                                visible = customWallpaperViewModel.bgImageUrl.value != null
+                                visible = customWallpaperViewModel.bgImageFullUrl.value != null
                                         || customWallpaperViewModel.boxColor.value != Color(
                                     0xF1FFFFFF
                                 )
@@ -181,29 +177,50 @@ fun CustomWallpaperScreen(
                                 .background(customWallpaperViewModel.boxColor.value)
                         ) {
                             if (
-                                customWallpaperViewModel.bgImageUrl.value == null
+                                customWallpaperViewModel.bgImageFullUrl.value == null
                                 && customWallpaperViewModel.boxColor.value == Color(0xF1FFFFFF)
                                 && customWallpaperViewModel.wallpaperText.value == ""
                             ) {
                                 Text(
                                     text = "Add something here.",
-                                    fontSize = 22.sp,
+                                    fontSize = 18.sp,
                                     fontFamily = maven_pro_regular
                                 )
                             }
-                            if (customWallpaperViewModel.bgImageUrl.value != null) {
-                                val painter =
-                                    rememberImagePainter(data = customWallpaperViewModel.bgImageUrl.value) {
-                                        crossfade(durationMillis = 500)
-                                        error(R.drawable.ic_placeholder)
-                                    }
-                                Image(
-                                    modifier = Modifier.fillMaxSize(),
-                                    painter = painter,
-                                    contentDescription = "Unsplash Image",
+
+                            if (customWallpaperViewModel.bgImageFullUrl.value != null) {
+//                                val painter =
+//                                    rememberImagePainter(data = customWallpaperViewModel.bgImageUrl.value) {
+//                                        placeholder(R.drawable.ic_placeholder)
+//                                        crossfade(durationMillis = 500)
+//                                        error(R.drawable.ic_placeholder)
+//                                    }
+//                                Image(
+//                                    modifier = Modifier.fillMaxSize(),
+//                                    painter = painter,
+//                                    contentDescription = "Unsplash Image",
+//                                    contentScale = ContentScale.Crop,
+//                                    alpha = customWallpaperViewModel.bgImageTransparency.value
+//                                )
+                                SubcomposeAsyncImage(
+                                    model = customWallpaperViewModel.bgImageFullUrl.value,
                                     contentScale = ContentScale.Crop,
+                                    contentDescription = null,
                                     alpha = customWallpaperViewModel.bgImageTransparency.value
-                                )
+                                ) {
+                                    val state = painter.state
+                                    if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                                        SubcomposeAsyncImage(
+                                            modifier = Modifier.fillMaxSize(),
+                                            contentScale = ContentScale.Crop,
+                                            model = customWallpaperViewModel.bgImageRegularUrl.value,
+                                            contentDescription = null,
+                                            alpha = customWallpaperViewModel.bgImageTransparency.value
+                                        )
+                                    } else {
+                                        SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
+                                    }
+                                }
                             }
 
                             Text(

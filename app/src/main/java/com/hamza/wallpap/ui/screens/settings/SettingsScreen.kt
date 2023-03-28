@@ -4,7 +4,6 @@ import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,6 +14,7 @@ import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -27,10 +27,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.BuildConfig
 import com.hamza.wallpap.ui.screens.common.GetProDialog
 import com.hamza.wallpap.ui.screens.common.admob.BannerAd
-import com.hamza.wallpap.ui.theme.iconColor
-import com.hamza.wallpap.ui.theme.maven_pro_regular
-import com.hamza.wallpap.ui.theme.systemBarColor
-import com.hamza.wallpap.ui.theme.textColor
+import com.hamza.wallpap.ui.theme.*
 import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
 
@@ -77,12 +74,12 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .background(MaterialTheme.colors.background)
-                .padding(12.dp),
+                .padding(10.dp),
             verticalArrangement = Arrangement.Top
         ) {
             Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(2.dp)
                     .fillMaxWidth()
             ) {
                 Text(
@@ -97,40 +94,44 @@ fun SettingsScreen(
                 )
 
                 if (themeValue.value == 0) {
-                    Icon(
-                        imageVector = Icons.Outlined.DarkMode,
-                        tint = MaterialTheme.colors.iconColor,
-                        contentDescription = null,
-                        modifier = Modifier.clickable {
-                            onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_NIGHT.ordinal))
-                            scope.launch {
-                                dataStore.saveThemeValue(1)
-                            }
-                        })
+                    IconButton(onClick = {
+                        onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_NIGHT.ordinal))
+                        scope.launch {
+                            dataStore.saveThemeValue(1)
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Outlined.DarkMode,
+                            tint = MaterialTheme.colors.iconColor,
+                            contentDescription = null
+                        )
+                    }
                 }
 
                 if (themeValue.value == 1) {
-                    Icon(
-                        imageVector = Icons.Filled.DarkMode,
-                        tint = Color.Yellow,
-                        contentDescription = null,
-                        modifier = Modifier.clickable {
-                            onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_DAY.ordinal))
-                            scope.launch {
-                                dataStore.saveThemeValue(0)
-                            }
-                        })
+                    IconButton(onClick = {
+                        onItemSelected(WallPapTheme.fromOrdinal(WallPapTheme.MODE_DAY.ordinal))
+                        scope.launch {
+                            dataStore.saveThemeValue(0)
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.DarkMode,
+                            tint = Color.Yellow,
+                            contentDescription = null
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.padding(6.dp))
+            Spacer(modifier = Modifier.padding(2.dp))
             Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp)
-            Spacer(modifier = Modifier.padding(6.dp))
+            Spacer(modifier = Modifier.padding(2.dp))
 
             Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(2.dp),
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
@@ -143,29 +144,63 @@ fun SettingsScreen(
                     ),
                     modifier = Modifier
                 )
-                Text(
-                    text = "Remove Ads now!",
-                    fontSize = 16.sp,
-                    style = TextStyle(
-                        fontStyle = MaterialTheme.typography.body1.fontStyle,
-                        fontFamily = maven_pro_regular
-                    ),
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Red,
-                    modifier = Modifier.clickable {
-                        settingsViewModel.dialogState.value = true
-                    }
-                )
+                TextButton(onClick = { settingsViewModel.dialogState.value = true }) {
+                    Text(
+                        text = "Remove Ads now!",
+                        fontSize = 16.sp,
+                        style = TextStyle(
+                            fontStyle = MaterialTheme.typography.body1.fontStyle,
+                            fontFamily = maven_pro_regular
+                        ),
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.bottomAppBarContentColor
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.padding(6.dp))
+            Spacer(modifier = Modifier.padding(2.dp))
             Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp)
-            Spacer(modifier = Modifier.padding(6.dp))
+            Spacer(modifier = Modifier.padding(2.dp))
 
             Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "About",
+                    color = MaterialTheme.colors.textColor,
+                    fontSize = 16.sp,
+                    style = TextStyle(
+                        fontStyle = MaterialTheme.typography.subtitle1.fontStyle,
+                        fontFamily = maven_pro_regular
+                    ),
+                    modifier = Modifier
+                )
+                TextButton(onClick = { settingsViewModel.dialogState.value = true }) {
+                    Text(
+                        text = "Privacy Policy",
+                        fontSize = 16.sp,
+                        style = TextStyle(
+                            fontStyle = MaterialTheme.typography.body1.fontStyle,
+                            fontFamily = maven_pro_regular
+                        ),
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.bottomAppBarContentColor
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.padding(2.dp))
+            Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp)
+            Spacer(modifier = Modifier.padding(2.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(2.dp),
+                    .padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
@@ -189,7 +224,7 @@ fun SettingsScreen(
                 )
             }
             Spacer(modifier = Modifier.padding(10.dp))
-            BannerAd(modifier = Modifier)
+//            BannerAd(modifier = Modifier)
         }
     }
 }

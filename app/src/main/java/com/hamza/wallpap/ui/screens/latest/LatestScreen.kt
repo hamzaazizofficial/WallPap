@@ -1,10 +1,10 @@
 package com.hamza.wallpap.ui.screens.latest
 
+import android.content.Context
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -27,9 +27,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
+import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.ui.theme.textColor
@@ -98,7 +100,7 @@ fun LatestScreen(
                     val height = remember {
                         Random.nextInt(140, 380).dp
                     }
-                    LatestItem(amoledUrl = url, navController, height)
+                    LatestItem(amoledUrl = url, navController, height, context)
                 }
             }
         }
@@ -106,12 +108,12 @@ fun LatestScreen(
 }
 
 @Composable
-fun LatestItem(amoledUrl: String, navController: NavHostController, height: Dp) {
-    val painter = rememberImagePainter(data = amoledUrl) {
-        crossfade(durationMillis = 1000)
-        error(R.drawable.ic_placeholder)
-//        placeholder(R.drawable.ic_placeholder)
-    }
+fun LatestItem(amoledUrl: String, navController: NavHostController, height: Dp, context: Context) {
+//    val painter = rememberImagePainter(data = amoledUrl) {
+//        crossfade(durationMillis = 1000)
+//        error(R.drawable.ic_placeholder)
+////        placeholder(R.drawable.ic_placeholder)
+//    }
 
     val fullEncodedUrl = URLEncoder.encode(amoledUrl, StandardCharsets.UTF_8.toString())
 
@@ -130,17 +132,32 @@ fun LatestItem(amoledUrl: String, navController: NavHostController, height: Dp) 
             contentAlignment = Alignment.BottomCenter
         ) {
 
-            LinearProgressIndicator(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                color = MaterialTheme.colors.secondary
-            )
+            SubcomposeAsyncImage(
+                model = ImageRequest
+                    .Builder(context)
+                    .data(amoledUrl)
+                    .crossfade(1000)
+                    .build(),
+                contentScale = ContentScale.Crop,
+                contentDescription = null
+            ) {
+                val state = painter.state
+                if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                    LinearProgressIndicator(
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        color = MaterialTheme.colors.secondary
+                    )
+                } else {
+                    SubcomposeAsyncImageContent()
+                }
+            }
 
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = painter,
-                contentDescription = "Firestore Image",
-                contentScale = ContentScale.Crop
-            )
+//            Image(
+//                modifier = Modifier.fillMaxSize(),
+//                painter = painter,
+//                contentDescription = "Firestore Image",
+//                contentScale = ContentScale.Crop
+//            )
         }
     }
 }

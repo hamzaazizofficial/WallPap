@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,6 +31,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import coil.compose.rememberImagePainter
 import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
@@ -45,6 +49,10 @@ fun LatestFullScreen(
     navController: NavHostController,
 ) {
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
+    BackHandler {
+        navController.popBackStack()
+    }
+
     Box(
         Modifier
             .fillMaxSize()
@@ -56,9 +64,9 @@ fun LatestFullScreen(
 
         val context = LocalContext.current
 
-        val painter = rememberImagePainter(data = data) {
-            crossfade(durationMillis = 1)
-        }
+//        val painter = rememberImagePainter(data = data) {
+//            crossfade(durationMillis = 1)
+//        }
 
         val thread = Thread {
             try {
@@ -76,18 +84,34 @@ fun LatestFullScreen(
         var showCropScreenBtn by remember { mutableStateOf(false) }
 
         if (showFitScreenBtn) {
-            LinearProgressIndicator(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                color = MaterialTheme.colors.secondary
-            )
+//            LinearProgressIndicator(
+//                modifier = Modifier.align(Alignment.BottomCenter),
+//                color = MaterialTheme.colors.secondary
+//            )
         }
 
-        Image(
+        SubcomposeAsyncImage(
+            model = data,
             contentScale = scale,
-            modifier = Modifier.fillMaxSize(),
-            painter = painter,
-            contentDescription = "Amoled Image",
-        )
+            contentDescription = null
+        ) {
+            val state = painter.state
+            if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                LinearProgressIndicator(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    color = MaterialTheme.colors.secondary
+                )
+            } else {
+                SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
+            }
+        }
+
+//        Image(
+//            contentScale = scale,
+//            modifier = Modifier.fillMaxSize(),
+//            painter = painter,
+//            contentDescription = "Amoled Image",
+//        )
 
         if (wallpaperFullScreenViewModel.dialogState.value) {
             SetWallpaperDialog(

@@ -1,7 +1,8 @@
-package com.hamza.wallpap.ui.screens.editor
+package com.hamza.wallpap.ui.screens.common
 
 import android.content.Context
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,37 +26,49 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.hamza.wallpap.R
+import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
+import com.hamza.wallpap.navigation.Screen
+import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.textColor
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun ClearEditorDialog(
+fun ClearAllDialog(
     dialogState: MutableState<Boolean>,
     context: Context,
     customWallpaperViewModel: CustomWallpaperViewModel,
+    dialogText: String,
+    currentRoute: String?,
+    favUrlsViewModel: FavUrlsViewModel,
 ) {
     Dialog(
         onDismissRequest = { dialogState.value = false },
         properties = DialogProperties(usePlatformDefaultWidth = true),
     ) {
-        ClearEditorDialogUI(
+        ClearAllDialogUI(
             modifier = Modifier,
             dialogState,
             context,
-            customWallpaperViewModel
+            customWallpaperViewModel,
+            dialogText,
+            currentRoute,
+            favUrlsViewModel
         )
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun ClearEditorDialogUI(
+fun ClearAllDialogUI(
     modifier: Modifier = Modifier,
     dialogState: MutableState<Boolean>,
     context: Context,
     customWallpaperViewModel: CustomWallpaperViewModel,
+    dialogText: String,
+    currentRoute: String?,
+    favUrlsViewModel: FavUrlsViewModel,
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -105,7 +118,7 @@ fun ClearEditorDialogUI(
                                         fontFamily = maven_pro_regular
                                     )
                                 ) {
-                                    append("Are you sure want to clear the screen?")
+                                    append(dialogText)
                                 }
                             })
                     }
@@ -122,14 +135,25 @@ fun ClearEditorDialogUI(
                 TextButton(
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
-                        .padding(bottom = 10.dp)
+                        .padding(8.dp)
                         .width(80.dp),
                     onClick = {
-                        customWallpaperViewModel.bgImageUrl.value = null
-                        customWallpaperViewModel.boxColor.value = Color(0xF1FFFFFF)
-                        customWallpaperViewModel.wallpaperText.value = ""
-                        customWallpaperViewModel.shareWallpaperVisible.value = false
-                        dialogState.value = false
+                        if (currentRoute.equals(Screen.CustomWallpaperScreen.route)) {
+                            customWallpaperViewModel.bgImageFullUrl.value = null
+                            customWallpaperViewModel.bgImageRegularUrl.value = null
+                            customWallpaperViewModel.boxColor.value = Color(0xF1FFFFFF)
+                            customWallpaperViewModel.wallpaperTextColor.value = Color(0xF1FFFFFF)
+                            customWallpaperViewModel.wallpaperText.value = ""
+                            customWallpaperViewModel.shareWallpaperVisible.value = false
+                            customWallpaperViewModel.selectedTextColorIndex.value = 0
+                            customWallpaperViewModel.selectedBgColorIndex.value = 20
+                            dialogState.value = false
+                        }
+                        if (currentRoute.equals(Screen.Favourite.route)){
+                            favUrlsViewModel.deleteAllFavouriteUrls()
+                            Toast.makeText(context, "Removed all images!", Toast.LENGTH_SHORT).show()
+                            dialogState.value = false
+                        }
                     }) {
                     Text(
                         text = "Yes",
@@ -145,7 +169,7 @@ fun ClearEditorDialogUI(
                 TextButton(
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
-                        .padding(bottom = 10.dp)
+                        .padding(8.dp)
                         .width(80.dp),
                     onClick = {
                         dialogState.value = false

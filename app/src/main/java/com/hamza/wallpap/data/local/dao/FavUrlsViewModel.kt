@@ -1,6 +1,7 @@
 package com.hamza.wallpap.data.local.dao
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ class FavUrlsViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
+    var clearAllImagesDialogState = mutableStateOf(false)
     private val readAllFavUrls: LiveData<List<FavouriteUrls>>
     private val unsplashImageDao = UnsplashDatabase.getDatabase(application).unsplashImageDao()
     private val repository = FavUrlsRepository(unsplashImageDao)

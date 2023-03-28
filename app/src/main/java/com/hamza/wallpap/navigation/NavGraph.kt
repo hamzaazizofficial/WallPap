@@ -34,6 +34,7 @@ import com.hamza.wallpap.ui.screens.search.SearchViewModel
 import com.hamza.wallpap.ui.screens.settings.SettingsScreen
 import com.hamza.wallpap.ui.screens.settings.SettingsViewModel
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreen
+import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.util.WallPapTheme
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -51,6 +52,7 @@ fun NavGraph(
     context: Context,
 ) {
     val homeViewModel: HomeViewModel = hiltViewModel()
+    val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
     val settingsViewModel: SettingsViewModel = hiltViewModel()
     val searchViewModel: SearchViewModel = hiltViewModel()
     val randomScreenViewModel: RandomScreenViewModel = viewModel()
@@ -88,7 +90,7 @@ fun NavGraph(
         }
 
         composable(Screen.Favourite.route) {
-            FavouriteScreen(favUrlsViewModel, navController, scaffoldState, lazyStaggeredGridState)
+            FavouriteScreen(favUrlsViewModel, navController, scaffoldState, context)
         }
 
         composable(Screen.Random.route) {
@@ -116,7 +118,7 @@ fun NavGraph(
             val regularUrl = it.arguments?.getString("regularUrl")
             val fullUrl = it.arguments?.getString("fullUrl")
             if (regularUrl != null && fullUrl != null) {
-                WallpaperFullScreen(regularUrl, fullUrl, navController)
+                WallpaperFullScreen(regularUrl, fullUrl, navController, currentRoute, favUrlsViewModel, wallpaperFullScreenViewModel)
             }
         }
 
@@ -144,7 +146,7 @@ fun NavGraph(
                 navController,
                 scaffoldState,
                 customWallpaperViewModel,
-                homeItems,
+                randomItems,
                 context
             )
         }

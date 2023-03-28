@@ -10,6 +10,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
+import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.ui.theme.*
 
 class CustomWallpaperViewModel : ViewModel() {
@@ -66,7 +67,22 @@ class CustomWallpaperViewModel : ViewModel() {
             FontFamilySearchChip("Trebuc Bold", trebuc_bd),
             FontFamilySearchChip("Verdana", verdana)
         )
-    var selectedIndex = mutableStateOf(0)
+    var selectedFontFamilyIndex = mutableStateOf(0)
+
+    var colorName = mutableStateOf(Color(0xFFFFFFFF))
+    val colorItems = arrayListOf(
+        CustomWallpaperBackgroundColor(Color(0xFFFFFFFF), 8),
+        CustomWallpaperBackgroundColor(Color(0xFF000000), 8),
+        CustomWallpaperBackgroundColor(Color(0xFF41FDF7), 8),
+        CustomWallpaperBackgroundColor(Color(0xFFFF5722), 8),
+        CustomWallpaperBackgroundColor(Color(0xFFE91E63), 8),
+        CustomWallpaperBackgroundColor(Color(0xFF8BC34A), 8),
+        CustomWallpaperBackgroundColor(Color(0xFF3F51B5), 8),
+        CustomWallpaperBackgroundColor(Color(0xFF9C27B0), 8)
+    )
+    var selectedTextColorIndex = mutableStateOf(1)
+    var selectedBgColorIndex = mutableStateOf(20)
+    var colorItem = mutableStateOf(Color(0xFFFFFFFF))
 
     var clearEditorDialogState = mutableStateOf(false)
     var shareWallpaperVisible = mutableStateOf(false)
@@ -99,6 +115,8 @@ class CustomWallpaperViewModel : ViewModel() {
     var bgColorBottomSheet = mutableStateOf(false)
     var textBottomSheet = mutableStateOf(false)
     var bgImageBottomSheet = mutableStateOf(false)
-    var bgImageUrl = mutableStateOf<String?>(null)
-    var bgImageTransparency = mutableStateOf(0.4f)
+    var bgImageFullUrl = mutableStateOf<String?>(null)
+    var bgImageRegularUrl = mutableStateOf<String?>(null)
+    var selectBgImageState = mutableStateOf(false)
+    var bgImageTransparency = mutableStateOf(0.6f)
 }
