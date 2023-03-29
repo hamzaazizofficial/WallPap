@@ -74,7 +74,7 @@ fun TopBar(
         },
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor,
         navigationIcon = {
-            if (!currentRoute.equals(Screen.CustomWallpaperScreen.route)) {
+            if (!currentRoute.equals(Screen.CustomWallpaperScreen.route) && !currentRoute.equals(Screen.Settings.route)) {
                 IconButton(onClick = onNavButtonClick) {
                     Icon(
                         imageVector = Icons.Default.Dehaze,

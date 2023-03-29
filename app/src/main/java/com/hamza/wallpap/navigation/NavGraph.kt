@@ -7,6 +7,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -60,6 +61,7 @@ fun NavGraph(
     val amoledViewModel: LatestViewModel = viewModel()
     val homeItems = homeViewModel.itemsFlow.collectAsLazyPagingItems()
     val randomItems = randomScreenViewModel.itemsFlow.collectAsLazyPagingItems()
+    val favouriteItemsData = favUrlsViewModel.getAllFavUrls.observeAsState(listOf())
     val lazyStaggeredGridState = rememberLazyStaggeredGridState()
     val customWallpaperViewModel: CustomWallpaperViewModel = viewModel()
 
@@ -90,7 +92,7 @@ fun NavGraph(
         }
 
         composable(Screen.Favourite.route) {
-            FavouriteScreen(favUrlsViewModel, navController, scaffoldState, context)
+            FavouriteScreen(favUrlsViewModel, navController, scaffoldState, context, favouriteItemsData)
         }
 
         composable(Screen.Random.route) {
@@ -135,8 +137,9 @@ fun NavGraph(
                 }
             )) {
             val fullUrl = it.arguments?.getString("fullUrl")
-            if (fullUrl != null) {
-                FavouriteWallpaperFullScreen(fullUrl, navController)
+            val regularUrl = it.arguments?.getString("regularUrl")
+            if (fullUrl != null && regularUrl != null) {
+                FavouriteWallpaperFullScreen(fullUrl, regularUrl, navController, favUrlsViewModel, wallpaperFullScreenViewModel)
             }
         }
 

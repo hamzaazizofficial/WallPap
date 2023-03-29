@@ -98,16 +98,6 @@ fun DrawerSheet(
                         .layoutId("appname")
                 ) {
 
-//                    Row(
-//                        verticalAlignment = Alignment.CenterVertically,
-//                        modifier = Modifier
-//                            .height(100.dp)
-//                    ) {
-//                        Image(
-//                            painter = painterResource(id = R.drawable.logo),
-//                            contentDescription = null,
-//                            modifier = Modifier.size(100.dp)
-//                        )
                     Text(
                         textAlign = TextAlign.Justify,
                         text = "Dreamy",
@@ -117,9 +107,6 @@ fun DrawerSheet(
                         modifier = Modifier
                             .padding(start = 22.dp, end = 10.dp),
                     )
-
-
-//                    }
 
                     AnimatedVisibility(
                         visible = drawerState.isOpen,

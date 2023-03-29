@@ -25,7 +25,6 @@ class FavUrlsViewModel(
         readAllFavUrls = repository.readAllFavUrls
     }
 
-
     fun addToFav(favouriteUrls: FavouriteUrls) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addFavUrl(favouriteUrls)

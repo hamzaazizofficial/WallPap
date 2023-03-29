@@ -39,38 +39,7 @@ fun FontFamilySearchChips(
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
-
-//        Box(
-//            contentAlignment = Alignment.Center,
-//            modifier = Modifier.background(MaterialTheme.colors.secondary)
-//        ) {
-//            Image(
-//                painter = painterResource(id = R.drawable.letter_w),
-//                contentDescription = null,
-//                modifier = Modifier
-//                    .height(50.dp)
-//                    .width(100.dp)
-//                    .blur(4.dp)
-//            )
-//
-//            Text(text = text, fontSize = 12.sp)
     } else {
-//        Box(
-//            contentAlignment = Alignment.Center,
-//            modifier = Modifier.background(MaterialTheme.colors.secondary.copy(0.1f))
-//        ) {
-//            Image(
-//                painter = painterResource(id = R.drawable.letter_w),
-//                contentDescription = null,
-//                modifier = Modifier
-//                    .height(50.dp)
-//                    .width(100.dp)
-//                    .blur(4.dp)
-//            )
-//
-//
-//            Text(text = text, fontSize = 12.sp)
-//        }
         TextButton(
             modifier = Modifier.padding(vertical = 2.dp),
             onClick = {

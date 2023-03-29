@@ -73,7 +73,6 @@ fun WallpaperFullScreen(
         navController.popBackStack()
     }
 
-//    val context: Context = LocalContext.current
 //
 //        DisposableEffect(key1 = "ad", effect = {
 //        var interstitialAd: InterstitialAd?
@@ -110,12 +109,21 @@ fun WallpaperFullScreen(
         ) {
             val state = painter.state
             if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                SubcomposeAsyncImage(
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = scale,
-                    model = regularUrl,
-                    contentDescription = null
-                )
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    SubcomposeAsyncImage(
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = scale,
+                        model = regularUrl,
+                        contentDescription = null
+                    )
+                    LinearProgressIndicator(
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        color = MaterialTheme.colors.secondary
+                    )
+                }
             } else {
                 SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
             }
@@ -238,7 +246,7 @@ fun WallpaperFullScreen(
             FloatingActionButton(
                 onClick = {
                     wallpaperFullScreenViewModel.id += 1
-                    val favUrl = FavouriteUrls(wallpaperFullScreenViewModel.id, fullUrl)
+                    val favUrl = FavouriteUrls(wallpaperFullScreenViewModel.id, fullUrl, regularUrl)
                     favUrlsViewModel.addToFav(favUrl)
                     Toast.makeText(context, "Added to Favourites!", Toast.LENGTH_SHORT).show()
                 },

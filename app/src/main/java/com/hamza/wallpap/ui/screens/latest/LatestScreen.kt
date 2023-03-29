@@ -109,12 +109,6 @@ fun LatestScreen(
 
 @Composable
 fun LatestItem(amoledUrl: String, navController: NavHostController, height: Dp, context: Context) {
-//    val painter = rememberImagePainter(data = amoledUrl) {
-//        crossfade(durationMillis = 1000)
-//        error(R.drawable.ic_placeholder)
-////        placeholder(R.drawable.ic_placeholder)
-//    }
-
     val fullEncodedUrl = URLEncoder.encode(amoledUrl, StandardCharsets.UTF_8.toString())
 
     Card(
@@ -148,16 +142,9 @@ fun LatestItem(amoledUrl: String, navController: NavHostController, height: Dp, 
                         color = MaterialTheme.colors.secondary
                     )
                 } else {
-                    SubcomposeAsyncImageContent()
+                    SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
                 }
             }
-
-//            Image(
-//                modifier = Modifier.fillMaxSize(),
-//                painter = painter,
-//                contentDescription = "Firestore Image",
-//                contentScale = ContentScale.Crop
-//            )
         }
     }
 }

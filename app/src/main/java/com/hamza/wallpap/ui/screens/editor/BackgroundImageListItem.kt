@@ -31,12 +31,6 @@ fun BackgroundImageListItem(
     customWallpaperViewModel: CustomWallpaperViewModel,
     context: Context,
 ) {
-
-//    val painter = rememberImagePainter(data = unsplashImage.urls.regular) {
-//        crossfade(durationMillis = 1000)
-//        error(R.drawable.ic_placeholder)
-//    }
-
     Card(
         backgroundColor = Color.Black,
         modifier = Modifier
@@ -78,12 +72,6 @@ fun BackgroundImageListItem(
                     SubcomposeAsyncImageContent()
                 }
             }
-
-//            Image(
-//                painter = painter,
-//                contentDescription = "Unsplash Image",
-//                contentScale = ContentScale.Crop
-//            )
         }
     }
 }

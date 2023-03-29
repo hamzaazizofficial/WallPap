@@ -10,5 +10,6 @@ import kotlinx.serialization.Serializable
 data class FavouriteUrls(
     val id: Int,
     @PrimaryKey
-    val full: String
+    val full: String,
+    val regular: String
 )

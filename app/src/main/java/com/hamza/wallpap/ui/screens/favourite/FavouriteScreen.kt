@@ -12,7 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,7 +28,7 @@ import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
-import com.hamza.wallpap.ui.theme.iconColor
+import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.ui.theme.textColor
@@ -40,13 +40,13 @@ fun FavouriteScreen(
     favUrlsViewModel: FavUrlsViewModel,
     navController: NavHostController,
     scaffoldState: ScaffoldState,
-    context: Context
+    context: Context,
+    favouriteItemsData: State<List<FavouriteUrls>>,
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
-    val data = favUrlsViewModel.getAllFavUrls.observeAsState(listOf())
 
-    if (data.value.isEmpty()) {
+    if (favouriteItemsData.value.isEmpty()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -64,7 +64,7 @@ fun FavouriteScreen(
     }
 
     LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
-        items(data.value) { favUrl ->
+        items(favouriteItemsData.value) { favUrl ->
             FavouriteItem(favUrl, favUrlsViewModel, navController, context)
         }
     })
@@ -77,13 +77,8 @@ fun FavouriteItem(
     navController: NavHostController,
     context: Context,
 ) {
-//    val painter = rememberImagePainter(data = favUrl.full) {
-//        crossfade(durationMillis = 1000)
-//        error(R.drawable.ic_placeholder)
-////        placeholder(R.drawable.ic_placeholder)
-//    }
-
     val fullEncodedUrl = URLEncoder.encode(favUrl.full, StandardCharsets.UTF_8.toString())
+    val regularEncodedUrl = URLEncoder.encode(favUrl.regular, StandardCharsets.UTF_8.toString())
 
     Card(
         backgroundColor = Color.Black,
@@ -91,7 +86,7 @@ fun FavouriteItem(
         modifier = Modifier
             .padding(2.5.dp)
             .height(280.dp)
-            .clickable { navController.navigate("fav_wallpaper_screen/$fullEncodedUrl") },
+            .clickable { navController.navigate("fav_wallpaper_screen/$fullEncodedUrl/$regularEncodedUrl") },
     ) {
         Box(
             modifier = Modifier
@@ -99,17 +94,10 @@ fun FavouriteItem(
                 .fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter
         ) {
-//            Image(
-//                modifier = Modifier.fillMaxSize(),
-//                painter = painter,
-//                contentDescription = "Unsplash Image",
-//                contentScale = ContentScale.Crop
-//            )
-
             SubcomposeAsyncImage(
                 model = ImageRequest
                     .Builder(context)
-                    .data(favUrl.full)
+                    .data(favUrl.regular)
                     .crossfade(1000)
                     .build(),
                 contentScale = ContentScale.Crop,
@@ -126,19 +114,18 @@ fun FavouriteItem(
                 }
             }
 
-            Icon(
-                imageVector = Icons.Default.Delete,
-                tint = MaterialTheme.colors.iconColor,
-                contentDescription = null,
+            IconButton(
+                onClick = { favUrlsViewModel.deleteFavouriteUrl(favUrl) },
                 modifier = Modifier
-                    .align(
-                        Alignment.TopEnd
-                    )
-                    .padding(10.dp)
-                    .clickable {
-                        favUrlsViewModel.deleteFavouriteUrl(favUrl)
-                    }
-            )
+                    .align(Alignment.TopEnd)
+                    .padding(2.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    tint = MaterialTheme.colors.bottomAppBarContentColor,
+                    contentDescription = null
+                )
+            }
         }
     }
 }

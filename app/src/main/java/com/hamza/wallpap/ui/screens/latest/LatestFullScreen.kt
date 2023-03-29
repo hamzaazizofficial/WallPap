@@ -1,19 +1,13 @@
 package com.hamza.wallpap.ui.screens.latest
 
-import android.app.WallpaperManager
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.util.DisplayMetrics
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -34,7 +28,6 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
-import coil.compose.rememberImagePainter
 import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
@@ -60,17 +53,10 @@ fun LatestFullScreen(
         contentAlignment = Alignment.BottomCenter
     ) {
         var image: Bitmap? = null
-        var data by remember { mutableStateOf(amoledUrl) }
-
         val context = LocalContext.current
-
-//        val painter = rememberImagePainter(data = data) {
-//            crossfade(durationMillis = 1)
-//        }
-
         val thread = Thread {
             try {
-                val url = URL(data)
+                val url = URL(amoledUrl)
                 image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -83,15 +69,8 @@ fun LatestFullScreen(
         var showFitScreenBtn by remember { mutableStateOf(true) }
         var showCropScreenBtn by remember { mutableStateOf(false) }
 
-        if (showFitScreenBtn) {
-//            LinearProgressIndicator(
-//                modifier = Modifier.align(Alignment.BottomCenter),
-//                color = MaterialTheme.colors.secondary
-//            )
-        }
-
         SubcomposeAsyncImage(
-            model = data,
+            model = amoledUrl,
             contentScale = scale,
             contentDescription = null
         ) {
@@ -105,13 +84,6 @@ fun LatestFullScreen(
                 SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
             }
         }
-
-//        Image(
-//            contentScale = scale,
-//            modifier = Modifier.fillMaxSize(),
-//            painter = painter,
-//            contentDescription = "Amoled Image",
-//        )
 
         if (wallpaperFullScreenViewModel.dialogState.value) {
             SetWallpaperDialog(
@@ -249,37 +221,4 @@ fun LatestFullScreen(
             }
         }
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.N)
-fun setWallPaper(context: Context, fullUrl: String) {
-
-    val metrics = DisplayMetrics()
-    val windowsManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    windowsManager.defaultDisplay.getMetrics(metrics)
-
-    val screenWidth = metrics.widthPixels
-    val screenHeight = metrics.heightPixels.minus(300)
-
-    val wallpaperManager = WallpaperManager.getInstance(context)
-    wallpaperManager.suggestDesiredDimensions(screenWidth, screenHeight)
-
-    val width = wallpaperManager.desiredMinimumWidth
-    val height = wallpaperManager.desiredMinimumHeight
-    Toast.makeText(context, "Setting your Wallpaper...", Toast.LENGTH_LONG).show()
-
-    val thread = Thread {
-        try {
-            val url = URL(fullUrl)
-            val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            val wallpaper = Bitmap.createScaledBitmap(image, width, height, true)
-            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
-            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
-
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    thread.start()
 }

@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
@@ -13,12 +13,14 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
@@ -36,17 +38,13 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
-import com.hamza.wallpap.R
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
-import com.hamza.wallpap.ui.theme.HeartRed
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import kotlin.random.Random
-
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalPagingApi::class)
 @ExperimentalCoilApi
@@ -64,15 +62,27 @@ fun HomeListContent(
         contentPadding = PaddingValues(2.dp)
     ) {
         items(items.itemCount) {
-            val height = remember {
-                Random.nextInt(140, 380).dp
+            val height by remember {
+                mutableStateOf(Random.nextInt(140, 380).dp)
             }
+//            val random : Random = ne
+            val colors = arrayOf(
+                Color.Black,
+                Color.Blue,
+                Color.Red,
+                Color.Green,
+                Color.Gray,
+                Color.Yellow,
+                //...more
+            )
+            val randomColor = colors.random()
             items[it]?.let { unsplashImage ->
                 UnsplashItem(
                     unsplashImage = unsplashImage,
                     navController,
                     homeViewModel,
-                    height
+                    height,
+                    randomColor
                 )
             }
         }
@@ -87,6 +97,7 @@ fun UnsplashItem(
     navController: NavHostController,
     homeViewModel: HomeViewModel,
     height: Dp,
+    randomColor: Color,
 ) {
     val regularUrl = unsplashImage.urls.regular
     val fullUrl = unsplashImage.urls.full
@@ -94,19 +105,14 @@ fun UnsplashItem(
     val fullEncodedUrl = URLEncoder.encode(fullUrl, StandardCharsets.UTF_8.toString())
     val context = LocalContext.current
 
-//    val painter = rememberImagePainter(data = unsplashImage.urls.regular) {
-//        crossfade(durationMillis = 1000)
-//        error(R.drawable.ic_placeholder)
-////        placeholder(R.drawable.ic_placeholder)
-//    }
-
-
     Card(
         backgroundColor = Color.Black,
         shape = RoundedCornerShape(2.dp),
         modifier = Modifier
             .padding(2.5.dp)
             .height(height)
+//            .clip(RoundedCornerShape(2.dp))
+//            .border(1.5.dp, randomColor, RoundedCornerShape(2.dp))
             .clickable {
                 navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl")
 //                {
@@ -123,19 +129,6 @@ fun UnsplashItem(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter
         ) {
-
-//            LinearProgressIndicator(
-//                modifier = Modifier.align(Alignment.BottomCenter),
-//                color = MaterialTheme.colors.secondary
-//            )
-
-//            Image(
-//                modifier = Modifier.fillMaxSize(),
-//                painter = painter,
-//                contentDescription = "Unsplash Image",
-//                contentScale = ContentScale.Crop
-//            )
-
             SubcomposeAsyncImage(
                 model = ImageRequest
                     .Builder(context)
@@ -201,34 +194,5 @@ fun UnsplashItem(
             }
         }
     }
-
-
 }
 
-@Composable
-fun LikeCounter(
-    modifier: Modifier,
-    painter: Painter,
-    likes: String,
-) {
-    Row(
-        modifier = modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End
-    ) {
-        Icon(
-            painter = painter,
-            contentDescription = "Heart Icon",
-            tint = HeartRed
-        )
-        Divider(modifier = Modifier.width(6.dp))
-        Text(
-            text = likes,
-            color = Color.White,
-            fontSize = MaterialTheme.typography.subtitle1.fontSize,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
-}

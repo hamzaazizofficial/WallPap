@@ -1,16 +1,11 @@
 package com.hamza.wallpap.ui.screens.favourite
 
 
-import android.app.WallpaperManager
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.util.DisplayMetrics
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -27,13 +22,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
-import coil.compose.rememberImagePainter
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
@@ -48,11 +40,11 @@ import java.net.URL
 @Composable
 fun FavouriteWallpaperFullScreen(
     fullUrl: String,
+    regularUrl: String,
     navController: NavHostController,
+    favUrlsViewModel: FavUrlsViewModel,
+    wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
 ) {
-    val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
-    val favUrlsViewModel: FavUrlsViewModel = hiltViewModel()
-    val scope = rememberCoroutineScope()
     Box(
         Modifier
             .fillMaxSize()
@@ -60,19 +52,11 @@ fun FavouriteWallpaperFullScreen(
         contentAlignment = Alignment.BottomCenter
     ) {
         var image: Bitmap? = null
-        var data by remember { mutableStateOf(fullUrl) }
-
         val context = LocalContext.current
-
-//        val painter = rememberImagePainter(data = data) {
-//            crossfade(durationMillis = 1)
-////            error(R.drawable.ic_placeholder)
-////            placeholder(R.drawable.loading)
-//        }
 
         val thread = Thread {
             try {
-                val url = URL(data)
+                val url = URL(fullUrl)
                 image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -90,36 +74,23 @@ fun FavouriteWallpaperFullScreen(
             )
         }
 
-
-//        val thread = Thread {
-//            try {
-//                val url = URL(data)
-//                image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-//            } catch (e: java.lang.Exception) {
-//                e.printStackTrace()
-//            }
-//        }
-//
-//        thread.start()
-
         var scale by remember { mutableStateOf(ContentScale.Crop) }
         var showFitScreenBtn by remember { mutableStateOf(true) }
         var showCropScreenBtn by remember { mutableStateOf(false) }
 
-        if (showFitScreenBtn) {
-//            LinearProgressIndicator(
-//                modifier = Modifier.align(Alignment.BottomCenter),
-//                color = MaterialTheme.colors.secondary
-//            )
-        }
-
         SubcomposeAsyncImage(
-            model = data,
+            model = fullUrl,
             contentScale = scale,
             contentDescription = null
         ) {
             val state = painter.state
             if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                SubcomposeAsyncImage(
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = scale,
+                    model = regularUrl,
+                    contentDescription = null
+                )
                 LinearProgressIndicator(
                     modifier = Modifier.align(Alignment.BottomCenter),
                     color = MaterialTheme.colors.secondary
@@ -128,13 +99,6 @@ fun FavouriteWallpaperFullScreen(
                 SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
             }
         }
-
-//        Image(
-//            contentScale = scale,
-//            modifier = Modifier.fillMaxSize(),
-//            painter = painter,
-//            contentDescription = "Unsplash Image",
-//        )
 
         if (wallpaperFullScreenViewModel.dialogState.value) {
             SetWallpaperDialog(
@@ -250,7 +214,8 @@ fun FavouriteWallpaperFullScreen(
                     favUrlsViewModel.deleteFavouriteUrl(
                         FavouriteUrls(
                             wallpaperFullScreenViewModel.id,
-                            fullUrl
+                            fullUrl,
+                            regularUrl
                         )
                     )
                     Toast.makeText(context, "Removed!", Toast.LENGTH_SHORT).show()
@@ -282,37 +247,4 @@ fun FavouriteWallpaperFullScreen(
             }
         }
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.N)
-fun setWallPaper(context: Context, fullUrl: String) {
-
-    val metrics = DisplayMetrics()
-    val windowsManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    windowsManager.defaultDisplay.getMetrics(metrics)
-
-    val screenWidth = metrics.widthPixels
-    val screenHeight = metrics.heightPixels.minus(300)
-
-    val wallpaperManager = WallpaperManager.getInstance(context)
-    wallpaperManager.suggestDesiredDimensions(screenWidth, screenHeight)
-
-    val width = wallpaperManager.desiredMinimumWidth
-    val height = wallpaperManager.desiredMinimumHeight
-    Toast.makeText(context, "Setting your Wallpaper...", Toast.LENGTH_LONG).show()
-
-    val thread = Thread {
-        try {
-            val url = URL(fullUrl)
-            val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            val wallpaper = Bitmap.createScaledBitmap(image, width, height, true)
-            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
-            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
-
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    thread.start()
 }

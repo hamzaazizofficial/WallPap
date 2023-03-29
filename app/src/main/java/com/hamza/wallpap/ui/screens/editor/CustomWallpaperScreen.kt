@@ -189,19 +189,6 @@ fun CustomWallpaperScreen(
                             }
 
                             if (customWallpaperViewModel.bgImageFullUrl.value != null) {
-//                                val painter =
-//                                    rememberImagePainter(data = customWallpaperViewModel.bgImageUrl.value) {
-//                                        placeholder(R.drawable.ic_placeholder)
-//                                        crossfade(durationMillis = 500)
-//                                        error(R.drawable.ic_placeholder)
-//                                    }
-//                                Image(
-//                                    modifier = Modifier.fillMaxSize(),
-//                                    painter = painter,
-//                                    contentDescription = "Unsplash Image",
-//                                    contentScale = ContentScale.Crop,
-//                                    alpha = customWallpaperViewModel.bgImageTransparency.value
-//                                )
                                 SubcomposeAsyncImage(
                                     model = customWallpaperViewModel.bgImageFullUrl.value,
                                     contentScale = ContentScale.Crop,

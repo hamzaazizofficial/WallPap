@@ -24,7 +24,8 @@ class HomeViewModel @Inject constructor(
     val wallpaperItems = repository.wallpaperItems
     val selectedIndex = repository.selectedIndex
 
-    val query = MutableStateFlow<String?>("4k wallpapers")
+//    val query = MutableStateFlow<String?>("4k wallpapers")
+    val query = MutableStateFlow<String?>("digital art")
 
     var showUserDetails by mutableStateOf(false)
 
