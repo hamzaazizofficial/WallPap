@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalPagingApi::class)
@@ -49,6 +51,20 @@ fun MainScreen(
     val currentRoute = navBackStackEntry?.destination?.route
     val scope = rememberCoroutineScope()
 
+//    val listOfQueries = listOf(
+//        "Hd wallpapers",
+//        "4k wallpapers",
+//        "wallpapers",
+//        "digital art",
+//        "space"
+//    )
+//
+//    LaunchedEffect(key1 = "query", block = {
+//        val randomQueryIndex = Random.nextInt(listOfQueries.size)
+//        val randomQuery = listOfQueries[randomQueryIndex]
+//        homeViewModel.query.value = randomQuery
+//    })
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -62,7 +78,7 @@ fun MainScreen(
             ) {
                 TopBar(
                     onNavButtonClick = {
-                        if (!currentRoute.equals(Screen.CustomWallpaperScreen.route)) {
+                        if (!currentRoute.equals(Screen.CustomWallpaperScreen.route) && !currentRoute.equals(Screen.Settings.route)) {
                             scope.launch {
                                 scaffoldState.drawerState.open()
                             }
@@ -96,8 +112,7 @@ fun MainScreen(
                 currentRoute.equals(Screen.Home.route) or
                 currentRoute.equals(Screen.Random.route) or
                 currentRoute.equals(Screen.Amoled.route) or
-                currentRoute.equals(Screen.Favourite.route) or
-                currentRoute.equals(Screen.Settings.route)
+                currentRoute.equals(Screen.Favourite.route)
             ) {
                 BottomBar(navController = navController)
             }

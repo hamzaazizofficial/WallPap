@@ -5,7 +5,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
@@ -35,9 +34,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
-import com.hamza.wallpap.R
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
@@ -90,12 +87,6 @@ fun RandomUnsplashItem(
     val fullEncodedUrl = URLEncoder.encode(fullUrl, StandardCharsets.UTF_8.toString())
     val context = LocalContext.current
 
-//    val painter = rememberImagePainter(data = unsplashImage.urls.regular) {
-//        crossfade(durationMillis = 1000)
-//        error(R.drawable.ic_placeholder)
-////        placeholder(R.drawable.ic_placeholder)
-//    }
-
     Card(
         backgroundColor = Color.Black,
         shape = RoundedCornerShape(2.dp),
@@ -140,13 +131,6 @@ fun RandomUnsplashItem(
                     SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
                 }
             }
-
-//            Image(
-//                modifier = Modifier.fillMaxSize(),
-//                painter = painter,
-//                contentDescription = "Unsplash Image",
-//                contentScale = ContentScale.Crop
-//            )
 
             AnimatedVisibility(
                 visible = hotViewModel.showUserDetails,
@@ -193,34 +177,4 @@ fun RandomUnsplashItem(
             }
         }
     }
-
-
 }
-
-//@Composable
-//fun HotLikeCounter(
-//    modifier: Modifier,
-//    painter: Painter,
-//    likes: String
-//) {
-//    Row(
-//        modifier = modifier.fillMaxSize(),
-//        verticalAlignment = Alignment.CenterVertically,
-//        horizontalArrangement = Arrangement.End
-//    ) {
-//        Icon(
-//            painter = painter,
-//            contentDescription = "Heart Icon",
-//            tint = HeartRed
-//        )
-//        Divider(modifier = Modifier.width(6.dp))
-//        Text(
-//            text = likes,
-//            color = Color.White,
-//            fontSize = MaterialTheme.typography.subtitle1.fontSize,
-//            fontWeight = FontWeight.Bold,
-//            maxLines = 1,
-//            overflow = TextOverflow.Ellipsis
-//        )
-//    }
-//}
