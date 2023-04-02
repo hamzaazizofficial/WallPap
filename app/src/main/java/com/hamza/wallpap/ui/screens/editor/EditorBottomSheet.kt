@@ -3,18 +3,22 @@ package com.hamza.wallpap.ui.screens.editor
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.TextFormat
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -51,11 +55,21 @@ fun EditorBottomSheet(
         )
     }
 
+    var rotationAngle by remember { mutableStateOf(360F) }
+    val rotationAnimation by animateFloatAsState(
+        targetValue = rotationAngle,
+        tween(
+            durationMillis = 400,
+            easing = FastOutSlowInEasing
+        )
+    )
+
     if (!bottomSheetState.isVisible) {
         customWallpaperViewModel.bgColorBottomSheet.value = false
         customWallpaperViewModel.textBottomSheet.value = false
         customWallpaperViewModel.bgColorBottomSheet.value = false
     }
+
     if (customWallpaperViewModel.bgColorBottomSheet.value) {
         Card(modifier = Modifier.background(MaterialTheme.colors.background)) {
             Column(
@@ -205,6 +219,21 @@ fun EditorBottomSheet(
                         unfocusedBorderColor = MaterialTheme.colors.iconColor,
                         textColor = MaterialTheme.colors.textColor
                     ),
+                    leadingIcon = {
+                        IconButton(
+                            modifier = Modifier.rotate(rotationAnimation),
+                            onClick = {
+                                customWallpaperViewModel.wallpaperText.value = ""
+                                rotationAngle += 360f
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.bottomAppBarContentColor
+                            )
+                        }
+                    },
                     trailingIcon = {
                         IconButton(
                             onClick = {
@@ -271,7 +300,11 @@ fun EditorBottomSheet(
                     content = {
                         items(randomItems.itemCount) {
                             randomItems[it]?.let { unsplashImage ->
-                                BackgroundImageListItem(unsplashImage, customWallpaperViewModel, context)
+                                BackgroundImageListItem(
+                                    unsplashImage,
+                                    customWallpaperViewModel,
+                                    context
+                                )
                             }
                         }
                     })

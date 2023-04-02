@@ -2,13 +2,13 @@ package com.hamza.wallpap.ui
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.paging.ExperimentalPagingApi
+import com.google.accompanist.navigation.animation.AnimatedComposeNavigator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.navigation.NavGraph
@@ -30,10 +31,9 @@ import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.N)
-@OptIn(ExperimentalPagingApi::class)
+@OptIn(ExperimentalPagingApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(
     navController: NavHostController,
@@ -78,7 +78,10 @@ fun MainScreen(
             ) {
                 TopBar(
                     onNavButtonClick = {
-                        if (!currentRoute.equals(Screen.CustomWallpaperScreen.route) && !currentRoute.equals(Screen.Settings.route)) {
+                        if (!currentRoute.equals(Screen.CustomWallpaperScreen.route) && !currentRoute.equals(
+                                Screen.Settings.route
+                            )
+                        ) {
                             scope.launch {
                                 scaffoldState.drawerState.open()
                             }
@@ -117,6 +120,7 @@ fun MainScreen(
                 BottomBar(navController = navController)
             }
         },
+        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
             NavDrawer(scaffoldState = scaffoldState, navController, scope)
         }

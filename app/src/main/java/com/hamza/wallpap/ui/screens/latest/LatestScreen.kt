@@ -108,7 +108,12 @@ fun LatestScreen(
 }
 
 @Composable
-fun LatestItem(amoledUrl: String, navController: NavHostController, height: Dp, context: Context) {
+fun LatestItem(
+    amoledUrl: String,
+    navController: NavHostController,
+    height: Dp,
+    context: Context
+) {
     val fullEncodedUrl = URLEncoder.encode(amoledUrl, StandardCharsets.UTF_8.toString())
 
     Card(
