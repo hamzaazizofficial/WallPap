@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
@@ -19,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -65,24 +63,12 @@ fun HomeListContent(
             val height by remember {
                 mutableStateOf(Random.nextInt(140, 380).dp)
             }
-//            val random : Random = ne
-            val colors = arrayOf(
-                Color.Black,
-                Color.Blue,
-                Color.Red,
-                Color.Green,
-                Color.Gray,
-                Color.Yellow,
-                //...more
-            )
-            val randomColor = colors.random()
             items[it]?.let { unsplashImage ->
                 UnsplashItem(
                     unsplashImage = unsplashImage,
                     navController,
                     homeViewModel,
-                    height,
-                    randomColor
+                    height
                 )
             }
         }
@@ -97,7 +83,6 @@ fun UnsplashItem(
     navController: NavHostController,
     homeViewModel: HomeViewModel,
     height: Dp,
-    randomColor: Color,
 ) {
     val regularUrl = unsplashImage.urls.regular
     val fullUrl = unsplashImage.urls.full

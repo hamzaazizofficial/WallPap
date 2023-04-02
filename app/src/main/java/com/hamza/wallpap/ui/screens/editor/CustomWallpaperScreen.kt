@@ -6,6 +6,8 @@ import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -13,14 +15,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.FormatColorFill
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.*
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -57,6 +59,11 @@ fun CustomWallpaperScreen(
     )
     val captureController = rememberCaptureController()
     val scope = rememberCoroutineScope()
+
+    var xPosText by remember { mutableStateOf(0) }
+    var yPosText by remember { mutableStateOf(0) }
+
+    var scale by remember { mutableStateOf(1f) }
 
     BackHandler {
         navController.popBackStack()
@@ -174,6 +181,18 @@ fun CustomWallpaperScreen(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .fillMaxSize()
+                                .pointerInput(Unit) {
+                                    detectTransformGestures { centroid, pan, zoom, rotation ->
+                                        scale *= zoom
+                                    }
+                                }
+                                .pointerInput(Unit) {
+                                    detectDragGestures { change, dragAmount ->
+                                        change.consume()
+                                        xPosText += dragAmount.x.toInt()
+                                        yPosText += dragAmount.y.toInt()
+                                    }
+                                }
                                 .background(customWallpaperViewModel.boxColor.value)
                         ) {
                             if (
@@ -215,7 +234,7 @@ fun CustomWallpaperScreen(
                                 style = TextStyle(
                                     fontStyle = customWallpaperViewModel.wallpaperTextFontStyle.value,
                                     color = customWallpaperViewModel.wallpaperTextColor.value,
-                                    fontSize = customWallpaperViewModel.wallpaperTextSize.value,
+                                    fontSize = customWallpaperViewModel.wallpaperTextSize.value * scale,
                                     textDecoration = customWallpaperViewModel.wallpaperTextDecoration.value,
                                     fontWeight = customWallpaperViewModel.wallpaperTextFontWeight.value,
                                     textAlign = customWallpaperViewModel.wallpaperTextAlign.value,
@@ -223,6 +242,7 @@ fun CustomWallpaperScreen(
                                 ),
                                 modifier = Modifier
                                     .padding(12.dp)
+                                    .offset { IntOffset(xPosText, yPosText) }
                                     .combinedClickable(
                                         onClick = {
                                             if (customWallpaperViewModel.wallpaperText.value.isNotEmpty()) {
@@ -234,10 +254,11 @@ fun CustomWallpaperScreen(
                                             }
                                         },
 //                                        onLongClick = {
-//                                            customWallpaperViewModel.wallpaperText.value = ""
+//
 //                                        }
                                     )
                             )
+
                         }
                     }
                 }

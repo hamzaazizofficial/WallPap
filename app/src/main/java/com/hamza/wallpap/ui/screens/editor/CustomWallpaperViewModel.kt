@@ -91,14 +91,14 @@ class CustomWallpaperViewModel : ViewModel() {
 
     var boxColor = mutableStateOf(Color(0xF1FFFFFF))
     var wallpaperText = mutableStateOf("")
-    var wallpaperTextSize = mutableStateOf(16.sp)
+    var wallpaperTextSize = mutableStateOf(24.sp)
     var wallpaperTextColor = mutableStateOf(Color(0xFF000000))
     var wallpaperTextAlign = mutableStateOf(TextAlign.Center)
     var wallpaperDialogState = mutableStateOf(false)
     var wallpaperTextFontWeight = mutableStateOf(FontWeight.Normal)
     var wallpaperTextDecoration = mutableStateOf(TextDecoration.None)
     var wallpaperTextFontStyle = mutableStateOf(FontStyle.Normal)
-    var textSliderPosition = mutableStateOf(0f)
+    var textSliderPosition = mutableStateOf(24f)
     var imageTransparencySliderPosition = mutableStateOf(0.5f)
     var colorTransparencySliderPosition = mutableStateOf(0f)
 

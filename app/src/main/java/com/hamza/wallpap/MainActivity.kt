@@ -19,6 +19,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.ExperimentalPagingApi
+import com.google.accompanist.navigation.animation.AnimatedComposeNavigator
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.hamza.wallpap.ui.MainScreen
 import com.hamza.wallpap.ui.animation.CircularReveal
@@ -54,7 +55,7 @@ class MainActivity : ComponentActivity() {
             val isSystemDark = isSystemInDarkTheme()
             var darkTheme by remember { mutableStateOf(isSystemDark) }
             val onThemeToggle = { darkTheme = !darkTheme }
-            val navController = rememberNavController()
+            val navController = rememberAnimatedNavController()
 
             CircularReveal(
                 targetState = useDarkColors,

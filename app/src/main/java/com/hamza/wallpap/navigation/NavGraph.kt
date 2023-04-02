@@ -3,6 +3,8 @@ package com.hamza.wallpap.navigation
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ScaffoldState
@@ -12,12 +14,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.ui.screens.editor.CustomWallpaperScreen
 import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
@@ -41,7 +43,7 @@ import com.hamza.wallpap.util.WallPapTheme
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(
     ExperimentalPagingApi::class, ExperimentalCoilApi::class,
-    ExperimentalFoundationApi::class
+    ExperimentalFoundationApi::class, ExperimentalAnimationApi::class
 )
 
 @Composable
@@ -50,7 +52,7 @@ fun NavGraph(
     scaffoldState: ScaffoldState,
     onItemSelected: (WallPapTheme) -> Unit,
     currentRoute: String?,
-    context: Context,
+    context: Context
 ) {
     val homeViewModel: HomeViewModel = hiltViewModel()
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
@@ -65,10 +67,19 @@ fun NavGraph(
     val lazyStaggeredGridState = rememberLazyStaggeredGridState()
     val customWallpaperViewModel: CustomWallpaperViewModel = viewModel()
 
-    NavHost(
+    AnimatedNavHost(
         navController, startDestination = Screen.Home.route,
     ) {
-        composable(Screen.Home.route) {
+
+        composable(Screen.Home.route,
+            enterTransition = {
+                when (currentRoute) {
+                    Screen.Home.route ->
+                        fadeIn(animationSpec = tween(600))
+                    else -> null
+                }
+            }
+        ) {
             HomeScreen(
                 navController,
                 homeViewModel,
@@ -78,7 +89,19 @@ fun NavGraph(
             )
         }
 
-        composable(Screen.Search.route) {
+        composable(Screen.Search.route, enterTransition = {
+            when (currentRoute) {
+                Screen.Search.route ->
+                    fadeIn(animationSpec = tween(600)) + slideInVertically { 1800 }
+                else -> null
+            }
+        }, exitTransition = {
+            when (currentRoute) {
+                Screen.Search.route ->
+                    fadeOut(animationSpec = tween(600)) + slideOutVertically { 1800 }
+                else -> null
+            }
+        } ) {
             SearchScreen(
                 navController = navController,
                 searchViewModel,
@@ -87,7 +110,13 @@ fun NavGraph(
             )
         }
 
-        composable(Screen.Settings.route) {
+        composable(Screen.Settings.route, enterTransition = {
+            when (currentRoute) {
+                Screen.Settings.route ->
+                    fadeIn(animationSpec = tween(600)) + slideInHorizontally { 1800 }
+                else -> null
+            }
+        }) {
             SettingsScreen(settingsViewModel, navController, scaffoldState, onItemSelected)
         }
 
@@ -149,7 +178,7 @@ fun NavGraph(
                 navController,
                 scaffoldState,
                 customWallpaperViewModel,
-                randomItems,
+                homeItems,
                 context
             )
         }

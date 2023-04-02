@@ -74,7 +74,10 @@ fun TopBar(
         },
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor,
         navigationIcon = {
-            if (!currentRoute.equals(Screen.CustomWallpaperScreen.route) && !currentRoute.equals(Screen.Settings.route)) {
+            if (!currentRoute.equals(Screen.CustomWallpaperScreen.route) && !currentRoute.equals(
+                    Screen.Settings.route
+                )
+            ) {
                 IconButton(onClick = onNavButtonClick) {
                     Icon(
                         imageVector = Icons.Default.Dehaze,
@@ -115,16 +118,13 @@ fun TopBar(
                     }
                 }
 
-                AnimatedVisibility(
-                    visible = currentRoute.equals(Screen.Favourite.route) &&
-                            favUrlsViewModel.getAllFavUrls.observeAsState(listOf()).value.isNotEmpty(),
-                    enter = scaleIn() + fadeIn(),
-                    exit = scaleOut() + fadeOut()
+                if (currentRoute.equals(Screen.Favourite.route) &&
+                    favUrlsViewModel.getAllFavUrls.observeAsState(listOf()).value.isNotEmpty()
                 ) {
                     IconButton(
                         onClick = {
-                        favUrlsViewModel.clearAllImagesDialogState.value = true
-                    }) {
+                            favUrlsViewModel.clearAllImagesDialogState.value = true
+                        }) {
                         Icon(
                             imageVector = Icons.Default.DeleteSweep,
                             contentDescription = "Show user details icon",
@@ -154,8 +154,8 @@ fun TopBar(
                 AnimatedVisibility(
                     visible = currentRoute.equals(Screen.CustomWallpaperScreen.route) &&
                             (customWallpaperViewModel.bgImageFullUrl.value != null
-                            || customWallpaperViewModel.boxColor.value != Color(0xF1FFFFFF)
-                            || customWallpaperViewModel.wallpaperText.value != ""),
+                                    || customWallpaperViewModel.boxColor.value != Color(0xF1FFFFFF)
+                                    || customWallpaperViewModel.wallpaperText.value != ""),
                     enter = scaleIn() + fadeIn(),
                     exit = scaleOut() + fadeOut()
                 ) {

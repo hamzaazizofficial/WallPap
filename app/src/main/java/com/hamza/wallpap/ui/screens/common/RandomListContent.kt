@@ -54,7 +54,9 @@ fun RandomListContent(
 
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(2),
-        state = lazyStaggeredGridState
+        state = lazyStaggeredGridState,
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(2.dp)
     ) {
         items(items.itemCount) {
             val height = remember {
