@@ -18,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -63,6 +64,12 @@ fun CustomWallpaperScreen(
     var xPosText by remember { mutableStateOf(0) }
     var yPosText by remember { mutableStateOf(0) }
 
+    var bgImageBlurSliderPosition by remember { mutableStateOf(0f) }
+    var bgImageBlurValue by remember(bgImageBlurSliderPosition)  { mutableStateOf(0f) }
+
+//    var matrix by remember { mutableStateOf(ColorMatrix()) }
+//    val colorFilter = ColorFilter.colorMatrix(matrix)
+
     var scale by remember { mutableStateOf(1f) }
 
     BackHandler {
@@ -92,7 +99,7 @@ fun CustomWallpaperScreen(
                         floatingActionButton = {
                             AnimatedVisibility(
                                 visible = customWallpaperViewModel.bgImageFullUrl.value != null
-                                        || customWallpaperViewModel.boxColor.value != Color(
+                                        || customWallpaperViewModel.bgBoxColor.value != Color(
                                     0xF1FFFFFF
                                 )
                                         || customWallpaperViewModel.wallpaperText.value != "",
@@ -193,11 +200,11 @@ fun CustomWallpaperScreen(
                                         yPosText += dragAmount.y.toInt()
                                     }
                                 }
-                                .background(customWallpaperViewModel.boxColor.value)
+                                .background(customWallpaperViewModel.bgBoxColor.value)
                         ) {
                             if (
                                 customWallpaperViewModel.bgImageFullUrl.value == null
-                                && customWallpaperViewModel.boxColor.value == Color(0xF1FFFFFF)
+                                && customWallpaperViewModel.bgBoxColor.value == Color(0xF1FFFFFF)
                                 && customWallpaperViewModel.wallpaperText.value == ""
                             ) {
                                 Text(
@@ -212,7 +219,9 @@ fun CustomWallpaperScreen(
                                     model = customWallpaperViewModel.bgImageFullUrl.value,
                                     contentScale = ContentScale.Crop,
                                     contentDescription = null,
-                                    alpha = customWallpaperViewModel.bgImageTransparency.value
+                                    alpha = customWallpaperViewModel.bgImageTransparency.value,
+//                                    colorFilter = colorFilter
+//                                    modifier = Modifier.blur(bgImageBlurValue.dp)
                                 ) {
                                     val state = painter.state
                                     if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
@@ -227,6 +236,25 @@ fun CustomWallpaperScreen(
                                         SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
                                     }
                                 }
+
+//                                androidx.compose.material3.Slider(
+//                                    modifier = Modifier.padding(horizontal = 10.dp),
+//                                    value = matrix[0,0],
+//                                    onValueChange = {
+//                                        matrix = ColorMatrix().apply{
+//                                            setToSaturation(it)
+//                                        }
+//                                    },
+//                                    valueRange = 0f..100f,
+//                                    onValueChangeFinished = {
+////                                        bgImageBlurValue =
+////                                            bgImageBlurSliderPosition
+//                                    },
+//                                    colors = androidx.compose.material3.SliderDefaults.colors(
+//                                        activeTrackColor = Color.Blue.copy(0.5f),
+//                                        thumbColor = Color.Blue
+//                                    )
+//                                )
                             }
 
                             Text(

@@ -17,7 +17,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.paging.ExperimentalPagingApi
-import com.google.accompanist.navigation.animation.AnimatedComposeNavigator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.navigation.NavGraph
@@ -71,14 +70,14 @@ fun MainScreen(
             if (
                 currentRoute.equals(Screen.Home.route) or
                 currentRoute.equals(Screen.Random.route) or
-                currentRoute.equals(Screen.Amoled.route) or
+                currentRoute.equals(Screen.Latest.route) or
                 currentRoute.equals(Screen.Favourite.route) or
                 currentRoute.equals(Screen.Settings.route) or
-                currentRoute.equals(Screen.CustomWallpaperScreen.route)
+                currentRoute.equals(Screen.CustomWallpaperEditorScreen.route)
             ) {
                 TopBar(
                     onNavButtonClick = {
-                        if (!currentRoute.equals(Screen.CustomWallpaperScreen.route) && !currentRoute.equals(
+                        if (!currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) && !currentRoute.equals(
                                 Screen.Settings.route
                             )
                         ) {
@@ -114,7 +113,7 @@ fun MainScreen(
             if (
                 currentRoute.equals(Screen.Home.route) or
                 currentRoute.equals(Screen.Random.route) or
-                currentRoute.equals(Screen.Amoled.route) or
+                currentRoute.equals(Screen.Latest.route) or
                 currentRoute.equals(Screen.Favourite.route)
             ) {
                 BottomBar(navController = navController)

@@ -122,7 +122,7 @@ fun LatestItem(
         modifier = Modifier
             .padding(2.5.dp)
             .height(height)
-            .clickable { navController.navigate("amoled_full_screen/$fullEncodedUrl") },
+            .clickable { navController.navigate("latest_full_screen/$fullEncodedUrl") },
     ) {
         Box(
             modifier = Modifier

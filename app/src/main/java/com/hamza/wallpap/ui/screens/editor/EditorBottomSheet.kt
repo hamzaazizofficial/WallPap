@@ -8,9 +8,11 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Colorize
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.TextFormat
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,7 +20,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -27,9 +33,11 @@ import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.screens.common.ColorPickerDialog
 import com.hamza.wallpap.ui.theme.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(
@@ -46,12 +54,22 @@ fun EditorBottomSheet(
     randomItems: LazyPagingItems<UnsplashImage>,
     context: Context,
 ) {
+    val random = Random(System.currentTimeMillis())
+
     if (customWallpaperViewModel.wallpaperDialogState.value) {
         TextFormatDialog(
             dialogState = customWallpaperViewModel.wallpaperDialogState,
             context = context,
             itemList,
             customWallpaperViewModel
+        )
+    }
+
+    if (customWallpaperViewModel.colorPickerDialogState.value) {
+        ColorPickerDialog(
+            dialogState = customWallpaperViewModel.colorPickerDialogState,
+            context = context,
+            customWallpaperViewModel = customWallpaperViewModel
         )
     }
 
@@ -91,6 +109,7 @@ fun EditorBottomSheet(
                         text = "Background Color",
                         color = MaterialTheme.colors.topAppBarTitle,
                         fontWeight = FontWeight.ExtraBold,
+                        fontFamily = maven_pro_regular,
                         fontSize = 16.sp
                     )
                     androidx.compose.material3.IconButton(
@@ -114,44 +133,55 @@ fun EditorBottomSheet(
                 Spacer(modifier = Modifier.padding(vertical = 2.dp))
 
                 Row(
-                    modifier = Modifier
-                        .padding(horizontal = 6.dp)
-                        .horizontalScroll(rememberScrollState())
-                ) {
-                    itemList.forEachIndexed { index, s ->
-                        ColorChips(
-                            color = s.color,
-                            selected = customWallpaperViewModel.selectedBgColorIndex.value == index,
-                            onClick = {
-                                customWallpaperViewModel.selectedBgColorIndex.value = index
-                                customWallpaperViewModel.bgImageFullUrl.value = null
-                                customWallpaperViewModel.boxColor.value = s.color
-                            })
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                {
+                    Card(
+                        shape = CircleShape,
+                        modifier = Modifier
+                            .padding(end = 8.dp, start = 12.dp)
+                            .size(40.dp)
+                            .clip(CircleShape),
+                    ) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(CircleShape)
+                                .border(0.5.dp, MaterialTheme.colors.textColor, CircleShape)
+                                .background(
+                                    MaterialTheme.colors.bottomAppBarContentColor
+                                )
+                                .clickable {
+                                    customWallpaperViewModel.colorPickerDialogState.value = true
+                                }
+                        ){
+                            Icon(
+                                imageVector = Icons.Default.Colorize,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.topAppBarTitle,
+                            )
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .padding(horizontal = 6.dp)
+                            .horizontalScroll(rememberScrollState())
+                    ) {
+                        itemList.forEachIndexed { index, s ->
+                            ColorChips(
+                                color = s.color,
+                                selected = customWallpaperViewModel.selectedBgColorIndex.value == index,
+                                onClick = {
+                                    customWallpaperViewModel.selectedBgColorIndex.value = index
+                                    customWallpaperViewModel.bgImageFullUrl.value = null
+                                    customWallpaperViewModel.bgBoxColor.value = s.color
+                                })
+                        }
                     }
                 }
-
-//                LazyRow(
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    horizontalArrangement = Arrangement.Start,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(horizontal = 12.dp)
-//                ) {
-//                    items(itemList) { item ->
-//                        Box(
-//                            modifier = Modifier
-//                                .size(46.dp)
-//                                .clip(CircleShape)
-//                                .border(1.dp, MaterialTheme.colors.textColor, CircleShape)
-//                                .background(item.color)
-//                                .clickable {
-//                                    customWallpaperViewModel.bgImageUrl.value = null
-//                                    customWallpaperViewModel.boxColor.value = item.color
-//                                }
-//                        )
-//                        Spacer(modifier = Modifier.padding(horizontal = 6.dp))
-//                    }
-//                }
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
             }
@@ -179,6 +209,7 @@ fun EditorBottomSheet(
                         text = "Text",
                         color = MaterialTheme.colors.topAppBarTitle,
                         fontWeight = FontWeight.ExtraBold,
+                        fontFamily = maven_pro_regular,
                         fontSize = 16.sp
                     )
                     androidx.compose.material3.IconButton(
@@ -210,7 +241,8 @@ fun EditorBottomSheet(
                     label = {
                         androidx.compose.material3.Text(
                             "Enter text here",
-                            color = MaterialTheme.colors.textColor
+                            color = MaterialTheme.colors.textColor,
+                            fontFamily = maven_pro_regular,
                         )
                     },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -275,6 +307,7 @@ fun EditorBottomSheet(
                         text = "Background Image",
                         color = MaterialTheme.colors.topAppBarTitle,
                         fontWeight = FontWeight.ExtraBold,
+                        fontFamily = maven_pro_regular,
                         fontSize = 16.sp
                     )
                     androidx.compose.material3.IconButton(
@@ -316,6 +349,7 @@ fun EditorBottomSheet(
                     text = "Image Clarity",
                     color = MaterialTheme.colors.topAppBarTitle,
                     fontWeight = FontWeight.ExtraBold,
+                    fontFamily = maven_pro_regular,
                     fontSize = 16.sp,
                     modifier = Modifier
                         .fillMaxWidth()

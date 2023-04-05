@@ -1,7 +1,10 @@
 package com.hamza.wallpap.ui.screens.editor
 
 import android.graphics.Bitmap
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -12,8 +15,20 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.ui.theme.*
+import kotlin.random.Random
 
 class CustomWallpaperViewModel : ViewModel() {
+
+    var redColorSliderPosition = mutableStateOf(0f)
+    var blueColorSliderPosition =  mutableStateOf(0f)
+    var greenColorSliderPosition =   mutableStateOf(0f)
+    var alphaColorSliderPosition =  mutableStateOf(255f)
+    var redColorValue =  mutableStateOf(0)
+    var blueColorValue = mutableStateOf(0)
+    var greenColorValue = mutableStateOf(0)
+    var alphaColorValue = mutableStateOf(255)
+
+    val random = Random(System.currentTimeMillis())
     var fontFamilyName = mutableStateOf("Roboto")
     val fontFamilyItems =
         arrayListOf(
@@ -69,7 +84,6 @@ class CustomWallpaperViewModel : ViewModel() {
         )
     var selectedFontFamilyIndex = mutableStateOf(0)
 
-    var colorName = mutableStateOf(Color(0xFFFFFFFF))
     val colorItems = arrayListOf(
         CustomWallpaperBackgroundColor(Color(0xFFFFFFFF), 8),
         CustomWallpaperBackgroundColor(Color(0xFF000000), 8),
@@ -78,18 +92,218 @@ class CustomWallpaperViewModel : ViewModel() {
         CustomWallpaperBackgroundColor(Color(0xFFE91E63), 8),
         CustomWallpaperBackgroundColor(Color(0xFF8BC34A), 8),
         CustomWallpaperBackgroundColor(Color(0xFF3F51B5), 8),
-        CustomWallpaperBackgroundColor(Color(0xFF9C27B0), 8)
+        CustomWallpaperBackgroundColor(Color(0xFF9C27B0), 8),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
+        CustomWallpaperBackgroundColor(
+            Color(
+                random.nextFloat(),
+                random.nextFloat(),
+                random.nextFloat()
+            ), 8
+        ),
     )
+
     var selectedTextColorIndex = mutableStateOf(1)
-    var selectedBgColorIndex = mutableStateOf(20)
+    var selectedBgColorIndex = mutableStateOf(50)
     var colorItem = mutableStateOf(Color(0xFFFFFFFF))
 
     var clearEditorDialogState = mutableStateOf(false)
+    var colorPickerDialogState = mutableStateOf(false)
+    var textFormatColorPickerState = mutableStateOf(false)
+
     var shareWallpaperVisible = mutableStateOf(false)
 
     var savedImageBitmap = mutableStateOf<Bitmap?>(null)
 
-    var boxColor = mutableStateOf(Color(0xF1FFFFFF))
+    var bgBoxColor = mutableStateOf(Color(0xF1FFFFFF))
     var wallpaperText = mutableStateOf("")
     var wallpaperTextSize = mutableStateOf(24.sp)
     var wallpaperTextColor = mutableStateOf(Color(0xFF000000))
@@ -99,6 +313,7 @@ class CustomWallpaperViewModel : ViewModel() {
     var wallpaperTextDecoration = mutableStateOf(TextDecoration.None)
     var wallpaperTextFontStyle = mutableStateOf(FontStyle.Normal)
     var textSliderPosition = mutableStateOf(24f)
+
     var imageTransparencySliderPosition = mutableStateOf(0.5f)
     var colorTransparencySliderPosition = mutableStateOf(0f)
 
