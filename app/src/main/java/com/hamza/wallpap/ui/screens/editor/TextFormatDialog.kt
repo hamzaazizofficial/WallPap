@@ -28,6 +28,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.iconColor
+import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.textColor
 
 data class FontFamilySearchChip(val fontTitle: String, val font: FontFamily)
@@ -83,6 +84,7 @@ fun TextFormatDialogUI(
                 color = MaterialTheme.colors.textColor,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.sp,
+                fontFamily = maven_pro_regular,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp)
@@ -91,21 +93,47 @@ fun TextFormatDialogUI(
             Spacer(modifier = Modifier.padding(2.dp))
 
             Row(
-                modifier = Modifier
-                    .padding(horizontal = 6.dp, vertical = 6.dp)
-                    .horizontalScroll(rememberScrollState())
-            ) {
-                itemList.forEachIndexed { index, s ->
-                    ColorChips(
-                        color = s.color,
-                        selected = customWallpaperViewModel.selectedTextColorIndex.value == index,
-                        onClick = {
-                            customWallpaperViewModel.selectedTextColorIndex.value = index
-                            customWallpaperViewModel.colorItem.value = s.color
-                            customWallpaperViewModel.wallpaperTextColor.value = s.color
-                        })
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            )
+            {
+//                Card(
+//                    shape = CircleShape,
+//                    modifier = Modifier
+//                        .padding(end = 6.dp, start = 12.dp)
+//                        .size(40.dp)
+//                        .clip(CircleShape),
+//                ) {
+//                    Box(
+//                        modifier = Modifier
+//                            .size(40.dp)
+//                            .clip(CircleShape)
+//                            .border(0.5.dp, MaterialTheme.colors.textColor, CircleShape)
+//                            .background(Color.Red)
+//                            .clickable {
+//                                customWallpaperViewModel.colorPickerDialogState.value = true
+//                            }
+//                    )
+//                }
+
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 6.dp, vertical = 6.dp)
+                        .horizontalScroll(rememberScrollState())
+                ) {
+                    itemList.forEachIndexed { index, s ->
+                        ColorChips(
+                            color = s.color,
+                            selected = customWallpaperViewModel.selectedTextColorIndex.value == index,
+                            onClick = {
+                                customWallpaperViewModel.selectedTextColorIndex.value = index
+                                customWallpaperViewModel.colorItem.value = s.color
+                                customWallpaperViewModel.wallpaperTextColor.value = s.color
+                            })
+                    }
                 }
             }
+
 
 
             Spacer(modifier = Modifier.padding(6.dp))
@@ -113,6 +141,7 @@ fun TextFormatDialogUI(
             Text(
                 textAlign = TextAlign.Start,
                 text = "Font Size",
+                fontFamily = maven_pro_regular,
                 color = MaterialTheme.colors.textColor,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
@@ -147,6 +176,7 @@ fun TextFormatDialogUI(
                 Text(
                     textAlign = TextAlign.Start,
                     text = "Font Family",
+                    fontFamily = maven_pro_regular,
                     color = MaterialTheme.colors.textColor,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 16.sp
@@ -196,6 +226,7 @@ fun TextFormatDialogUI(
             Text(
                 textAlign = TextAlign.Start,
                 text = "Font Style",
+                fontFamily = maven_pro_regular,
                 color = MaterialTheme.colors.textColor,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.sp,
@@ -394,35 +425,10 @@ fun TextFormatDialogUI(
                 TextButton(
                     onClick = { dialogState.value = false }
                 ) {
-                    Text(text = "Done", color = MaterialTheme.colors.textColor)
+                    Text(text = "Close", color = MaterialTheme.colors.textColor)
                 }
             }
         }
     }
 }
 
-@Composable
-fun TextColorListItem(
-    color: Color,
-    customWallpaperViewModel: CustomWallpaperViewModel,
-) {
-
-    Card(
-        shape = CircleShape,
-        modifier = Modifier
-            .padding(6.dp)
-            .size(40.dp)
-            .clip(CircleShape),
-    ) {
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .border(1.dp, MaterialTheme.colors.textColor, CircleShape)
-                .background(color)
-                .clickable {
-                    customWallpaperViewModel.wallpaperTextColor.value = color
-                }
-        )
-    }
-}

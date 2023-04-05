@@ -28,6 +28,7 @@ import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
+import com.hamza.wallpap.navigation.Screen
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.systemBarColor
@@ -86,7 +87,7 @@ fun FavouriteItem(
         modifier = Modifier
             .padding(2.5.dp)
             .height(280.dp)
-            .clickable { navController.navigate("fav_wallpaper_screen/$fullEncodedUrl/$regularEncodedUrl") },
+            .clickable { navController.navigate("fav_full_screen/$fullEncodedUrl/$regularEncodedUrl") },
     ) {
         Box(
             modifier = Modifier

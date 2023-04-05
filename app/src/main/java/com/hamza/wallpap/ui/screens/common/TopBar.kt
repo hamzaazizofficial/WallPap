@@ -66,15 +66,15 @@ fun TopBar(
                 else if (currentRoute.equals(Screen.Settings.route)) "Settings"
                 else if (currentRoute.equals(Screen.Random.route)) "Random"
                 else if (currentRoute.equals(Screen.Favourite.route)) "Favourite"
-                else if (currentRoute.equals(Screen.Amoled.route)) "Latest"
-                else if (currentRoute.equals(Screen.CustomWallpaperScreen.route)) "Editor"
+                else if (currentRoute.equals(Screen.Latest.route)) "Latest"
+                else if (currentRoute.equals(Screen.CustomWallpaperEditorScreen.route)) "Editor"
                 else "Home",
                 color = MaterialTheme.colors.topAppBarTitle,
             )
         },
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor,
         navigationIcon = {
-            if (!currentRoute.equals(Screen.CustomWallpaperScreen.route) && !currentRoute.equals(
+            if (!currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) && !currentRoute.equals(
                     Screen.Settings.route
                 )
             ) {
@@ -134,7 +134,7 @@ fun TopBar(
                 }
 
                 AnimatedVisibility(
-                    visible = currentRoute.equals(Screen.CustomWallpaperScreen.route) &&
+                    visible = currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) &&
                             customWallpaperViewModel.savedImageBitmap.value != null
                             && customWallpaperViewModel.shareWallpaperVisible.value,
                     enter = scaleIn() + fadeIn(),
@@ -152,9 +152,9 @@ fun TopBar(
                 }
 
                 AnimatedVisibility(
-                    visible = currentRoute.equals(Screen.CustomWallpaperScreen.route) &&
+                    visible = currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) &&
                             (customWallpaperViewModel.bgImageFullUrl.value != null
-                                    || customWallpaperViewModel.boxColor.value != Color(0xF1FFFFFF)
+                                    || customWallpaperViewModel.bgBoxColor.value != Color(0xF1FFFFFF)
                                     || customWallpaperViewModel.wallpaperText.value != ""),
                     enter = scaleIn() + fadeIn(),
                     exit = scaleOut() + fadeOut()
@@ -173,7 +173,7 @@ fun TopBar(
                 }
 
                 if (!currentRoute.equals(Screen.Settings.route) &&
-                    !currentRoute.equals(Screen.CustomWallpaperScreen.route) &&
+                    !currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) &&
                     !currentRoute.equals(Screen.Favourite.route)
                 ) {
                     IconButton(onClick = onSearchClicked) {

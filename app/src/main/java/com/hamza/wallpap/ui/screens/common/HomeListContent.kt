@@ -38,6 +38,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.navigation.Screen
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import java.net.URLEncoder
@@ -99,7 +100,7 @@ fun UnsplashItem(
 //            .clip(RoundedCornerShape(2.dp))
 //            .border(1.5.dp, randomColor, RoundedCornerShape(2.dp))
             .clickable {
-                navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl")
+                navController.navigate("home_wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl")
 //                {
 //                    navController.graph.startDestinationRoute?.let { route ->
 //                        popUpTo(route) {

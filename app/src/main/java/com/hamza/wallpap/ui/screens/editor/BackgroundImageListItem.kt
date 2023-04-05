@@ -45,7 +45,7 @@ fun BackgroundImageListItem(
                 .height(120.dp)
                 .width(80.dp)
                 .clickable {
-                    customWallpaperViewModel.boxColor.value = Color(0xF1FFFFFF)
+                    customWallpaperViewModel.bgBoxColor.value = Color(0xF1FFFFFF)
                     customWallpaperViewModel.bgImageFullUrl.value = unsplashImage.urls.full
                     customWallpaperViewModel.bgImageRegularUrl.value = unsplashImage.urls.regular
                     customWallpaperViewModel.selectBgImageState.value = true

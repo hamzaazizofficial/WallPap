@@ -17,8 +17,8 @@ fun BottomBar(
 ) {
     val items = listOf(
         Screen.Home,
-        Screen.Amoled,
-        Screen.CustomWallpaperScreen,
+        Screen.Latest,
+        Screen.CustomWallpaperEditorScreen,
         Screen.Random,
         Screen.Favourite,
 //        Screen.Settings,

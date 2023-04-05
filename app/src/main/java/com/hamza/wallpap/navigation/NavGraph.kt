@@ -135,7 +135,21 @@ fun NavGraph(
         }
 
         composable(
-            Screen.WallPaperScreen.route,
+            Screen.HomeWallpaperFullScreen.route,
+            enterTransition = {
+                when (currentRoute) {
+                    Screen.HomeWallpaperFullScreen.route ->
+                        fadeIn(animationSpec = tween(600)) + scaleIn()
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when (currentRoute) {
+                    Screen.HomeWallpaperFullScreen.route ->
+                        fadeOut(animationSpec = tween(600)) + scaleOut()
+                    else -> null
+                }
+            },
             arguments = listOf(
                 navArgument("regularUrl") {
                     nullable = true
@@ -154,7 +168,21 @@ fun NavGraph(
         }
 
         composable(
-            Screen.FavouriteWallPaperScreen.route,
+            Screen.FavouriteFullScreen.route,
+            enterTransition = {
+                when (currentRoute) {
+                    Screen.FavouriteFullScreen.route ->
+                        fadeIn(animationSpec = tween(600)) + scaleIn()
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when (currentRoute) {
+                    Screen.FavouriteFullScreen.route ->
+                        fadeOut(animationSpec = tween(600)) + scaleOut()
+                    else -> null
+                }
+            },
             arguments = listOf(
                 navArgument("fullUrl") {
                     nullable = true
@@ -168,12 +196,12 @@ fun NavGraph(
             val fullUrl = it.arguments?.getString("fullUrl")
             val regularUrl = it.arguments?.getString("regularUrl")
             if (fullUrl != null && regularUrl != null) {
-                FavouriteWallpaperFullScreen(fullUrl, regularUrl, navController, favUrlsViewModel, wallpaperFullScreenViewModel)
+                FavouriteWallpaperFullScreen(fullUrl, regularUrl, navController, favUrlsViewModel, wallpaperFullScreenViewModel, context)
             }
         }
 
         // Custom Wallpaper Screens
-        composable(Screen.CustomWallpaperScreen.route) {
+        composable(Screen.CustomWallpaperEditorScreen.route) {
             CustomWallpaperScreen(
                 navController,
                 scaffoldState,
@@ -184,12 +212,26 @@ fun NavGraph(
         }
 
         // FireStore Screens
-        composable(Screen.Amoled.route) {
+        composable(Screen.Latest.route) {
             LatestScreen(navController, amoledViewModel, scaffoldState)
         }
 
         composable(
-            Screen.AmoledFullScreen.route,
+            Screen.LatestFullScreen.route,
+            enterTransition = {
+                when (currentRoute) {
+                    Screen.LatestFullScreen.route ->
+                        fadeIn(animationSpec = tween(600)) + scaleIn()
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when (currentRoute) {
+                    Screen.LatestFullScreen.route ->
+                        fadeOut(animationSpec = tween(600)) + scaleOut()
+                    else -> null
+                }
+            },
             arguments = listOf(
                 navArgument("amoledUrl") {
                     nullable = true
@@ -198,7 +240,7 @@ fun NavGraph(
             )) {
             val amoledUrl = it.arguments?.getString("amoledUrl")
             if (amoledUrl != null) {
-                LatestFullScreen(amoledUrl, navController)
+                LatestFullScreen(amoledUrl, navController, wallpaperFullScreenViewModel, context)
             }
         }
     }

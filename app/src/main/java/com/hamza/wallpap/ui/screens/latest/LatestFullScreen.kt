@@ -1,8 +1,8 @@
 package com.hamza.wallpap.ui.screens.latest
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -21,9 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
@@ -32,19 +30,25 @@ import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
+import com.hamza.wallpap.util.getBitmapFromUrl
 import com.hamza.wallpap.util.saveMediaToStorage
-import java.net.URL
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun LatestFullScreen(
     amoledUrl: String,
     navController: NavHostController,
+    wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
+    context: Context,
 ) {
-    val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
+    var image by remember { mutableStateOf<Bitmap?>(null) }
     BackHandler {
         navController.popBackStack()
     }
+
+    LaunchedEffect(key1 = "image", block = {
+        image = getBitmapFromUrl(amoledUrl)
+    })
 
     Box(
         Modifier
@@ -52,18 +56,6 @@ fun LatestFullScreen(
             .background(MaterialTheme.colors.background),
         contentAlignment = Alignment.BottomCenter
     ) {
-        var image: Bitmap? = null
-        val context = LocalContext.current
-        val thread = Thread {
-            try {
-                val url = URL(amoledUrl)
-                image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        thread.start()
 
         var scale by remember { mutableStateOf(ContentScale.Crop) }
         var showFitScreenBtn by remember { mutableStateOf(true) }
@@ -98,7 +90,7 @@ fun LatestFullScreen(
             modifier = Modifier
                 .height(60.dp)
                 .fillMaxWidth()
-                .alpha(ContentAlpha.disabled)
+                .alpha(ContentAlpha.medium)
                 .align(Alignment.TopEnd),
             color = Color.Black
         ) {

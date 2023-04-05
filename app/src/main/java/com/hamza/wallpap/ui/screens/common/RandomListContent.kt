@@ -96,7 +96,7 @@ fun RandomUnsplashItem(
             .padding(2.5.dp)
             .height(height)
             .clickable {
-                navController.navigate("wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl")
+                navController.navigate("home_wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl")
 //                {
 //                    navController.graph.startDestinationRoute?.let { route ->
 //                        popUpTo(route) {
