@@ -1,6 +1,7 @@
 package com.hamza.wallpap.ui.screens.wallpaper
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -39,6 +40,7 @@ import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.util.getBitmapFromUrl
+import com.hamza.wallpap.util.loadReducedSizeBitmapFromUrl
 import com.hamza.wallpap.util.saveMediaToStorage
 import com.hamza.wallpap.util.shareWallpaper
 import dev.shreyaspatil.capturable.Capturable
@@ -62,10 +64,14 @@ fun WallpaperFullScreen(
     val matrix by remember { mutableStateOf(ColorMatrix()) }
     matrix.setToSaturation(wallpaperFullScreenViewModel.saturationSliderValue.value)
     val colorFilter = ColorFilter.colorMatrix(matrix)
-    var image by remember { mutableStateOf<Bitmap?>(null) }
+
+    var smallSizeImage by remember { mutableStateOf<Bitmap?>(null) }
+    var originalImage by remember { mutableStateOf<Bitmap?>(null) }
 
     LaunchedEffect(key1 = "bitmap", block = {
-        image = getBitmapFromUrl(fullUrl)
+//        wallpaperFullScreenViewModel.fullUrl.value = fullUrl
+        originalImage = getBitmapFromUrl(fullUrl)
+        smallSizeImage = loadReducedSizeBitmapFromUrl(fullUrl)
     })
 
     var scale by remember { mutableStateOf(ContentScale.Crop) }
@@ -92,7 +98,7 @@ fun WallpaperFullScreen(
             }
         }, content = {
             SubcomposeAsyncImage(
-                model = image,
+                model = smallSizeImage,
                 contentScale = scale,
                 contentDescription = null,
                 colorFilter = colorFilter
@@ -185,7 +191,7 @@ fun WallpaperFullScreen(
                         } else {
                             IconButton(
                                 onClick = {
-                                    image?.let {
+                                    originalImage?.let {
                                         saveMediaToStorage(
                                             it,
                                             context
@@ -302,7 +308,7 @@ fun WallpaperFullScreen(
 
             FloatingActionButton(
                 onClick = {
-                    shareWallpaper(context, image)
+                    shareWallpaper(context, originalImage)
                 },
                 modifier = Modifier
                     .padding(8.dp),
@@ -352,5 +358,3 @@ fun WallpaperFullScreen(
         }
     }
 }
-
-
