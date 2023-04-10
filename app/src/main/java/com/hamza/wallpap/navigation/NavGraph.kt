@@ -60,7 +60,7 @@ fun NavGraph(
     val searchViewModel: SearchViewModel = hiltViewModel()
     val randomScreenViewModel: RandomScreenViewModel = viewModel()
     val favUrlsViewModel: FavUrlsViewModel = viewModel()
-    val amoledViewModel: LatestViewModel = viewModel()
+    val latestViewModel: LatestViewModel = viewModel()
     val homeItems = homeViewModel.itemsFlow.collectAsLazyPagingItems()
     val randomItems = randomScreenViewModel.itemsFlow.collectAsLazyPagingItems()
     val favouriteItemsData = favUrlsViewModel.getAllFavUrls.observeAsState(listOf())
@@ -213,7 +213,7 @@ fun NavGraph(
 
         // FireStore Screens
         composable(Screen.Latest.route) {
-            LatestScreen(navController, amoledViewModel, scaffoldState)
+            LatestScreen(navController, latestViewModel, scaffoldState)
         }
 
         composable(
@@ -240,7 +240,7 @@ fun NavGraph(
             )) {
             val amoledUrl = it.arguments?.getString("amoledUrl")
             if (amoledUrl != null) {
-                LatestFullScreen(amoledUrl, navController, wallpaperFullScreenViewModel, context)
+                LatestFullScreen(amoledUrl, navController, wallpaperFullScreenViewModel, context, latestViewModel)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.hamza.wallpap.ui.screens.latest
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
 class LatestViewModel : ViewModel() {
@@ -86,4 +87,7 @@ class LatestViewModel : ViewModel() {
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792592725.jpg?alt=media&token=47ef861c-f892-4fec-b9ba-50d86c25cddf",
             //356.12kb
         )
+
+    var saturationSliderValue = mutableStateOf(1f)
+    var saturationSliderPosition = mutableStateOf(1f)
 }
