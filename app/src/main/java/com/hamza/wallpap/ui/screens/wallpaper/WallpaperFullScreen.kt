@@ -68,6 +68,15 @@ fun WallpaperFullScreen(
     var smallSizeImage by remember { mutableStateOf<Bitmap?>(null) }
     var originalImage by remember { mutableStateOf<Bitmap?>(null) }
 
+    if (wallpaperFullScreenViewModel.dialogState.value) {
+        SetWallpaperDialog(
+            dialogState = wallpaperFullScreenViewModel.dialogState,
+            context = context,
+            wallpaperFullScreenViewModel,
+            fullUrl
+        )
+    }
+
     LaunchedEffect(key1 = "bitmap", block = {
 //        wallpaperFullScreenViewModel.fullUrl.value = fullUrl
         originalImage = getBitmapFromUrl(fullUrl)
@@ -91,7 +100,6 @@ fun WallpaperFullScreen(
             .background(MaterialTheme.colors.background),
         contentAlignment = Alignment.BottomCenter
     ) {
-
         Capturable(controller = captureController, onCaptured = { bitmap, error ->
             if (bitmap != null) {
                 saveMediaToStorage(bitmap.asAndroidBitmap(), context)
@@ -132,20 +140,10 @@ fun WallpaperFullScreen(
             MainInterstitialAd()
         }
 
-
-        if (wallpaperFullScreenViewModel.dialogState.value) {
-            SetWallpaperDialog(
-                dialogState = wallpaperFullScreenViewModel.dialogState,
-                context = context,
-                wallpaperFullScreenViewModel,
-                fullUrl
-            )
-        }
-
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .alpha(ContentAlpha.medium)
+                .alpha(if(expanded) ContentAlpha.medium else ContentAlpha.disabled)
                 .align(Alignment.TopEnd)
                 .animateContentSize(),
             color = Color.Black
