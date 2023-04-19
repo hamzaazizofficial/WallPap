@@ -1,12 +1,7 @@
 package com.hamza.wallpap.ui.screens.wallpaper
 
-import android.graphics.Bitmap
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.hamza.wallpap.util.getBitmapFromUrl
-import com.hamza.wallpap.util.loadReducedSizeBitmapFromUrl
-import kotlinx.coroutines.launch
 
 class WallpaperFullScreenViewModel : ViewModel() {
 
@@ -21,7 +16,8 @@ class WallpaperFullScreenViewModel : ViewModel() {
 //    }
 
     var id by mutableStateOf(0)
-    var dialogState = mutableStateOf(false)
+    var setOriginalWallpaperDialog = mutableStateOf(false)
+    var setModifiedWallpaperDialog = mutableStateOf(false)
     var setWallpaperAs by mutableStateOf(1)
     var interstitalState = mutableStateOf(false)
     var downloadWallpaperChecked = mutableStateOf(false)

@@ -1,6 +1,7 @@
 package com.hamza.wallpap.ui.screens.common
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -11,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Wallpaper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,7 +28,7 @@ fun SetWallpaperDialog(
     dialogState: MutableState<Boolean>,
     context: Context,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
-    fullUrl: String,
+    fullUrl: String
 ) {
     Dialog(
         onDismissRequest = { dialogState.value = false },
@@ -51,7 +51,7 @@ fun SetWallpaperDialogUI(
     dialogState: MutableState<Boolean>,
     context: Context,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
-    fullUrl: String,
+    fullUrl: String
 ) {
     Card(
         shape = RoundedCornerShape(0.dp),
@@ -117,7 +117,11 @@ fun SetWallpaperDialogUI(
                     modifier = Modifier.padding(5.dp),
                     onClick = {
                         wallpaperFullScreenViewModel.setWallpaperAs = 2
-                        setWallPaper(context, fullUrl, wallpaperFullScreenViewModel.setWallpaperAs)
+                        setWallPaper(
+                            context,
+                            fullUrl,
+                            wallpaperFullScreenViewModel.setWallpaperAs
+                        )
                         dialogState.value = false
                         wallpaperFullScreenViewModel.interstitalState.value = true
                     }) {
@@ -134,7 +138,11 @@ fun SetWallpaperDialogUI(
                     modifier = Modifier.padding(5.dp),
                     onClick = {
                         wallpaperFullScreenViewModel.setWallpaperAs = 3
-                        setWallPaper(context, fullUrl, wallpaperFullScreenViewModel.setWallpaperAs)
+                        setWallPaper(
+                            context,
+                            fullUrl,
+                            wallpaperFullScreenViewModel.setWallpaperAs
+                        )
                         dialogState.value = false
                         wallpaperFullScreenViewModel.interstitalState.value = true
                     }) {

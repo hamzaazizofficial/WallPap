@@ -1,7 +1,11 @@
 package com.hamza.wallpap.ui.screens.editor
 
 import android.content.Context
+import android.net.Uri
 import android.os.Build
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -9,35 +13,37 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Colorize
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.TextFormat
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
+import com.hamza.wallpap.R
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.screens.common.ColorPickerDialog
+import com.hamza.wallpap.ui.screens.latest.LatestViewModel
 import com.hamza.wallpap.ui.theme.*
+import com.hamza.wallpap.util.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(
@@ -53,9 +59,8 @@ fun EditorBottomSheet(
     scope: CoroutineScope,
     randomItems: LazyPagingItems<UnsplashImage>,
     context: Context,
+    singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
 ) {
-    val random = Random(System.currentTimeMillis())
-
     if (customWallpaperViewModel.wallpaperDialogState.value) {
         TextFormatDialog(
             dialogState = customWallpaperViewModel.wallpaperDialogState,
@@ -156,7 +161,7 @@ fun EditorBottomSheet(
                                 .clickable {
                                     customWallpaperViewModel.colorPickerDialogState.value = true
                                 }
-                        ){
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.Colorize,
                                 contentDescription = null,
@@ -328,19 +333,73 @@ fun EditorBottomSheet(
                     }
                 }
 
-                LazyRow(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    content = {
-                        items(randomItems.itemCount) {
-                            randomItems[it]?.let { unsplashImage ->
-                                BackgroundImageListItem(
-                                    unsplashImage,
-                                    customWallpaperViewModel,
-                                    context
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 6.dp)
+                )
+                {
+                    Card(
+                        backgroundColor = MaterialTheme.colors.background,
+                        modifier = Modifier
+                            .height(120.dp)
+                            .width(80.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .border(
+                                1.dp,
+                                MaterialTheme.colors.topAppBarTitle,
+                                RoundedCornerShape(4.dp)
+                            ),
+                    ) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .height(120.dp)
+                                .width(80.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.addanimagereduced),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop
+                            )
+                            FilledTonalIconButton(
+                                onClick = {
+                                    singlePhotoPickerLauncher.launch(
+                                        PickVisualMediaRequest(
+                                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                                        )
+                                    )
+                                },
+                                colors = IconButtonDefaults.filledTonalIconButtonColors(
+                                    containerColor = MaterialTheme.colors.bottomAppBarContentColor
+                                )
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.AddAPhoto,
+                                    contentDescription = null,
+                                    tint = Color.White,
                                 )
                             }
                         }
-                    })
+                    }
+
+                    LazyRow(
+                        modifier = Modifier.padding(start = 4.dp, end = 4.dp),
+                        content = {
+                            items(randomItems.itemCount) {
+                                randomItems[it]?.let { unsplashImage ->
+                                    BackgroundImageListItem(
+                                        unsplashImage,
+                                        customWallpaperViewModel,
+                                        context
+                                    )
+                                }
+                            }
+                        })
+
+                }
 
                 Spacer(modifier = Modifier.padding(6.dp))
 
