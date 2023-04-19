@@ -49,6 +49,7 @@ fun BackgroundImageListItem(
                     customWallpaperViewModel.bgImageFullUrl.value = unsplashImage.urls.full
                     customWallpaperViewModel.bgImageRegularUrl.value = unsplashImage.urls.regular
                     customWallpaperViewModel.selectBgImageState.value = true
+                    customWallpaperViewModel.selectedImageUri.value = null
                 },
             contentAlignment = Alignment.BottomCenter
         ) {

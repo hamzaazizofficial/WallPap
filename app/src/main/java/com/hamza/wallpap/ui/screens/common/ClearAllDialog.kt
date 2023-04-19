@@ -141,6 +141,7 @@ fun ClearAllDialogUI(
                         if (currentRoute.equals(Screen.CustomWallpaperEditorScreen.route)) {
                             customWallpaperViewModel.bgImageFullUrl.value = null
                             customWallpaperViewModel.bgImageRegularUrl.value = null
+                            customWallpaperViewModel.selectedImageUri.value = null
                             customWallpaperViewModel.bgBoxColor.value = Color(0xF1FFFFFF)
                             customWallpaperViewModel.wallpaperTextColor.value = Color(0xF1FFFFFF)
                             customWallpaperViewModel.wallpaperText.value = ""

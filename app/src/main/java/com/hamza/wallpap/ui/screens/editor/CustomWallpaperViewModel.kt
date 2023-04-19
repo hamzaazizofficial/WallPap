@@ -1,10 +1,8 @@
 package com.hamza.wallpap.ui.screens.editor
 
 import android.graphics.Bitmap
-import androidx.compose.runtime.getValue
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -303,6 +301,9 @@ class CustomWallpaperViewModel : ViewModel() {
 
     var savedImageBitmap = mutableStateOf<Bitmap?>(null)
 
+    var selectedImageUri = mutableStateOf<Uri?>(null)
+
+
     var bgBoxColor = mutableStateOf(Color(0xF1FFFFFF))
     var wallpaperText = mutableStateOf("")
     var wallpaperTextSize = mutableStateOf(24.sp)
@@ -314,7 +315,7 @@ class CustomWallpaperViewModel : ViewModel() {
     var wallpaperTextFontStyle = mutableStateOf(FontStyle.Normal)
     var textSliderPosition = mutableStateOf(24f)
 
-    var imageTransparencySliderPosition = mutableStateOf(0.5f)
+    var imageTransparencySliderPosition = mutableStateOf(1f)
     var colorTransparencySliderPosition = mutableStateOf(0f)
 
     /* Text Format Icons Checked */
@@ -333,5 +334,5 @@ class CustomWallpaperViewModel : ViewModel() {
     var bgImageFullUrl = mutableStateOf<String?>(null)
     var bgImageRegularUrl = mutableStateOf<String?>(null)
     var selectBgImageState = mutableStateOf(false)
-    var bgImageTransparency = mutableStateOf(0.6f)
+    var bgImageTransparency = mutableStateOf(1f)
 }

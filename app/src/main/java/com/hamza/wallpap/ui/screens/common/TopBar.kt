@@ -155,7 +155,8 @@ fun TopBar(
                     visible = currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) &&
                             (customWallpaperViewModel.bgImageFullUrl.value != null
                                     || customWallpaperViewModel.bgBoxColor.value != Color(0xF1FFFFFF)
-                                    || customWallpaperViewModel.wallpaperText.value != ""),
+                                    || customWallpaperViewModel.wallpaperText.value != ""
+                                    || customWallpaperViewModel.selectedImageUri.value != null),
                     enter = scaleIn() + fadeIn(),
                     exit = scaleOut() + fadeOut()
                 ) {

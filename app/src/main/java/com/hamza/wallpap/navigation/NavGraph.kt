@@ -52,7 +52,7 @@ fun NavGraph(
     scaffoldState: ScaffoldState,
     onItemSelected: (WallPapTheme) -> Unit,
     currentRoute: String?,
-    context: Context
+    context: Context,
 ) {
     val homeViewModel: HomeViewModel = hiltViewModel()
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
@@ -101,7 +101,7 @@ fun NavGraph(
                     fadeOut(animationSpec = tween(600)) + slideOutVertically { 1800 }
                 else -> null
             }
-        } ) {
+        }) {
             SearchScreen(
                 navController = navController,
                 searchViewModel,
@@ -121,7 +121,13 @@ fun NavGraph(
         }
 
         composable(Screen.Favourite.route) {
-            FavouriteScreen(favUrlsViewModel, navController, scaffoldState, context, favouriteItemsData)
+            FavouriteScreen(
+                favUrlsViewModel,
+                navController,
+                scaffoldState,
+                context,
+                favouriteItemsData
+            )
         }
 
         composable(Screen.Random.route) {
@@ -163,7 +169,14 @@ fun NavGraph(
             val regularUrl = it.arguments?.getString("regularUrl")
             val fullUrl = it.arguments?.getString("fullUrl")
             if (regularUrl != null && fullUrl != null) {
-                WallpaperFullScreen(regularUrl, fullUrl, navController, currentRoute, favUrlsViewModel, wallpaperFullScreenViewModel)
+                WallpaperFullScreen(
+                    regularUrl,
+                    fullUrl,
+                    navController,
+                    currentRoute,
+                    favUrlsViewModel,
+                    wallpaperFullScreenViewModel
+                )
             }
         }
 
@@ -196,7 +209,14 @@ fun NavGraph(
             val fullUrl = it.arguments?.getString("fullUrl")
             val regularUrl = it.arguments?.getString("regularUrl")
             if (fullUrl != null && regularUrl != null) {
-                FavouriteWallpaperFullScreen(fullUrl, regularUrl, navController, favUrlsViewModel, wallpaperFullScreenViewModel, context)
+                FavouriteWallpaperFullScreen(
+                    fullUrl,
+                    regularUrl,
+                    navController,
+                    favUrlsViewModel,
+                    wallpaperFullScreenViewModel,
+                    context
+                )
             }
         }
 
@@ -240,7 +260,13 @@ fun NavGraph(
             )) {
             val amoledUrl = it.arguments?.getString("amoledUrl")
             if (amoledUrl != null) {
-                LatestFullScreen(amoledUrl, navController, wallpaperFullScreenViewModel, context, latestViewModel)
+                LatestFullScreen(
+                    amoledUrl,
+                    navController,
+                    wallpaperFullScreenViewModel,
+                    context,
+                    latestViewModel
+                )
             }
         }
     }

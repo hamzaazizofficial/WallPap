@@ -3,6 +3,8 @@ package com.hamza.wallpap.ui.screens.editor
 import android.content.Context
 import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
@@ -18,7 +20,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
+import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
@@ -65,12 +67,20 @@ fun CustomWallpaperScreen(
     var yPosText by remember { mutableStateOf(0) }
 
     var bgImageBlurSliderPosition by remember { mutableStateOf(0f) }
-    var bgImageBlurValue by remember(bgImageBlurSliderPosition)  { mutableStateOf(0f) }
+    var bgImageBlurValue by remember(bgImageBlurSliderPosition) { mutableStateOf(0f) }
 
 //    var matrix by remember { mutableStateOf(ColorMatrix()) }
 //    val colorFilter = ColorFilter.colorMatrix(matrix)
 
     var scale by remember { mutableStateOf(1f) }
+
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            customWallpaperViewModel.selectedImageUri.value = uri
+            customWallpaperViewModel.bgImageFullUrl.value = null
+        }
+    )
 
     BackHandler {
         navController.popBackStack()
@@ -87,7 +97,8 @@ fun CustomWallpaperScreen(
                 modalBottomSheetState,
                 scope,
                 randomItems,
-                context
+                context,
+                singlePhotoPickerLauncher
             )
         },
         content = {
@@ -204,6 +215,7 @@ fun CustomWallpaperScreen(
                         ) {
                             if (
                                 customWallpaperViewModel.bgImageFullUrl.value == null
+                                && customWallpaperViewModel.selectedImageUri.value == null
                                 && customWallpaperViewModel.bgBoxColor.value == Color(0xF1FFFFFF)
                                 && customWallpaperViewModel.wallpaperText.value == ""
                             ) {
@@ -214,47 +226,37 @@ fun CustomWallpaperScreen(
                                 )
                             }
 
-                            if (customWallpaperViewModel.bgImageFullUrl.value != null) {
-                                SubcomposeAsyncImage(
-                                    model = customWallpaperViewModel.bgImageFullUrl.value,
-                                    contentScale = ContentScale.Crop,
-                                    contentDescription = null,
-                                    alpha = customWallpaperViewModel.bgImageTransparency.value,
-//                                    colorFilter = colorFilter
-//                                    modifier = Modifier.blur(bgImageBlurValue.dp)
-                                ) {
-                                    val state = painter.state
-                                    if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                                        SubcomposeAsyncImage(
-                                            modifier = Modifier.fillMaxSize(),
-                                            contentScale = ContentScale.Crop,
-                                            model = customWallpaperViewModel.bgImageRegularUrl.value,
-                                            contentDescription = null,
-                                            alpha = customWallpaperViewModel.bgImageTransparency.value
-                                        )
-                                    } else {
-                                        SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
+                            when {
+                                customWallpaperViewModel.bgImageFullUrl.value != null -> {
+                                    SubcomposeAsyncImage(
+                                        model = customWallpaperViewModel.bgImageFullUrl.value,
+                                        contentScale = ContentScale.Crop,
+                                        contentDescription = null,
+                                        alpha = customWallpaperViewModel.bgImageTransparency.value
+                                    ) {
+                                        val state = painter.state
+                                        if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                                            SubcomposeAsyncImage(
+                                                modifier = Modifier.fillMaxSize(),
+                                                contentScale = ContentScale.Crop,
+                                                model = customWallpaperViewModel.bgImageRegularUrl.value,
+                                                contentDescription = null,
+                                                alpha = customWallpaperViewModel.bgImageTransparency.value
+                                            )
+                                        } else {
+                                            SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
+                                        }
                                     }
                                 }
-
-//                                androidx.compose.material3.Slider(
-//                                    modifier = Modifier.padding(horizontal = 10.dp),
-//                                    value = matrix[0,0],
-//                                    onValueChange = {
-//                                        matrix = ColorMatrix().apply{
-//                                            setToSaturation(it)
-//                                        }
-//                                    },
-//                                    valueRange = 0f..100f,
-//                                    onValueChangeFinished = {
-////                                        bgImageBlurValue =
-////                                            bgImageBlurSliderPosition
-//                                    },
-//                                    colors = androidx.compose.material3.SliderDefaults.colors(
-//                                        activeTrackColor = Color.Blue.copy(0.5f),
-//                                        thumbColor = Color.Blue
-//                                    )
-//                                )
+                                customWallpaperViewModel.selectedImageUri.value != null -> {
+                                    AsyncImage(
+                                        model = customWallpaperViewModel.selectedImageUri.value,
+                                        contentDescription = null,
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentScale = ContentScale.Crop,
+                                        alpha = customWallpaperViewModel.bgImageTransparency.value
+                                    )
+                                }
                             }
 
                             Text(

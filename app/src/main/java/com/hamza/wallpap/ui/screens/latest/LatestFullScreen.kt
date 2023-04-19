@@ -66,9 +66,9 @@ fun LatestFullScreen(
     var showCropScreenBtn by remember { mutableStateOf(false) }
     val captureController = rememberCaptureController()
 
-    if (wallpaperFullScreenViewModel.dialogState.value) {
+    if (wallpaperFullScreenViewModel.setOriginalWallpaperDialog.value) {
         SetWallpaperDialog(
-            dialogState = wallpaperFullScreenViewModel.dialogState,
+            dialogState = wallpaperFullScreenViewModel.setOriginalWallpaperDialog,
             context = context,
             wallpaperFullScreenViewModel,
             amoledUrl
@@ -120,10 +120,6 @@ fun LatestFullScreen(
                             color = MaterialTheme.colors.secondary
                         )
                     }
-//                    LinearProgressIndicator(
-//                        modifier = Modifier.align(Alignment.BottomCenter),
-//                        color = MaterialTheme.colors.secondary
-//                    )
                 } else {
                     SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
                 }
@@ -322,7 +318,7 @@ fun LatestFullScreen(
 
             FloatingActionButton(
                 onClick = {
-                    wallpaperFullScreenViewModel.dialogState.value = true
+                    wallpaperFullScreenViewModel.setOriginalWallpaperDialog.value = true
                 },
                 modifier = Modifier
                     .padding(8.dp),

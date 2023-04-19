@@ -1,13 +1,11 @@
 package com.hamza.wallpap.ui.screens.wallpaper
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -46,6 +44,7 @@ import com.hamza.wallpap.util.shareWallpaper
 import dev.shreyaspatil.capturable.Capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 
+@OptIn(ExperimentalAnimationApi::class)
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun WallpaperFullScreen(
@@ -68,9 +67,9 @@ fun WallpaperFullScreen(
     var smallSizeImage by remember { mutableStateOf<Bitmap?>(null) }
     var originalImage by remember { mutableStateOf<Bitmap?>(null) }
 
-    if (wallpaperFullScreenViewModel.dialogState.value) {
+    if (wallpaperFullScreenViewModel.setOriginalWallpaperDialog.value) {
         SetWallpaperDialog(
-            dialogState = wallpaperFullScreenViewModel.dialogState,
+            dialogState = wallpaperFullScreenViewModel.setOriginalWallpaperDialog,
             context = context,
             wallpaperFullScreenViewModel,
             fullUrl
@@ -143,7 +142,7 @@ fun WallpaperFullScreen(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .alpha(if(expanded) ContentAlpha.medium else ContentAlpha.disabled)
+                .alpha(if (expanded) ContentAlpha.medium else ContentAlpha.disabled)
                 .align(Alignment.TopEnd)
                 .animateContentSize(),
             color = Color.Black
@@ -171,7 +170,7 @@ fun WallpaperFullScreen(
                     }
 
                     Row {
-                        if (expanded || (wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f &&
+                        if ((wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f &&
                                     wallpaperFullScreenViewModel.saturationSliderValue.value != 1f)
                         ) {
                             FilledIconButton(
@@ -296,63 +295,68 @@ fun WallpaperFullScreen(
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
+       AnimatedVisibility(visible = wallpaperFullScreenViewModel.saturationSliderPosition.value == 1f &&
+               wallpaperFullScreenViewModel.saturationSliderValue.value == 1f,
+           enter = slideInVertically { 3000 } + scaleIn(),
+           exit = slideOutVertically { 5000 } + scaleOut()) {
+           Row(
+               modifier = Modifier
+                   .fillMaxWidth()
+                   .padding(20.dp),
+               verticalAlignment = Alignment.CenterVertically,
+               horizontalArrangement = Arrangement.Center
+           ) {
 
-            FloatingActionButton(
-                onClick = {
-                    shareWallpaper(context, originalImage)
-                },
-                modifier = Modifier
-                    .padding(8.dp),
-                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Share,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.bottomAppBarContentColor
-                )
-            }
+               FloatingActionButton(
+                   onClick = {
+                       shareWallpaper(context, originalImage)
+                   },
+                   modifier = Modifier
+                       .padding(8.dp),
+                   backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
+               ) {
+                   Icon(
+                       imageVector = Icons.Default.Share,
+                       contentDescription = null,
+                       tint = MaterialTheme.colors.bottomAppBarContentColor
+                   )
+               }
 
 
-            FloatingActionButton(
-                onClick = {
-                    wallpaperFullScreenViewModel.id += 1
-                    val favUrl = FavouriteUrls(wallpaperFullScreenViewModel.id, fullUrl, regularUrl)
-                    favUrlsViewModel.addToFav(favUrl)
-                    Toast.makeText(context, "Added to Favourites!", Toast.LENGTH_SHORT).show()
-                },
-                modifier = Modifier
-                    .padding(8.dp),
-                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.bottomAppBarContentColor
-                )
-            }
+               FloatingActionButton(
+                   onClick = {
+                       wallpaperFullScreenViewModel.id += 1
+                       val favUrl = FavouriteUrls(wallpaperFullScreenViewModel.id, fullUrl, regularUrl)
+                       favUrlsViewModel.addToFav(favUrl)
+                       Toast.makeText(context, "Added to Favourites!", Toast.LENGTH_SHORT).show()
+                   },
+                   modifier = Modifier
+                       .padding(8.dp),
+                   backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
+               ) {
+                   Icon(
+                       imageVector = Icons.Default.Favorite,
+                       contentDescription = null,
+                       tint = MaterialTheme.colors.bottomAppBarContentColor
+                   )
+               }
 
-            FloatingActionButton(
-                onClick = {
-                    wallpaperFullScreenViewModel.dialogState.value = true
-                    wallpaperFullScreenViewModel.interstitalState.value = true
-                },
-                modifier = Modifier
-                    .padding(8.dp),
-                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Wallpaper,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.bottomAppBarContentColor
-                )
-            }
-        }
+               FloatingActionButton(
+                   onClick = {
+                       wallpaperFullScreenViewModel.setOriginalWallpaperDialog.value = true
+                       wallpaperFullScreenViewModel.interstitalState.value = true
+                   },
+                   modifier = Modifier
+                       .padding(8.dp),
+                   backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
+               ) {
+                   Icon(
+                       imageVector = Icons.Default.Wallpaper,
+                       contentDescription = null,
+                       tint = MaterialTheme.colors.bottomAppBarContentColor
+                   )
+               }
+           }
+       }
     }
 }
