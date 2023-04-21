@@ -49,7 +49,9 @@ fun BackgroundImageListItem(
                     customWallpaperViewModel.bgImageFullUrl.value = unsplashImage.urls.full
                     customWallpaperViewModel.bgImageRegularUrl.value = unsplashImage.urls.regular
                     customWallpaperViewModel.selectBgImageState.value = true
-                    customWallpaperViewModel.selectedImageUri.value = null
+                    customWallpaperViewModel.bgImageUri.value = null
+                    customWallpaperViewModel.imageRotate.value = 0f
+                    customWallpaperViewModel.contentScale.value = ContentScale.Crop
                 },
             contentAlignment = Alignment.BottomCenter
         ) {

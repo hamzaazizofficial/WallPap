@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -17,6 +18,12 @@ import kotlin.random.Random
 
 class CustomWallpaperViewModel : ViewModel() {
 
+    var saturationSliderValue = mutableStateOf(1f)
+    var saturationSliderPosition = mutableStateOf(1f)
+
+    var editorDropDownExpanded = mutableStateOf(false)
+    var imageRotate = mutableStateOf(0f)
+    var contentScale = mutableStateOf(ContentScale.Crop)
     var redColorSliderPosition = mutableStateOf(0f)
     var blueColorSliderPosition =  mutableStateOf(0f)
     var greenColorSliderPosition =   mutableStateOf(0f)
@@ -301,7 +308,7 @@ class CustomWallpaperViewModel : ViewModel() {
 
     var savedImageBitmap = mutableStateOf<Bitmap?>(null)
 
-    var selectedImageUri = mutableStateOf<Uri?>(null)
+    var bgImageUri = mutableStateOf<Uri?>(null)
 
 
     var bgBoxColor = mutableStateOf(Color(0xF1FFFFFF))

@@ -20,6 +20,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -39,6 +41,7 @@ import com.hamza.wallpap.ui.theme.*
 import com.hamza.wallpap.util.saveMediaToStorage
 import dev.shreyaspatil.capturable.Capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -57,7 +60,7 @@ fun CustomWallpaperScreen(
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
 
-    var modalBottomSheetState = rememberModalBottomSheetState(
+    val modalBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
     )
     val captureController = rememberCaptureController()
@@ -66,24 +69,25 @@ fun CustomWallpaperScreen(
     var xPosText by remember { mutableStateOf(0) }
     var yPosText by remember { mutableStateOf(0) }
 
-    var bgImageBlurSliderPosition by remember { mutableStateOf(0f) }
-    var bgImageBlurValue by remember(bgImageBlurSliderPosition) { mutableStateOf(0f) }
-
-//    var matrix by remember { mutableStateOf(ColorMatrix()) }
-//    val colorFilter = ColorFilter.colorMatrix(matrix)
+    val matrix by remember { mutableStateOf(ColorMatrix()) }
+    matrix.setToSaturation(customWallpaperViewModel.saturationSliderValue.value)
+    val colorFilter = ColorFilter.colorMatrix(matrix)
 
     var scale by remember { mutableStateOf(1f) }
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            customWallpaperViewModel.selectedImageUri.value = uri
+            customWallpaperViewModel.bgImageUri.value = uri
             customWallpaperViewModel.bgImageFullUrl.value = null
+            customWallpaperViewModel.imageRotate.value = 0f
+            customWallpaperViewModel.contentScale.value = ContentScale.Crop
         }
     )
 
     BackHandler {
         navController.popBackStack()
+        customWallpaperViewModel.editorDropDownExpanded.value = false
     }
 
     ModalBottomSheetLayout(
@@ -110,6 +114,7 @@ fun CustomWallpaperScreen(
                         floatingActionButton = {
                             AnimatedVisibility(
                                 visible = customWallpaperViewModel.bgImageFullUrl.value != null
+                                        || customWallpaperViewModel.bgImageUri.value != null
                                         || customWallpaperViewModel.bgBoxColor.value != Color(
                                     0xF1FFFFFF
                                 )
@@ -123,7 +128,17 @@ fun CustomWallpaperScreen(
                                     contentColor = Color.White,
                                     shape = RoundedCornerShape(4.dp),
                                     onClick = {
-                                        captureController.capture()
+                                        if (customWallpaperViewModel.editorDropDownExpanded.value) {
+                                            customWallpaperViewModel.editorDropDownExpanded.value =
+                                                false
+                                            scope.launch {
+                                                delay(2000)
+                                                captureController.capture()
+                                            }
+
+                                        } else {
+                                            captureController.capture()
+                                        }
                                         customWallpaperViewModel.shareWallpaperVisible.value = true
                                     })
                                 {
@@ -146,7 +161,7 @@ fun CustomWallpaperScreen(
                                 Icon(
                                     Icons.Outlined.FormatColorFill,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colors.editorBottomAppBarContentColor
+                                    tint = MaterialTheme.colors.topAppBarTitle
                                 )
                             }
 
@@ -160,7 +175,7 @@ fun CustomWallpaperScreen(
                                 Icon(
                                     Icons.Default.TextFields,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colors.editorBottomAppBarContentColor
+                                    tint = MaterialTheme.colors.topAppBarTitle
                                 )
                             }
 
@@ -174,7 +189,7 @@ fun CustomWallpaperScreen(
                                 Icon(
                                     Icons.Default.Image,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colors.editorBottomAppBarContentColor
+                                    tint = MaterialTheme.colors.topAppBarTitle
                                 )
                             }
                         }
@@ -188,6 +203,7 @@ fun CustomWallpaperScreen(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
                     Capturable(controller = captureController, onCaptured = { bitmap, error ->
                         if (bitmap != null) {
                             saveMediaToStorage(bitmap.asAndroidBitmap(), context)
@@ -215,7 +231,7 @@ fun CustomWallpaperScreen(
                         ) {
                             if (
                                 customWallpaperViewModel.bgImageFullUrl.value == null
-                                && customWallpaperViewModel.selectedImageUri.value == null
+                                && customWallpaperViewModel.bgImageUri.value == null
                                 && customWallpaperViewModel.bgBoxColor.value == Color(0xF1FFFFFF)
                                 && customWallpaperViewModel.wallpaperText.value == ""
                             ) {
@@ -230,32 +246,248 @@ fun CustomWallpaperScreen(
                                 customWallpaperViewModel.bgImageFullUrl.value != null -> {
                                     SubcomposeAsyncImage(
                                         model = customWallpaperViewModel.bgImageFullUrl.value,
-                                        contentScale = ContentScale.Crop,
+                                        contentScale = customWallpaperViewModel.contentScale.value,
                                         contentDescription = null,
-                                        alpha = customWallpaperViewModel.bgImageTransparency.value
+                                        alpha = customWallpaperViewModel.bgImageTransparency.value,
+                                        colorFilter = colorFilter
                                     ) {
                                         val state = painter.state
                                         if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
                                             SubcomposeAsyncImage(
-                                                modifier = Modifier.fillMaxSize(),
-                                                contentScale = ContentScale.Crop,
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .rotate(customWallpaperViewModel.imageRotate.value),
+                                                contentScale = contentScale,
                                                 model = customWallpaperViewModel.bgImageRegularUrl.value,
                                                 contentDescription = null,
-                                                alpha = customWallpaperViewModel.bgImageTransparency.value
+                                                alpha = customWallpaperViewModel.bgImageTransparency.value,
+                                                colorFilter = colorFilter
                                             )
+                                            if (customWallpaperViewModel.editorDropDownExpanded.value) {
+                                                Surface(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .height(80.dp)
+                                                        .alpha(ContentAlpha.high)
+                                                        .align(Alignment.TopCenter)
+                                                        .animateContentSize(),
+                                                    color = MaterialTheme.colors.topAppBarBackgroundColor
+                                                ) {
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth(),
+                                                        verticalArrangement = Arrangement.Center,
+                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                    ) {
+                                                        Row(
+                                                            modifier = Modifier
+                                                                .fillMaxWidth()
+                                                                .padding(
+                                                                    start = 8.dp,
+                                                                    end = 0.dp,
+                                                                    bottom = 4.dp,
+                                                                    top = 4.dp
+                                                                ),
+                                                            verticalAlignment = Alignment.CenterVertically,
+                                                            horizontalArrangement = Arrangement.SpaceEvenly
+                                                        ) {
+                                                            androidx.compose.material3.Slider(
+                                                                modifier = Modifier.weight(4.5f),
+                                                                value = customWallpaperViewModel.saturationSliderPosition.value,
+                                                                onValueChange = {
+                                                                    customWallpaperViewModel.saturationSliderPosition.value =
+                                                                        it
+                                                                },
+                                                                valueRange = 0f..10f,
+                                                                onValueChangeFinished = {
+                                                                    customWallpaperViewModel.saturationSliderValue.value =
+                                                                        customWallpaperViewModel.saturationSliderPosition.value
+                                                                },
+                                                                colors = androidx.compose.material3.SliderDefaults.colors(
+                                                                    activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(
+                                                                        0.5f
+                                                                    ),
+                                                                    thumbColor = MaterialTheme.colors.bottomAppBarContentColor
+                                                                )
+                                                            )
+
+                                                            IconButton(onClick = {
+                                                                customWallpaperViewModel.saturationSliderPosition.value =
+                                                                    1f
+                                                                customWallpaperViewModel.saturationSliderValue.value =
+                                                                    1f
+                                                            }, modifier = Modifier.weight(1f)) {
+                                                                Icon(
+                                                                    imageVector = if (customWallpaperViewModel.saturationSliderPosition.value ==
+                                                                        1f &&
+                                                                        customWallpaperViewModel.saturationSliderValue.value ==
+                                                                        1f
+                                                                    ) Icons.Default.InvertColors else Icons.Default.InvertColorsOff,
+                                                                    contentDescription = null,
+                                                                    tint = MaterialTheme.colors.iconColor
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         } else {
-                                            SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
+//
+                                            SubcomposeAsyncImageContent(
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .rotate(customWallpaperViewModel.imageRotate.value)
+                                            )
+                                            if (customWallpaperViewModel.editorDropDownExpanded.value) {
+                                                Surface(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .height(80.dp)
+                                                        .alpha(ContentAlpha.high)
+                                                        .align(Alignment.TopCenter)
+                                                        .animateContentSize(),
+                                                    color = MaterialTheme.colors.topAppBarBackgroundColor
+                                                ) {
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth(),
+                                                        verticalArrangement = Arrangement.Center,
+                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                    ) {
+                                                        Row(
+                                                            modifier = Modifier
+                                                                .fillMaxWidth()
+                                                                .padding(
+                                                                    start = 8.dp,
+                                                                    end = 0.dp,
+                                                                    bottom = 4.dp,
+                                                                    top = 4.dp
+                                                                ),
+                                                            verticalAlignment = Alignment.CenterVertically,
+                                                            horizontalArrangement = Arrangement.SpaceEvenly
+                                                        ) {
+                                                            androidx.compose.material3.Slider(
+                                                                modifier = Modifier.weight(4.5f),
+                                                                value = customWallpaperViewModel.saturationSliderPosition.value,
+                                                                onValueChange = {
+                                                                    customWallpaperViewModel.saturationSliderPosition.value =
+                                                                        it
+                                                                },
+                                                                valueRange = 0f..10f,
+                                                                onValueChangeFinished = {
+                                                                    customWallpaperViewModel.saturationSliderValue.value =
+                                                                        customWallpaperViewModel.saturationSliderPosition.value
+                                                                },
+                                                                colors = androidx.compose.material3.SliderDefaults.colors(
+                                                                    activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(
+                                                                        0.5f
+                                                                    ),
+                                                                    thumbColor = MaterialTheme.colors.bottomAppBarContentColor
+                                                                )
+                                                            )
+
+                                                            IconButton(onClick = {
+                                                                customWallpaperViewModel.saturationSliderPosition.value =
+                                                                    1f
+                                                                customWallpaperViewModel.saturationSliderValue.value =
+                                                                    1f
+                                                            }, modifier = Modifier.weight(1f)) {
+                                                                Icon(
+                                                                    imageVector = if (customWallpaperViewModel.saturationSliderPosition.value ==
+                                                                        1f &&
+                                                                        customWallpaperViewModel.saturationSliderValue.value ==
+                                                                        1f
+                                                                    ) Icons.Default.InvertColors else Icons.Default.InvertColorsOff,
+                                                                    contentDescription = null,
+                                                                    tint = MaterialTheme.colors.iconColor
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
-                                customWallpaperViewModel.selectedImageUri.value != null -> {
+                                customWallpaperViewModel.bgImageUri.value != null -> {
                                     AsyncImage(
-                                        model = customWallpaperViewModel.selectedImageUri.value,
+                                        model = customWallpaperViewModel.bgImageUri.value,
                                         contentDescription = null,
-                                        modifier = Modifier.fillMaxSize(),
-                                        contentScale = ContentScale.Crop,
-                                        alpha = customWallpaperViewModel.bgImageTransparency.value
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .rotate(customWallpaperViewModel.imageRotate.value),
+                                        contentScale = customWallpaperViewModel.contentScale.value,
+                                        alpha = customWallpaperViewModel.bgImageTransparency.value,
+                                        colorFilter = colorFilter
                                     )
+                                    if (customWallpaperViewModel.editorDropDownExpanded.value) {
+                                        Surface(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(80.dp)
+                                                .alpha(ContentAlpha.high)
+                                                .align(Alignment.TopCenter)
+                                                .animateContentSize(),
+                                            color = MaterialTheme.colors.topAppBarBackgroundColor
+                                        ) {
+                                            Column(
+                                                modifier = Modifier
+                                                    .fillMaxWidth(),
+                                                verticalArrangement = Arrangement.Center,
+                                                horizontalAlignment = Alignment.CenterHorizontally
+                                            ) {
+                                                Row(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(
+                                                            start = 8.dp,
+                                                            end = 0.dp,
+                                                            bottom = 4.dp,
+                                                            top = 4.dp
+                                                        ),
+                                                    verticalAlignment = Alignment.CenterVertically,
+                                                    horizontalArrangement = Arrangement.SpaceEvenly
+                                                ) {
+                                                    androidx.compose.material3.Slider(
+                                                        modifier = Modifier.weight(4.5f),
+                                                        value = customWallpaperViewModel.saturationSliderPosition.value,
+                                                        onValueChange = {
+                                                            customWallpaperViewModel.saturationSliderPosition.value =
+                                                                it
+                                                        },
+                                                        valueRange = 0f..10f,
+                                                        onValueChangeFinished = {
+                                                            customWallpaperViewModel.saturationSliderValue.value =
+                                                                customWallpaperViewModel.saturationSliderPosition.value
+                                                        },
+                                                        colors = androidx.compose.material3.SliderDefaults.colors(
+                                                            activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(
+                                                                0.5f
+                                                            ),
+                                                            thumbColor = MaterialTheme.colors.bottomAppBarContentColor
+                                                        )
+                                                    )
+
+                                                    IconButton(onClick = {
+                                                        customWallpaperViewModel.saturationSliderPosition.value =
+                                                            1f
+                                                        customWallpaperViewModel.saturationSliderValue.value =
+                                                            1f
+                                                    }, modifier = Modifier.weight(1f)) {
+                                                        Icon(
+                                                            imageVector = if (customWallpaperViewModel.saturationSliderPosition.value ==
+                                                                1f &&
+                                                                customWallpaperViewModel.saturationSliderValue.value ==
+                                                                1f
+                                                            ) Icons.Default.InvertColors else Icons.Default.InvertColorsOff,
+                                                            contentDescription = null,
+                                                            tint = MaterialTheme.colors.iconColor
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
 
