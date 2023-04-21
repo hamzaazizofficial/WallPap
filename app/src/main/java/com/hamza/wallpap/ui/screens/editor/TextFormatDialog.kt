@@ -97,25 +97,6 @@ fun TextFormatDialogUI(
                 modifier = Modifier.fillMaxWidth()
             )
             {
-//                Card(
-//                    shape = CircleShape,
-//                    modifier = Modifier
-//                        .padding(end = 6.dp, start = 12.dp)
-//                        .size(40.dp)
-//                        .clip(CircleShape),
-//                ) {
-//                    Box(
-//                        modifier = Modifier
-//                            .size(40.dp)
-//                            .clip(CircleShape)
-//                            .border(0.5.dp, MaterialTheme.colors.textColor, CircleShape)
-//                            .background(Color.Red)
-//                            .clickable {
-//                                customWallpaperViewModel.colorPickerDialogState.value = true
-//                            }
-//                    )
-//                }
-
                 Row(
                     modifier = Modifier
                         .padding(horizontal = 6.dp, vertical = 6.dp)

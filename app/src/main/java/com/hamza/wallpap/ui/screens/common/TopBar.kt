@@ -8,19 +8,19 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.navigation.Screen
 import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
-import com.hamza.wallpap.ui.theme.topAppBarBackgroundColor
-import com.hamza.wallpap.ui.theme.topAppBarContentColor
-import com.hamza.wallpap.ui.theme.topAppBarTitle
-import com.hamza.wallpap.util.shareWallpaper
+import com.hamza.wallpap.ui.theme.*
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalPagingApi::class, ExperimentalAnimationApi::class)
@@ -133,34 +133,33 @@ fun TopBar(
                     }
                 }
 
-                AnimatedVisibility(
-                    visible = currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) &&
-                            customWallpaperViewModel.savedImageBitmap.value != null
-                            && customWallpaperViewModel.shareWallpaperVisible.value,
-                    enter = scaleIn() + fadeIn(),
-                    exit = scaleOut() + fadeOut()
-                ) {
-                    IconButton(onClick = {
-                        shareWallpaper(context, customWallpaperViewModel.savedImageBitmap.value)
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Share,
-                            contentDescription = "Share wallpaper",
-                            tint = MaterialTheme.colors.topAppBarContentColor
-                        )
-                    }
-                }
+//                AnimatedVisibility(
+//                    visible = currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) &&
+//                            customWallpaperViewModel.savedImageBitmap.value != null
+//                            && customWallpaperViewModel.shareWallpaperVisible.value,
+//                    enter = scaleIn() + fadeIn(),
+//                    exit = scaleOut() + fadeOut()
+//                ) {
+//                    IconButton(onClick = {
+//                        shareWallpaper(context, customWallpaperViewModel.savedImageBitmap.value)
+//                    }) {
+//                        Icon(
+//                            imageVector = Icons.Default.Share,
+//                            contentDescription = "Share wallpaper",
+//                            tint = MaterialTheme.colors.topAppBarContentColor
+//                        )
+//                    }
+//                }
 
                 AnimatedVisibility(
                     visible = currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) &&
                             (customWallpaperViewModel.bgImageFullUrl.value != null
                                     || customWallpaperViewModel.bgBoxColor.value != Color(0xF1FFFFFF)
                                     || customWallpaperViewModel.wallpaperText.value != ""
-                                    || customWallpaperViewModel.selectedImageUri.value != null),
+                                    || customWallpaperViewModel.bgImageUri.value != null),
                     enter = scaleIn() + fadeIn(),
                     exit = scaleOut() + fadeOut()
                 ) {
-
                     IconButton(
                         onClick = {
                             customWallpaperViewModel.clearEditorDialogState.value = true
@@ -171,6 +170,74 @@ fun TopBar(
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
+                }
+
+                AnimatedVisibility(
+                    visible = currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) &&
+                            (customWallpaperViewModel.bgImageFullUrl.value != null
+                                    || customWallpaperViewModel.bgImageUri.value != null),
+                    enter = scaleIn() + fadeIn(),
+                    exit = scaleOut() + fadeOut()
+                ) {
+
+                    IconToggleButton(
+                        checked = customWallpaperViewModel.editorDropDownExpanded.value,
+                        onCheckedChange = {
+                            customWallpaperViewModel.editorDropDownExpanded.value = it
+                        }) {
+                        if (customWallpaperViewModel.editorDropDownExpanded.value) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowDropUp,
+                                contentDescription = null,
+                                tint = if (customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Default.ArrowDropDown,
+                                contentDescription = null,
+                                tint = if (customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
+                            )
+                        }
+                    }
+
+//                    IconButton(
+//                        onClick = {
+//                            customWallpaperViewModel.editorDropDownExpanded.value =
+//                                !customWallpaperViewModel.editorDropDownExpanded.value
+//                        }) {
+//                        Icon(
+//                            imageVector = if (customWallpaperViewModel.editorDropDownExpanded.value) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+//                            contentDescription = null,
+//                            tint = MaterialTheme.colors.topAppBarContentColor
+//                        )
+//                    }
+
+//                    if (!customWallpaperViewModel.editorDropDownExpanded.value) {
+//                        IconButton(
+//                            onClick = {
+//                                customWallpaperViewModel.editorDropDownExpanded.value = true
+//                            }) {
+//                            Icon(
+//                                imageVector = Icons.Default.ArrowDropDown,
+//                                contentDescription = null,
+//                                tint = MaterialTheme.colors.topAppBarContentColor
+//                            )
+//                        }
+//                    }
+//
+//                    if (customWallpaperViewModel.editorDropDownExpanded.value) {
+//                        FilledIconButton(
+//                            colors = IconButtonDefaults.filledIconButtonColors(containerColor = MaterialTheme.colors.bottomAppBarContentColor),
+//                            onClick = {
+//                            customWallpaperViewModel.editorDropDownExpanded.value = false
+//                        }) {
+//                            Icon(
+//                                imageVector = Icons.Default.ArrowDropUp,
+//                                contentDescription = null,
+//                                tint = MaterialTheme.colors.topAppBarContentColor
+//                            )
+//                        }
+//                    }
                 }
 
                 if (!currentRoute.equals(Screen.Settings.route) &&

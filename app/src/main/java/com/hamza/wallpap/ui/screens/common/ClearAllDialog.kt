@@ -139,9 +139,10 @@ fun ClearAllDialogUI(
                         .width(80.dp),
                     onClick = {
                         if (currentRoute.equals(Screen.CustomWallpaperEditorScreen.route)) {
+                            customWallpaperViewModel.contentScale.value = ContentScale.Crop
                             customWallpaperViewModel.bgImageFullUrl.value = null
                             customWallpaperViewModel.bgImageRegularUrl.value = null
-                            customWallpaperViewModel.selectedImageUri.value = null
+                            customWallpaperViewModel.bgImageUri.value = null
                             customWallpaperViewModel.bgBoxColor.value = Color(0xF1FFFFFF)
                             customWallpaperViewModel.wallpaperTextColor.value = Color(0xF1FFFFFF)
                             customWallpaperViewModel.wallpaperText.value = ""
@@ -156,6 +157,8 @@ fun ClearAllDialogUI(
                             customWallpaperViewModel.greenColorValue.value = 0
                             customWallpaperViewModel.blueColorValue.value = 0
                             customWallpaperViewModel.alphaColorValue.value = 255
+                            customWallpaperViewModel.bgImageTransparency.value = 1f
+                            customWallpaperViewModel.imageTransparencySliderPosition.value = 1f
                             dialogState.value = false
                         }
                         if (currentRoute.equals(Screen.Favourite.route)){

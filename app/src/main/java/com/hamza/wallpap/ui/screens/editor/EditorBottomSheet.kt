@@ -39,9 +39,7 @@ import com.hamza.wallpap.R
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.screens.common.ColorPickerDialog
-import com.hamza.wallpap.ui.screens.latest.LatestViewModel
 import com.hamza.wallpap.ui.theme.*
-import com.hamza.wallpap.util.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -82,7 +80,7 @@ fun EditorBottomSheet(
     val rotationAnimation by animateFloatAsState(
         targetValue = rotationAngle,
         tween(
-            durationMillis = 400,
+            durationMillis = 650,
             easing = FastOutSlowInEasing
         )
     )
@@ -181,7 +179,6 @@ fun EditorBottomSheet(
                                 selected = customWallpaperViewModel.selectedBgColorIndex.value == index,
                                 onClick = {
                                     customWallpaperViewModel.selectedBgColorIndex.value = index
-                                    customWallpaperViewModel.bgImageFullUrl.value = null
                                     customWallpaperViewModel.bgBoxColor.value = s.color
                                 })
                         }
@@ -267,7 +264,7 @@ fun EditorBottomSheet(
                             Icon(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = null,
-                                tint = MaterialTheme.colors.bottomAppBarContentColor
+                                tint = MaterialTheme.colors.topAppBarContentColor
                             )
                         }
                     },
@@ -386,7 +383,7 @@ fun EditorBottomSheet(
                     }
 
                     LazyRow(
-                        modifier = Modifier.padding(start = 4.dp, end = 4.dp),
+                        modifier = Modifier.padding(start = 8.dp, end = 4.dp),
                         content = {
                             items(randomItems.itemCount) {
                                 randomItems[it]?.let { unsplashImage ->
@@ -416,7 +413,7 @@ fun EditorBottomSheet(
                 )
 
                 androidx.compose.material3.Slider(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 0.dp),
                     value = customWallpaperViewModel.imageTransparencySliderPosition.value,
                     onValueChange = {
                         customWallpaperViewModel.imageTransparencySliderPosition.value = it
@@ -431,6 +428,92 @@ fun EditorBottomSheet(
                         thumbColor = MaterialTheme.colors.bottomAppBarContentColor
                     )
                 )
+
+                Spacer(modifier = Modifier.padding(0.dp))
+
+                Text(
+                    textAlign = TextAlign.Start,
+                    text = "Image Format",
+                    color = MaterialTheme.colors.topAppBarTitle,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontFamily = maven_pro_regular,
+                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 12.dp)
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 12.dp, end = 10.dp)
+                ) {
+
+                    if (customWallpaperViewModel.contentScale.value == ContentScale.Crop) {
+                        IconButton(
+                            onClick = {
+                                customWallpaperViewModel.contentScale.value = ContentScale.Fit
+                            }) {
+                            Icon(
+                                imageVector = Icons.Default.ZoomInMap,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.topAppBarContentColor
+                            )
+                        }
+                    } else {
+                        IconButton(
+                            onClick = {
+                                customWallpaperViewModel.contentScale.value = ContentScale.Crop
+                            }) {
+                            Icon(
+                                imageVector = Icons.Default.ZoomOutMap,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.topAppBarContentColor
+                            )
+                        }
+                    }
+
+                    IconButton(
+                        onClick = {
+                            customWallpaperViewModel.imageRotate.value -= 90f
+                        }) {
+                        Icon(
+                            imageVector = Icons.Default.Rotate90DegreesCcw,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.topAppBarContentColor
+                        )
+                    }
+
+                    IconButton(
+                        onClick = {
+                            customWallpaperViewModel.imageRotate.value += 90f
+                        }) {
+                        Icon(
+                            imageVector = Icons.Default.Rotate90DegreesCw,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.topAppBarContentColor
+                        )
+                    }
+
+                    IconButton(
+                        modifier = Modifier.rotate(rotationAnimation),
+                        onClick = {
+                            rotationAngle += 360f
+                            customWallpaperViewModel.bgImageFullUrl.value = null
+                            customWallpaperViewModel.bgImageRegularUrl.value = null
+                            customWallpaperViewModel.bgImageUri.value = null
+                        }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.topAppBarContentColor
+                        )
+                    }
+
+
+                }
 
                 Spacer(modifier = Modifier.padding(vertical = 6.dp))
             }
