@@ -22,6 +22,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
+import com.hamza.wallpap.R
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.theme.topAppBarTitle
 
@@ -61,6 +62,7 @@ fun BackgroundImageListItem(
                     .Builder(context)
                     .data(unsplashImage.urls.regular)
                     .crossfade(1000)
+                    .error(R.drawable.ic_placeholder)
                     .build(),
                 contentScale = ContentScale.Crop,
                 contentDescription = null

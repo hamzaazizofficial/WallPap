@@ -189,7 +189,7 @@ fun TopBar(
                             Icon(
                                 imageVector = Icons.Filled.ArrowDropUp,
                                 contentDescription = null,
-                                tint = if (customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
+                                tint = if ((customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) || customWallpaperViewModel.editorDropDownExpanded.value) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
                             )
                         } else {
                             Icon(
