@@ -20,7 +20,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
@@ -72,8 +71,6 @@ fun CustomWallpaperScreen(
     val matrix by remember { mutableStateOf(ColorMatrix()) }
     matrix.setToSaturation(customWallpaperViewModel.saturationSliderValue.value)
     val colorFilter = ColorFilter.colorMatrix(matrix)
-
-    var scale by remember { mutableStateOf(1f) }
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -217,7 +214,9 @@ fun CustomWallpaperScreen(
                                 .fillMaxSize()
                                 .pointerInput(Unit) {
                                     detectTransformGestures { centroid, pan, zoom, rotation ->
-                                        scale *= zoom
+//                                        scale *= zoom
+                                        customWallpaperViewModel.wallpaperTextSize.value *= zoom
+                                        customWallpaperViewModel.textSliderPosition.value *= zoom
                                     }
                                 }
                                 .pointerInput(Unit) {
@@ -268,7 +267,7 @@ fun CustomWallpaperScreen(
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .height(80.dp)
-                                                        .alpha(ContentAlpha.high)
+//                                                        .alpha(ContentAlpha.high)
                                                         .align(Alignment.TopCenter)
                                                         .animateContentSize(),
                                                     color = MaterialTheme.colors.topAppBarBackgroundColor
@@ -332,7 +331,6 @@ fun CustomWallpaperScreen(
                                                 }
                                             }
                                         } else {
-//
                                             SubcomposeAsyncImageContent(
                                                 modifier = Modifier
                                                     .fillMaxSize()
@@ -343,7 +341,7 @@ fun CustomWallpaperScreen(
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .height(80.dp)
-                                                        .alpha(ContentAlpha.high)
+//                                                        .alpha(ContentAlpha.high)
                                                         .align(Alignment.TopCenter)
                                                         .animateContentSize(),
                                                     color = MaterialTheme.colors.topAppBarBackgroundColor
@@ -425,7 +423,7 @@ fun CustomWallpaperScreen(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .height(80.dp)
-                                                .alpha(ContentAlpha.high)
+//                                                .alpha(ContentAlpha.high)
                                                 .align(Alignment.TopCenter)
                                                 .animateContentSize(),
                                             color = MaterialTheme.colors.topAppBarBackgroundColor
@@ -496,7 +494,7 @@ fun CustomWallpaperScreen(
                                 style = TextStyle(
                                     fontStyle = customWallpaperViewModel.wallpaperTextFontStyle.value,
                                     color = customWallpaperViewModel.wallpaperTextColor.value,
-                                    fontSize = customWallpaperViewModel.wallpaperTextSize.value * scale,
+                                    fontSize = customWallpaperViewModel.wallpaperTextSize.value,
                                     textDecoration = customWallpaperViewModel.wallpaperTextDecoration.value,
                                     fontWeight = customWallpaperViewModel.wallpaperTextFontWeight.value,
                                     textAlign = customWallpaperViewModel.wallpaperTextAlign.value,

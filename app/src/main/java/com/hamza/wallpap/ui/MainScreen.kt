@@ -2,7 +2,6 @@ package com.hamza.wallpap.ui
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -32,7 +31,7 @@ import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.N)
-@OptIn(ExperimentalPagingApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalPagingApi::class)
 @Composable
 fun MainScreen(
     navController: NavHostController,
@@ -49,20 +48,6 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val scope = rememberCoroutineScope()
-
-//    val listOfQueries = listOf(
-//        "Hd wallpapers",
-//        "4k wallpapers",
-//        "wallpapers",
-//        "digital art",
-//        "space"
-//    )
-//
-//    LaunchedEffect(key1 = "query", block = {
-//        val randomQueryIndex = Random.nextInt(listOfQueries.size)
-//        val randomQuery = listOfQueries[randomQueryIndex]
-//        homeViewModel.query.value = randomQuery
-//    })
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -130,7 +115,8 @@ fun MainScreen(
                 scaffoldState,
                 onItemSelected,
                 currentRoute,
-                context
+                context,
+                scope
             )
         }
     }

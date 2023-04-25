@@ -5,6 +5,7 @@ import androidx.paging.PagingSource
 import androidx.room.*
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.model.UnsplashImage
+import retrofit2.http.GET
 
 @Dao
 interface UnsplashImageDao {
@@ -14,6 +15,9 @@ interface UnsplashImageDao {
 
     @Query("SELECT * FROM unsplash_fav_urls_table ORDER BY id ASC")
     fun getAllFavUrls(): LiveData<List<FavouriteUrls>>
+
+    @Query("SELECT * FROM unsplash_fav_urls_table WHERE id = :id")
+    suspend fun getFavouriteUrl(id: Int): FavouriteUrls?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addImages(images: List<UnsplashImage>)

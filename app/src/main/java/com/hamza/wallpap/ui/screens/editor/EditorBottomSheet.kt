@@ -40,6 +40,7 @@ import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.screens.common.ColorPickerDialog
 import com.hamza.wallpap.ui.theme.*
+import com.hamza.wallpap.util.isOnline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -382,19 +383,39 @@ fun EditorBottomSheet(
                         }
                     }
 
-                    LazyRow(
-                        modifier = Modifier.padding(start = 8.dp, end = 4.dp),
-                        content = {
-                            items(randomItems.itemCount) {
-                                randomItems[it]?.let { unsplashImage ->
-                                    BackgroundImageListItem(
-                                        unsplashImage,
-                                        customWallpaperViewModel,
-                                        context
-                                    )
+                    if (isOnline(context)) {
+                        LazyRow(
+                            modifier = Modifier.padding(start = 8.dp, end = 4.dp),
+                            content = {
+                                items(randomItems.itemCount) {
+                                    randomItems[it]?.let { unsplashImage ->
+                                        BackgroundImageListItem(
+                                            unsplashImage,
+                                            customWallpaperViewModel,
+                                            context
+                                        )
+                                    }
                                 }
-                            }
-                        })
+                            })
+                    } else {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Connect with internet to load \nonline wallpapers.",
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                fontFamily = maven_pro_regular
+                            )
+//                            Spacer(modifier = Modifier.padding(4.dp))
+//                            Icon(
+//                                imageVector = Icons.Default.SentimentVeryDissatisfied,
+//                                contentDescription = null
+//                            )
+                        }
+                    }
 
                 }
 

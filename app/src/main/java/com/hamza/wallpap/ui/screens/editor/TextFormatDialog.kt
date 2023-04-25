@@ -135,7 +135,7 @@ fun TextFormatDialogUI(
                 modifier = Modifier.padding(horizontal = 10.dp),
                 value = customWallpaperViewModel.textSliderPosition.value,
                 onValueChange = { customWallpaperViewModel.textSliderPosition.value = it },
-                valueRange = 12f..100f,
+                valueRange = 12f..250f,
                 onValueChangeFinished = {
                     customWallpaperViewModel.wallpaperTextSize.value =
                         customWallpaperViewModel.textSliderPosition.value.sp
@@ -227,6 +227,11 @@ fun TextFormatDialogUI(
                     checked = customWallpaperViewModel.textAlignCenterChecked.value,
                     onCheckedChange = {
                         customWallpaperViewModel.textAlignCenterChecked.value = it
+                        if (customWallpaperViewModel.textAlignCenterChecked.value){
+                            customWallpaperViewModel.textAlignJustifyChecked.value = false
+                            customWallpaperViewModel.textAlignRightChecked.value = false
+                            customWallpaperViewModel.textAlignLeftChecked.value = false
+                        }
                     }) {
                     if (customWallpaperViewModel.textAlignCenterChecked.value) {
                         customWallpaperViewModel.wallpaperTextAlign.value = TextAlign.Center
@@ -250,6 +255,11 @@ fun TextFormatDialogUI(
                     checked = customWallpaperViewModel.textAlignJustifyChecked.value,
                     onCheckedChange = {
                         customWallpaperViewModel.textAlignJustifyChecked.value = it
+                        if (customWallpaperViewModel.textAlignJustifyChecked.value){
+                            customWallpaperViewModel.textAlignCenterChecked.value = false
+                            customWallpaperViewModel.textAlignRightChecked.value = false
+                            customWallpaperViewModel.textAlignLeftChecked.value = false
+                        }
                     }) {
                     if (customWallpaperViewModel.textAlignJustifyChecked.value) {
                         customWallpaperViewModel.wallpaperTextAlign.value = TextAlign.Justify
@@ -273,6 +283,11 @@ fun TextFormatDialogUI(
                     checked = customWallpaperViewModel.textAlignRightChecked.value,
                     onCheckedChange = {
                         customWallpaperViewModel.textAlignRightChecked.value = it
+                        if (customWallpaperViewModel.textAlignRightChecked.value){
+                            customWallpaperViewModel.textAlignCenterChecked.value = false
+                            customWallpaperViewModel.textAlignJustifyChecked.value = false
+                            customWallpaperViewModel.textAlignLeftChecked.value = false
+                        }
                     }) {
                     if (customWallpaperViewModel.textAlignRightChecked.value) {
                         customWallpaperViewModel.wallpaperTextAlign.value = TextAlign.Right
@@ -296,6 +311,11 @@ fun TextFormatDialogUI(
                     checked = customWallpaperViewModel.textAlignLeftChecked.value,
                     onCheckedChange = {
                         customWallpaperViewModel.textAlignLeftChecked.value = it
+                        if (customWallpaperViewModel.textAlignLeftChecked.value){
+                            customWallpaperViewModel.textAlignCenterChecked.value = false
+                            customWallpaperViewModel.textAlignRightChecked.value = false
+                            customWallpaperViewModel.textAlignJustifyChecked.value = false
+                        }
                     }) {
                     if (customWallpaperViewModel.textAlignLeftChecked.value) {
                         customWallpaperViewModel.wallpaperTextAlign.value = TextAlign.Left

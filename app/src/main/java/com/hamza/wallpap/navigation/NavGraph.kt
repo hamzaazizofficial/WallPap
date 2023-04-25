@@ -39,6 +39,7 @@ import com.hamza.wallpap.ui.screens.settings.SettingsViewModel
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreen
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.util.WallPapTheme
+import kotlinx.coroutines.CoroutineScope
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(
@@ -53,6 +54,7 @@ fun NavGraph(
     onItemSelected: (WallPapTheme) -> Unit,
     currentRoute: String?,
     context: Context,
+    scope: CoroutineScope,
 ) {
     val homeViewModel: HomeViewModel = hiltViewModel()
     val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
@@ -175,7 +177,8 @@ fun NavGraph(
                     navController,
                     currentRoute,
                     favUrlsViewModel,
-                    wallpaperFullScreenViewModel
+                    wallpaperFullScreenViewModel,
+                    scope
                 )
             }
         }

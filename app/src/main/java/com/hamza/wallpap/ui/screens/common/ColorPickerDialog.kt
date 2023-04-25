@@ -209,7 +209,6 @@ fun ColorPickerDialogUI(
                 TextButton(
                     onClick = {
                         customWallpaperViewModel.bgBoxColor.value = colorPickerBoxColor
-                        customWallpaperViewModel.bgImageFullUrl.value = null
                         customWallpaperViewModel.selectedBgColorIndex.value = 50
                         dialogState.value = false
                     }

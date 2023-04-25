@@ -21,15 +21,38 @@ class FavUrlsViewModel(
     private val repository = FavUrlsRepository(unsplashImageDao)
     val getAllFavUrls = repository.readAllFavUrls
 
+//    var alreadyInFavorite = mutableStateOf(false)
+
     init {
         readAllFavUrls = repository.readAllFavUrls
     }
 
+//    fun addToFav(favouriteUrls: FavouriteUrls) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            repository.addFavUrl(favouriteUrls)
+//        }
+//    }
+
     fun addToFav(favouriteUrls: FavouriteUrls) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addFavUrl(favouriteUrls)
+            val existingFavUrl = repository.getFavouriteUrlById(favouriteUrls.id)
+            if (existingFavUrl == null) {
+//                alreadyInFavorite.value = true
+                repository.addFavUrl(favouriteUrls)
+                // Display a message to the user that the image has been added to their favorites
+
+            } else {
+                // Display a message to the user that the image is already in their favorites
+//                alreadyInFavorite.value = false
+            }
         }
     }
+
+//    fun getFavUrl(favouriteUrls: FavouriteUrls){
+//        viewModelScope.launch(Dispatchers.IO) {
+//            repository.getFavUrl(favouriteUrls)
+//        }
+//    }
 
     fun deleteFavouriteUrl(favouriteUrls: FavouriteUrls) {
         viewModelScope.launch(Dispatchers.IO) {
