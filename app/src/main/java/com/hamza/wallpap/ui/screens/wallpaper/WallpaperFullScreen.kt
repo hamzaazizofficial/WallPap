@@ -2,7 +2,6 @@ package com.hamza.wallpap.ui.screens.wallpaper
 
 import android.graphics.Bitmap
 import android.os.Build
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
@@ -15,6 +14,7 @@ import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.ArrowDropUp
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Fullscreen
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.*
@@ -31,6 +31,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
+import com.hamza.wallpap.data.repository.FavUrlsRepository
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
 import com.hamza.wallpap.ui.screens.common.admob.MainInterstitialAd
@@ -43,8 +44,10 @@ import com.hamza.wallpap.util.saveMediaToStorage
 import com.hamza.wallpap.util.shareWallpaper
 import dev.shreyaspatil.capturable.Capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun WallpaperFullScreen(
@@ -54,6 +57,7 @@ fun WallpaperFullScreen(
     currentRoute: String?,
     favUrlsViewModel: FavUrlsViewModel,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
+    scope: CoroutineScope,
 ) {
     val context = LocalContext.current
     val systemUiController = rememberSystemUiController()
@@ -76,6 +80,11 @@ fun WallpaperFullScreen(
         )
     }
 
+//    val favUrl = FavouriteUrls(wallpaperFullScreenViewModel.id, fullUrl, regularUrl)
+//    val existingUrl = favUrlsViewModel.getFavUrl(favUrl)
+
+
+
     LaunchedEffect(key1 = "bitmap", block = {
 //        wallpaperFullScreenViewModel.fullUrl.value = fullUrl
         originalImage = getBitmapFromUrl(fullUrl)
@@ -86,6 +95,7 @@ fun WallpaperFullScreen(
     var showFitScreenBtn by remember { mutableStateOf(true) }
     var showCropScreenBtn by remember { mutableStateOf(false) }
     val captureController = rememberCaptureController()
+    val snackbarHostState = remember { androidx.compose.material3.SnackbarHostState() }
 
     BackHandler {
         navController.popBackStack()
@@ -93,6 +103,9 @@ fun WallpaperFullScreen(
         wallpaperFullScreenViewModel.saturationSliderValue.value = 1f
     }
 
+    androidx.compose.material3.Scaffold(snackbarHost = { androidx.compose.material3.SnackbarHost(
+        hostState = snackbarHostState
+    )}) { padding->
     Box(
         Modifier
             .fillMaxSize()
@@ -328,7 +341,22 @@ fun WallpaperFullScreen(
                        wallpaperFullScreenViewModel.id += 1
                        val favUrl = FavouriteUrls(wallpaperFullScreenViewModel.id, fullUrl, regularUrl)
                        favUrlsViewModel.addToFav(favUrl)
-                       Toast.makeText(context, "Added to Favourites!", Toast.LENGTH_SHORT).show()
+//                       if (!favUrlsViewModel.alreadyInFavorite.value){
+//                       if (favUrlsViewModel.getFavUrlById == null){
+                           scope.launch {
+                               snackbarHostState.showSnackbar(
+                                   "Added to Favourites!",
+                                   withDismissAction = true
+                               )
+                           }
+//                       } else {
+//                           scope.launch {
+//                               snackbarHostState.showSnackbar(
+//                                   "Already in Favourites!"
+//                               )
+//                           }
+//                       }
+//                       Toast.makeText(context, "Added to Favourites!", Toast.LENGTH_SHORT).show()
                    },
                    modifier = Modifier
                        .padding(8.dp),
@@ -358,5 +386,6 @@ fun WallpaperFullScreen(
                }
            }
        }
+    }
     }
 }
