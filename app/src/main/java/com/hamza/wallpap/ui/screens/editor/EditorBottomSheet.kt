@@ -60,6 +60,7 @@ fun EditorBottomSheet(
     context: Context,
     singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
 ) {
+
     if (customWallpaperViewModel.wallpaperDialogState.value) {
         TextFormatDialog(
             dialogState = customWallpaperViewModel.wallpaperDialogState,
@@ -472,6 +473,17 @@ fun EditorBottomSheet(
                         .padding(start = 12.dp, end = 10.dp)
                 ) {
 
+                    IconButton(
+                        onClick = {
+
+                        }) {
+                        Icon(
+                            imageVector = Icons.Default.Crop,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.topAppBarContentColor
+                        )
+                    }
+
                     if (customWallpaperViewModel.contentScale.value == ContentScale.Crop) {
                         IconButton(
                             onClick = {
@@ -538,6 +550,7 @@ fun EditorBottomSheet(
 
                 Spacer(modifier = Modifier.padding(vertical = 6.dp))
             }
+            Spacer(modifier = Modifier.padding(vertical = 6.dp))
         }
     }
 }

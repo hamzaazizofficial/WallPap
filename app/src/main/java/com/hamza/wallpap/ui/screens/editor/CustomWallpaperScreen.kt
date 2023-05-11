@@ -88,6 +88,7 @@ fun CustomWallpaperScreen(
     }
 
     ModalBottomSheetLayout(
+        modifier = Modifier.fillMaxHeight(),
         sheetShape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp),
         sheetState = modalBottomSheetState,
         sheetContent = {
