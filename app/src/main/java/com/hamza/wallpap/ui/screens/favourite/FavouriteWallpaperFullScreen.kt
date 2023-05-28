@@ -303,7 +303,7 @@ fun FavouriteWallpaperFullScreen(
 
             FloatingActionButton(
                 onClick = {
-                    shareWallpaper(context, originalImage)
+                    shareWallpaper(context, originalImage, false, false)
                 },
                 modifier = Modifier
                     .padding(8.dp),

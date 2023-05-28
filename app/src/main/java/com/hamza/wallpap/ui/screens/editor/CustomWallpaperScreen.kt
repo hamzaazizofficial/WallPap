@@ -204,9 +204,13 @@ fun CustomWallpaperScreen(
 
                     Capturable(controller = captureController, onCaptured = { bitmap, error ->
                         if (bitmap != null) {
-                            saveMediaToStorage(bitmap.asAndroidBitmap(), context)
+//                            saveMediaToStorage(bitmap.asAndroidBitmap(), context)
                             customWallpaperViewModel.savedImageBitmap.value =
                                 bitmap.asAndroidBitmap()
+                            customWallpaperViewModel.saveImageBottomSheet.value = true
+                            scope.launch {
+                                modalBottomSheetState.show()
+                            }
                         }
                     }) {
                         Box(
