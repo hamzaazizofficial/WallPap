@@ -41,6 +41,8 @@ import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.screens.common.ColorPickerDialog
 import com.hamza.wallpap.ui.theme.*
 import com.hamza.wallpap.util.isOnline
+import com.hamza.wallpap.util.saveMediaToStorage
+import com.hamza.wallpap.util.shareWallpaper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -60,6 +62,8 @@ fun EditorBottomSheet(
     context: Context,
     singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
 ) {
+
+    var radioState by remember { mutableStateOf(true) }
 
     if (customWallpaperViewModel.wallpaperDialogState.value) {
         TextFormatDialog(
@@ -125,6 +129,7 @@ fun EditorBottomSheet(
                             customWallpaperViewModel.bgColorBottomSheet.value = false
                             customWallpaperViewModel.textBottomSheet.value = false
                             customWallpaperViewModel.bgImageBottomSheet.value = false
+                            customWallpaperViewModel.saveImageBottomSheet.value = false
                         }
                     ) {
                         Icon(
@@ -224,6 +229,7 @@ fun EditorBottomSheet(
                             customWallpaperViewModel.bgColorBottomSheet.value = false
                             customWallpaperViewModel.textBottomSheet.value = false
                             customWallpaperViewModel.bgImageBottomSheet.value = false
+                            customWallpaperViewModel.saveImageBottomSheet.value = false
                         }
                     ) {
                         Icon(
@@ -322,6 +328,7 @@ fun EditorBottomSheet(
                             customWallpaperViewModel.bgColorBottomSheet.value = false
                             customWallpaperViewModel.textBottomSheet.value = false
                             customWallpaperViewModel.bgImageBottomSheet.value = false
+                            customWallpaperViewModel.saveImageBottomSheet.value = false
                         }
                     ) {
                         Icon(
@@ -455,7 +462,7 @@ fun EditorBottomSheet(
 
                 Text(
                     textAlign = TextAlign.Start,
-                    text = "Image Format",
+                    text = "Image Style",
                     color = MaterialTheme.colors.topAppBarTitle,
                     fontWeight = FontWeight.ExtraBold,
                     fontFamily = maven_pro_regular,
@@ -551,6 +558,259 @@ fun EditorBottomSheet(
                 Spacer(modifier = Modifier.padding(vertical = 6.dp))
             }
             Spacer(modifier = Modifier.padding(vertical = 6.dp))
+        }
+    }
+
+    if (customWallpaperViewModel.saveImageBottomSheet.value) {
+        Card(modifier = Modifier.background(MaterialTheme.colors.background)) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.background(MaterialTheme.colors.background)
+            ) {
+                Spacer(modifier = Modifier.padding(vertical = 2.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 12.dp, end = 10.dp)
+                ) {
+                    Text(
+                        textAlign = TextAlign.Start,
+                        text = "Download & Share",
+                        color = MaterialTheme.colors.topAppBarTitle,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontFamily = maven_pro_regular,
+                        fontSize = 16.sp
+                    )
+                    androidx.compose.material3.IconButton(
+                        onClick = {
+                            scope.launch {
+                                bottomSheetState.hide()
+                            }
+                            customWallpaperViewModel.bgColorBottomSheet.value = false
+                            customWallpaperViewModel.saveImageBottomSheet.value = false
+                            customWallpaperViewModel.bgImageBottomSheet.value = false
+                            customWallpaperViewModel.bgColorBottomSheet.value = false
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.topAppBarTitle,
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.padding(vertical = 2.dp))
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 10.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    /*
+                    Row(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 2.dp)
+                            .border(
+                                border = BorderStroke(1.dp, MaterialTheme.colors.topAppBarContentColor),
+                                shape = RoundedCornerShape(2.dp)
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        Text(
+                            text = "Image Format",
+                            color = MaterialTheme.colors.topAppBarTitle,
+                            fontWeight = FontWeight.Normal,
+                            fontFamily = maven_pro_regular,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+
+                        Row(modifier = Modifier.selectableGroup(), verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "PNG",
+                                color = MaterialTheme.colors.topAppBarTitle,
+                                fontWeight = FontWeight.Normal,
+                                fontFamily = maven_pro_regular,
+                                fontSize = 13.sp,
+                            )
+                            RadioButton(
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = MaterialTheme.colors.bottomAppBarContentColor,
+                                    unselectedColor = MaterialTheme.colors.topAppBarContentColor
+                                ),
+                                selected = radioState,
+                                onClick = { radioState = true },
+                                modifier = Modifier.semantics { contentDescription = "Localized Description" }
+                            )
+
+                            Text(
+                                text = "JPEG",
+                                color = MaterialTheme.colors.topAppBarTitle,
+                                fontWeight = FontWeight.Normal,
+                                fontFamily = maven_pro_regular,
+                                fontSize = 13.sp,
+                            )
+                            RadioButton(
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = MaterialTheme.colors.bottomAppBarContentColor,
+                                    unselectedColor = MaterialTheme.colors.topAppBarContentColor
+                                ),
+                                selected = !radioState,
+                                onClick = { radioState = false },
+                                modifier = Modifier.semantics { contentDescription = "Localized Description" }
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
+
+                    */
+
+                    Row(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(shape = RoundedCornerShape(5.dp))
+                            .clickable {
+                                customWallpaperViewModel.savedImageBitmap.value?.let {
+                                    saveMediaToStorage(
+                                        it,
+                                        context
+                                    )
+                                }
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Download,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.topAppBarContentColor,
+                            modifier = Modifier.padding(4.dp)
+                        )
+                        Spacer(modifier = Modifier.padding(horizontal = 6.dp))
+                        Text(
+                            text = "Download", color = MaterialTheme.colors.topAppBarTitle,
+                            fontWeight = FontWeight.Normal,
+                            fontFamily = maven_pro_regular,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(4.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(shape = RoundedCornerShape(5.dp))
+                            .clickable {
+                                shareWallpaper(
+                                    context,
+                                    customWallpaperViewModel.savedImageBitmap.value,
+                                    false,
+                                    saveToDrive = true
+                                )
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.AddToDrive,
+                            contentDescription = null,
+                            tint = Color(0xFFffbb00),
+                            modifier = Modifier.padding(4.dp)
+                        )
+                        Spacer(modifier = Modifier.padding(horizontal = 6.dp))
+                        Text(
+                            text = "Save to Drive", color = MaterialTheme.colors.topAppBarTitle,
+                            fontWeight = FontWeight.Normal,
+                            fontFamily = maven_pro_regular,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(4.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(shape = RoundedCornerShape(5.dp))
+                            .clickable {
+                                shareWallpaper(
+                                    context,
+                                    customWallpaperViewModel.savedImageBitmap.value,
+                                    true,
+                                    false
+                                )
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Whatsapp,
+                            contentDescription = null,
+                            tint = Color(0xFF25D366),
+                            modifier = Modifier.padding(4.dp)
+                        )
+                        Spacer(modifier = Modifier.padding(horizontal = 6.dp))
+                        Text(
+                            text = "WhatsApp", color = MaterialTheme.colors.topAppBarTitle,
+                            fontWeight = FontWeight.Normal,
+                            fontFamily = maven_pro_regular,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(4.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(shape = RoundedCornerShape(5.dp))
+                            .clickable {
+                                shareWallpaper(
+                                    context,
+                                    customWallpaperViewModel.savedImageBitmap.value,
+                                    false,
+                                    saveToDrive = false
+                                )
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.MoreHoriz,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.topAppBarContentColor,
+                            modifier = Modifier.padding(4.dp)
+                        )
+                        Spacer(modifier = Modifier.padding(horizontal = 6.dp))
+                        Text(
+                            text = "More Apps", color = MaterialTheme.colors.topAppBarTitle,
+                            fontWeight = FontWeight.Normal,
+                            fontFamily = maven_pro_regular,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(4.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            }
         }
     }
 }

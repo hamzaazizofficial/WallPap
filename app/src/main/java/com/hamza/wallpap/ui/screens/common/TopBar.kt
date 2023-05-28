@@ -130,54 +130,54 @@ fun TopBar(
                     }
                 }
 
-                AnimatedVisibility(
-                    visible = currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) &&
-                            (customWallpaperViewModel.bgImageFullUrl.value != null
-                                    || customWallpaperViewModel.bgBoxColor.value != Color(0xF1FFFFFF)
-                                    || customWallpaperViewModel.wallpaperText.value != ""
-                                    || customWallpaperViewModel.bgImageUri.value != null),
-                    enter = scaleIn() + fadeIn(),
-                    exit = scaleOut() + fadeOut()
-                ) {
-                    IconButton(
-                        onClick = {
-                            customWallpaperViewModel.clearEditorDialogState.value = true
-                        }) {
-                        Icon(
-                            imageVector = Icons.Default.ClearAll,
-                            contentDescription = "Clear Screen",
-                            tint = MaterialTheme.colors.topAppBarContentColor
-                        )
-                    }
-                }
-
-                AnimatedVisibility(
-                    visible = currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) &&
-                            (customWallpaperViewModel.bgImageFullUrl.value != null
-                                    || customWallpaperViewModel.bgImageUri.value != null),
-                    enter = scaleIn() + fadeIn(),
-                    exit = scaleOut() + fadeOut()
-                ) {
-
-                    IconToggleButton(
-                        checked = customWallpaperViewModel.editorDropDownExpanded.value,
-                        onCheckedChange = {
-                            customWallpaperViewModel.editorDropDownExpanded.value = it
-                        }) {
-                        if (customWallpaperViewModel.editorDropDownExpanded.value) {
+                if (currentRoute.equals(Screen.CustomWallpaperEditorScreen.route)) {
+                    AnimatedVisibility(
+                        (customWallpaperViewModel.bgImageFullUrl.value != null
+                                || customWallpaperViewModel.bgBoxColor.value != Color(0xF1FFFFFF)
+                                || customWallpaperViewModel.wallpaperText.value != ""
+                                || customWallpaperViewModel.bgImageUri.value != null),
+                        enter = scaleIn() + fadeIn(),
+                        exit = scaleOut() + fadeOut()
+                    ) {
+                        IconButton(
+                            onClick = {
+                                customWallpaperViewModel.clearEditorDialogState.value = true
+                            }) {
                             Icon(
-                                imageVector = Icons.Filled.ArrowDropUp,
-                                contentDescription = null,
-                                tint = if ((customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) || customWallpaperViewModel.editorDropDownExpanded.value) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
-                            )
-                        } else {
-                            Icon(
-                                imageVector = Icons.Default.ArrowDropDown,
-                                contentDescription = null,
-                                tint = if (customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
+                                imageVector = Icons.Default.ClearAll,
+                                contentDescription = "Clear Screen",
+                                tint = MaterialTheme.colors.topAppBarContentColor
                             )
                         }
                     }
+
+                    AnimatedVisibility(
+                        visible = (customWallpaperViewModel.bgImageFullUrl.value != null || customWallpaperViewModel.bgImageUri.value != null),
+                        enter = scaleIn() + fadeIn(),
+                        exit = scaleOut() + fadeOut()
+                    )
+                    {
+                        IconToggleButton(
+                            checked = customWallpaperViewModel.editorDropDownExpanded.value,
+                            onCheckedChange = {
+                                customWallpaperViewModel.editorDropDownExpanded.value = it
+                            }) {
+                            if (customWallpaperViewModel.editorDropDownExpanded.value) {
+                                Icon(
+                                    imageVector = Icons.Filled.ArrowDropUp,
+                                    contentDescription = null,
+                                    tint = if ((customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) || customWallpaperViewModel.editorDropDownExpanded.value) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowDropDown,
+                                    contentDescription = null,
+                                    tint = if (customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
+                                )
+                            }
+                        }
+                    }
+
                 }
 
                 if (!currentRoute.equals(Screen.Settings.route) &&

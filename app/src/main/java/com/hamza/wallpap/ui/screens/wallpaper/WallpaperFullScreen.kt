@@ -31,7 +31,6 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
-import com.hamza.wallpap.data.repository.FavUrlsRepository
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
 import com.hamza.wallpap.ui.screens.common.admob.MainInterstitialAd
@@ -322,7 +321,7 @@ fun WallpaperFullScreen(
 
                FloatingActionButton(
                    onClick = {
-                       shareWallpaper(context, originalImage)
+                       shareWallpaper(context, originalImage, false, false)
                    },
                    modifier = Modifier
                        .padding(8.dp),

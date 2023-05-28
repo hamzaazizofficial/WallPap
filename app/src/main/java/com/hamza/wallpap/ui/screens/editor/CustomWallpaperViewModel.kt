@@ -338,6 +338,7 @@ class CustomWallpaperViewModel : ViewModel() {
     var bgColorBottomSheet = mutableStateOf(false)
     var textBottomSheet = mutableStateOf(false)
     var bgImageBottomSheet = mutableStateOf(false)
+    var saveImageBottomSheet = mutableStateOf(false)
     var bgImageFullUrl = mutableStateOf<String?>(null)
     var bgImageRegularUrl = mutableStateOf<String?>(null)
     var selectBgImageState = mutableStateOf(false)
