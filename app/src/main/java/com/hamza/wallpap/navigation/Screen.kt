@@ -15,7 +15,7 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Favourite: Screen("favourite", "Favourite", Icons.Default.Favorite)
 
     // Editor
-    object CustomWallpaperEditorScreen: Screen("custom_wallpaper_editor", "Custom Wallpaper", Icons.Default.Edit)
+    object CustomWallpaperEditorScreen: Screen("custom_wallpaper_editor", "Custom Wallpaper", Icons.Default.Brush)
 
     object Latest: Screen("amoled", "Amoled", Icons.Default.Whatshot)
     object LatestFullScreen : Screen("latest_full_screen/{amoledUrl}","Amoled", Icons.Default.Wallpaper)

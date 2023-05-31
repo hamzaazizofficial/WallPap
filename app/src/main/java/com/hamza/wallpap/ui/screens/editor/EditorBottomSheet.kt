@@ -62,9 +62,6 @@ fun EditorBottomSheet(
     context: Context,
     singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
 ) {
-
-    var radioState by remember { mutableStateOf(true) }
-
     if (customWallpaperViewModel.wallpaperDialogState.value) {
         TextFormatDialog(
             dialogState = customWallpaperViewModel.wallpaperDialogState,
@@ -94,7 +91,8 @@ fun EditorBottomSheet(
     if (!bottomSheetState.isVisible) {
         customWallpaperViewModel.bgColorBottomSheet.value = false
         customWallpaperViewModel.textBottomSheet.value = false
-        customWallpaperViewModel.bgColorBottomSheet.value = false
+        customWallpaperViewModel.bgImageBottomSheet.value = false
+        customWallpaperViewModel.saveImageBottomSheet.value = false
     }
 
     if (customWallpaperViewModel.bgColorBottomSheet.value) {
@@ -125,6 +123,7 @@ fun EditorBottomSheet(
                         onClick = {
                             scope.launch {
                                 bottomSheetState.hide()
+//                                bottomSheetState.bottomSheetState.collapse()
                             }
                             customWallpaperViewModel.bgColorBottomSheet.value = false
                             customWallpaperViewModel.textBottomSheet.value = false
@@ -225,6 +224,7 @@ fun EditorBottomSheet(
                         onClick = {
                             scope.launch {
                                 bottomSheetState.hide()
+//                                bottomSheetState.bottomSheetState.collapse()
                             }
                             customWallpaperViewModel.bgColorBottomSheet.value = false
                             customWallpaperViewModel.textBottomSheet.value = false
@@ -324,6 +324,7 @@ fun EditorBottomSheet(
                         onClick = {
                             scope.launch {
                                 bottomSheetState.hide()
+//                                bottomSheetState.bottomSheetState.collapse()
                             }
                             customWallpaperViewModel.bgColorBottomSheet.value = false
                             customWallpaperViewModel.textBottomSheet.value = false
@@ -458,8 +459,18 @@ fun EditorBottomSheet(
                     )
                 )
 
-                Spacer(modifier = Modifier.padding(0.dp))
+                Spacer(modifier = Modifier.padding(6.dp))
 
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    verticalAlignment = Alignment.Top,
+//                    horizontalArrangement = Arrangement.Center
+//                ) {
+//                    Column(
+//                        verticalArrangement = Arrangement.Center,
+//                        horizontalAlignment = Alignment.Start,
+//                        modifier = Modifier.weight(2f)
+//                    ) {
                 Text(
                     textAlign = TextAlign.Start,
                     text = "Image Style",
@@ -480,21 +491,11 @@ fun EditorBottomSheet(
                         .padding(start = 12.dp, end = 10.dp)
                 ) {
 
-                    IconButton(
-                        onClick = {
-
-                        }) {
-                        Icon(
-                            imageVector = Icons.Default.Crop,
-                            contentDescription = null,
-                            tint = MaterialTheme.colors.topAppBarContentColor
-                        )
-                    }
-
                     if (customWallpaperViewModel.contentScale.value == ContentScale.Crop) {
                         IconButton(
                             onClick = {
-                                customWallpaperViewModel.contentScale.value = ContentScale.Fit
+                                customWallpaperViewModel.contentScale.value =
+                                    ContentScale.Fit
                             }) {
                             Icon(
                                 imageVector = Icons.Default.ZoomInMap,
@@ -505,7 +506,8 @@ fun EditorBottomSheet(
                     } else {
                         IconButton(
                             onClick = {
-                                customWallpaperViewModel.contentScale.value = ContentScale.Crop
+                                customWallpaperViewModel.contentScale.value =
+                                    ContentScale.Crop
                             }) {
                             Icon(
                                 imageVector = Icons.Default.ZoomOutMap,
@@ -556,6 +558,11 @@ fun EditorBottomSheet(
                 }
 
                 Spacer(modifier = Modifier.padding(vertical = 6.dp))
+//                    }
+
+//
+
+//                }
             }
             Spacer(modifier = Modifier.padding(vertical = 6.dp))
         }
@@ -589,6 +596,7 @@ fun EditorBottomSheet(
                         onClick = {
                             scope.launch {
                                 bottomSheetState.hide()
+//                                bottomSheetState.bottomSheetState.collapse()
                             }
                             customWallpaperViewModel.bgColorBottomSheet.value = false
                             customWallpaperViewModel.saveImageBottomSheet.value = false

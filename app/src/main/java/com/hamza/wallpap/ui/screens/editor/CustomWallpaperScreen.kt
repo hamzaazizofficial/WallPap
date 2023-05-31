@@ -1,6 +1,9 @@
 package com.hamza.wallpap.ui.screens.editor
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -37,7 +40,6 @@ import coil.compose.SubcomposeAsyncImageContent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.theme.*
-import com.hamza.wallpap.util.saveMediaToStorage
 import dev.shreyaspatil.capturable.Capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.delay
@@ -48,6 +50,7 @@ import kotlinx.coroutines.launch
     ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
     ExperimentalFoundationApi::class, ExperimentalAnimationApi::class
 )
+@SuppressLint("SourceLockedOrientationActivity")
 @Composable
 fun CustomWallpaperScreen(
     navController: NavHostController,
@@ -56,10 +59,13 @@ fun CustomWallpaperScreen(
     randomItems: LazyPagingItems<UnsplashImage>,
     context: Context,
 ) {
+    val activity = context as? Activity
+    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
 
     val modalBottomSheetState = rememberModalBottomSheetState(
+        skipHalfExpanded = true,
         initialValue = ModalBottomSheetValue.Hidden,
     )
     val captureController = rememberCaptureController()
@@ -88,8 +94,8 @@ fun CustomWallpaperScreen(
     }
 
     ModalBottomSheetLayout(
-        modifier = Modifier.fillMaxHeight(),
-        sheetShape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp),
+        modifier = Modifier.fillMaxSize(),
+        sheetShape = MaterialTheme.shapes.large,
         sheetState = modalBottomSheetState,
         sheetContent = {
             EditorBottomSheet(
@@ -204,7 +210,6 @@ fun CustomWallpaperScreen(
 
                     Capturable(controller = captureController, onCaptured = { bitmap, error ->
                         if (bitmap != null) {
-//                            saveMediaToStorage(bitmap.asAndroidBitmap(), context)
                             customWallpaperViewModel.savedImageBitmap.value =
                                 bitmap.asAndroidBitmap()
                             customWallpaperViewModel.saveImageBottomSheet.value = true
@@ -272,7 +277,6 @@ fun CustomWallpaperScreen(
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .height(80.dp)
-//                                                        .alpha(ContentAlpha.high)
                                                         .align(Alignment.TopCenter)
                                                         .animateContentSize(),
                                                     color = MaterialTheme.colors.topAppBarBackgroundColor
@@ -346,7 +350,6 @@ fun CustomWallpaperScreen(
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .height(80.dp)
-//                                                        .alpha(ContentAlpha.high)
                                                         .align(Alignment.TopCenter)
                                                         .animateContentSize(),
                                                     color = MaterialTheme.colors.topAppBarBackgroundColor
@@ -428,7 +431,6 @@ fun CustomWallpaperScreen(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .height(80.dp)
-//                                                .alpha(ContentAlpha.high)
                                                 .align(Alignment.TopCenter)
                                                 .animateContentSize(),
                                             color = MaterialTheme.colors.topAppBarBackgroundColor

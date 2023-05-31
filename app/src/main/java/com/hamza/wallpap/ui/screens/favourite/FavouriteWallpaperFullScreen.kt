@@ -5,20 +5,14 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.rounded.ArrowDropDown
-import androidx.compose.material.icons.rounded.ArrowDropUp
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Fullscreen
-import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -129,7 +123,7 @@ fun FavouriteWallpaperFullScreen(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .alpha(if (expanded) ContentAlpha.medium else ContentAlpha.disabled)
+                .alpha(ContentAlpha.medium)
                 .align(Alignment.TopEnd)
                 .animateContentSize(),
             color = Color.Black
@@ -168,22 +162,22 @@ fun FavouriteWallpaperFullScreen(
 //                            )
 //                        }
 
-                        if (expanded || (wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f &&
-                                    wallpaperFullScreenViewModel.saturationSliderValue.value != 1f)
-                        ) {
-                            FilledIconButton(
-                                colors = IconButtonDefaults.filledIconButtonColors(
-                                    containerColor = MaterialTheme.colors.bottomAppBarContentColor,
-                                    contentColor = Color.White
-                                ),
-                                onClick = { captureController.capture() }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Download,
-                                    contentDescription = null,
-                                    tint = Color.White
-                                )
-                            }
-                        } else {
+//                        if (expanded || (wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f &&
+//                                    wallpaperFullScreenViewModel.saturationSliderValue.value != 1f)
+//                        ) {
+//                            FilledIconButton(
+//                                colors = IconButtonDefaults.filledIconButtonColors(
+//                                    containerColor = MaterialTheme.colors.bottomAppBarContentColor,
+//                                    contentColor = Color.White
+//                                ),
+//                                onClick = { captureController.capture() }) {
+//                                Icon(
+//                                    imageVector = Icons.Rounded.Download,
+//                                    contentDescription = null,
+//                                    tint = Color.White
+//                                )
+//                            }
+//                        } else {
                             IconButton(
                                 onClick = {
                                     originalImage?.let {
@@ -200,7 +194,7 @@ fun FavouriteWallpaperFullScreen(
                                     tint = Color.White
                                 )
                             }
-                        }
+//                        }
 
                         if (showFitScreenBtn) {
                             IconButton(
@@ -237,59 +231,59 @@ fun FavouriteWallpaperFullScreen(
                                 expanded = !expanded
                             }) {
                             Icon(
-                                imageVector = if (expanded) Icons.Rounded.ArrowDropUp else Icons.Rounded.ArrowDropDown,
+                                imageVector = Icons.Default.Brush,
                                 contentDescription = null,
                                 tint = Color.White
                             )
                         }
                     }
                 }
-                AnimatedVisibility(visible = expanded) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 8.dp, end = 0.dp, bottom = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            androidx.compose.material3.Slider(
-                                modifier = Modifier.weight(4.3f),
-                                value = wallpaperFullScreenViewModel.saturationSliderPosition.value,
-                                onValueChange = {
-                                    wallpaperFullScreenViewModel.saturationSliderPosition.value = it
-                                },
-                                valueRange = 0f..10f,
-                                onValueChangeFinished = {
-                                    wallpaperFullScreenViewModel.saturationSliderValue.value =
-                                        wallpaperFullScreenViewModel.saturationSliderPosition.value
-                                },
-                                colors = SliderDefaults.colors(
-                                    activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(
-                                        0.5f
-                                    ),
-                                    thumbColor = MaterialTheme.colors.bottomAppBarContentColor
-                                )
-                            )
-
-                            IconButton(onClick = {
-                                wallpaperFullScreenViewModel.saturationSliderPosition.value = 1f
-                                wallpaperFullScreenViewModel.saturationSliderValue.value = 1f
-                            }, modifier = Modifier.weight(1f)) {
-                                Icon(
-                                    imageVector = Icons.Default.FormatColorReset,
-                                    contentDescription = null,
-                                    tint = Color.White
-                                )
-                            }
-                        }
-                    }
-                }
+//                AnimatedVisibility(visible = expanded) {
+//                    Column(
+//                        modifier = Modifier
+//                            .fillMaxWidth(),
+//                        verticalArrangement = Arrangement.Center,
+//                        horizontalAlignment = Alignment.CenterHorizontally
+//                    ) {
+//                        Row(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(start = 8.dp, end = 0.dp, bottom = 4.dp),
+//                            verticalAlignment = Alignment.CenterVertically,
+//                            horizontalArrangement = Arrangement.SpaceEvenly
+//                        ) {
+//                            androidx.compose.material3.Slider(
+//                                modifier = Modifier.weight(4.3f),
+//                                value = wallpaperFullScreenViewModel.saturationSliderPosition.value,
+//                                onValueChange = {
+//                                    wallpaperFullScreenViewModel.saturationSliderPosition.value = it
+//                                },
+//                                valueRange = 0f..10f,
+//                                onValueChangeFinished = {
+//                                    wallpaperFullScreenViewModel.saturationSliderValue.value =
+//                                        wallpaperFullScreenViewModel.saturationSliderPosition.value
+//                                },
+//                                colors = SliderDefaults.colors(
+//                                    activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(
+//                                        0.5f
+//                                    ),
+//                                    thumbColor = MaterialTheme.colors.bottomAppBarContentColor
+//                                )
+//                            )
+//
+//                            IconButton(onClick = {
+//                                wallpaperFullScreenViewModel.saturationSliderPosition.value = 1f
+//                                wallpaperFullScreenViewModel.saturationSliderValue.value = 1f
+//                            }, modifier = Modifier.weight(1f)) {
+//                                Icon(
+//                                    imageVector = Icons.Default.FormatColorReset,
+//                                    contentDescription = null,
+//                                    tint = Color.White
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
 

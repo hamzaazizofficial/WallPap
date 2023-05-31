@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.paging.ExperimentalPagingApi
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.navigation.Screen
@@ -56,6 +57,7 @@ fun TopBar(
     }
 
     TopAppBar(
+        elevation = if (currentRoute.equals(Screen.CustomWallpaperEditorScreen.route)) 0.dp else 5.dp,
         title = {
             Text(
                 text =
@@ -164,13 +166,13 @@ fun TopBar(
                             }) {
                             if (customWallpaperViewModel.editorDropDownExpanded.value) {
                                 Icon(
-                                    imageVector = Icons.Filled.ArrowDropUp,
+                                    imageVector = Icons.Filled.Close,
                                     contentDescription = null,
                                     tint = if ((customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) || customWallpaperViewModel.editorDropDownExpanded.value) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
                                 )
                             } else {
                                 Icon(
-                                    imageVector = Icons.Default.ArrowDropDown,
+                                    imageVector = Icons.Default.InvertColors,
                                     contentDescription = null,
                                     tint = if (customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
                                 )
