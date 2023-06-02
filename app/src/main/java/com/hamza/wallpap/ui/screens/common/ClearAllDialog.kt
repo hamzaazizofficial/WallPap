@@ -159,6 +159,8 @@ fun ClearAllDialogUI(
                             customWallpaperViewModel.alphaColorValue.value = 255
                             customWallpaperViewModel.bgImageTransparency.value = 1f
                             customWallpaperViewModel.imageTransparencySliderPosition.value = 1f
+                            customWallpaperViewModel.saturationSliderValue.value = 1f
+                            customWallpaperViewModel.saturationSliderPosition.value = 1f
                             dialogState.value = false
                         }
                         if (currentRoute.equals(Screen.Favourite.route)){

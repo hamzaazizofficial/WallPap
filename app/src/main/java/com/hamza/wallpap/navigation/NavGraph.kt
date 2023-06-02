@@ -218,7 +218,8 @@ fun NavGraph(
                     navController,
                     favUrlsViewModel,
                     wallpaperFullScreenViewModel,
-                    context
+                    context,
+                    scope
                 )
             }
         }

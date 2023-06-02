@@ -34,6 +34,7 @@ class WallpaperFullScreenViewModel : ViewModel() {
     var alphaColorValue = mutableStateOf(255)
     var saturationSliderValue = mutableStateOf(1f)
     var saturationSliderPosition = mutableStateOf(1f)
+    var doneEditing = mutableStateOf(false)
     var blurSliderValue = mutableStateOf(0f)
     var blurSliderPosition = mutableStateOf(0f)
 

@@ -1,27 +1,18 @@
 package com.hamza.wallpap.ui.screens.latest
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.rounded.ArrowDropDown
-import androidx.compose.material.icons.rounded.ArrowDropUp
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Fullscreen
-import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,9 +33,11 @@ import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.util.getBitmapFromUrl
 import com.hamza.wallpap.util.saveMediaToStorage
+import com.hamza.wallpap.util.shareWallpaper
 import dev.shreyaspatil.capturable.Capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 
+@OptIn(ExperimentalAnimationApi::class)
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun LatestFullScreen(
@@ -56,6 +49,7 @@ fun LatestFullScreen(
 ) {
     var expanded by remember { mutableStateOf(false) }
     var image by remember { mutableStateOf<Bitmap?>(null) }
+    var finalImageBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     val matrix by remember { mutableStateOf(ColorMatrix()) }
     matrix.setToSaturation(wallpaperFullScreenViewModel.saturationSliderValue.value)
@@ -71,7 +65,8 @@ fun LatestFullScreen(
             dialogState = wallpaperFullScreenViewModel.setOriginalWallpaperDialog,
             context = context,
             wallpaperFullScreenViewModel,
-            amoledUrl
+            amoledUrl,
+            finalImageBitmap
         )
     }
 
@@ -83,6 +78,7 @@ fun LatestFullScreen(
 
     LaunchedEffect(key1 = "image", block = {
         image = getBitmapFromUrl(amoledUrl)
+        finalImageBitmap = image
     })
 
     Box(
@@ -93,7 +89,7 @@ fun LatestFullScreen(
     ) {
         Capturable(controller = captureController, onCaptured = { bitmap, error ->
             if (bitmap != null) {
-                saveMediaToStorage(bitmap.asAndroidBitmap(), context)
+                finalImageBitmap = bitmap.asAndroidBitmap()
             }
         }, content = {
 
@@ -134,7 +130,6 @@ fun LatestFullScreen(
                 .animateContentSize(),
             color = Color.Black
         ) {
-
             Column {
                 Row(
                     modifier = Modifier
@@ -144,7 +139,12 @@ fun LatestFullScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(
+                        onClick = {
+                            navController.popBackStack()
+                            wallpaperFullScreenViewModel.saturationSliderPosition.value = 1f
+                            wallpaperFullScreenViewModel.saturationSliderValue.value = 1f
+                        }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -153,39 +153,52 @@ fun LatestFullScreen(
                     }
 
                     Row {
-//                        if (expanded || (wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f &&
-//                                    wallpaperFullScreenViewModel.saturationSliderValue.value != 1f)
-//                        ) {
-//                            FilledIconButton(
-//                                colors = IconButtonDefaults.filledIconButtonColors(
-//                                    containerColor = MaterialTheme.colors.bottomAppBarContentColor,
-//                                    contentColor = Color.White
-//                                ),
-//                                onClick = { captureController.capture() }) {
-//                                Icon(
-//                                    imageVector = Icons.Rounded.Download,
-//                                    contentDescription = null,
-//                                    tint = Color.White
-//                                )
-//                            }
-//                        } else {
-                            IconButton(
-                                onClick = {
-                                    image?.let {
-                                        saveMediaToStorage(
-                                            it,
-                                            context
-                                        )
-                                        wallpaperFullScreenViewModel.interstitalState.value = true
-                                    }
-                                }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Download,
-                                    contentDescription = null,
-                                    tint = Color.White
-                                )
+                        AnimatedVisibility(
+                            visible = !expanded,
+                            enter = scaleIn() + fadeIn(),
+                            exit = scaleOut() + fadeOut()
+                        ) {
+                            if ((wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f &&
+                                        wallpaperFullScreenViewModel.saturationSliderValue.value != 1f)
+                            ) {
+                                IconButton(
+                                    onClick = {
+                                        captureController.capture()
+                                        finalImageBitmap?.let {
+                                            saveMediaToStorage(
+                                                it,
+                                                context
+                                            )
+                                            wallpaperFullScreenViewModel.interstitalState.value =
+                                                true
+                                        }
+                                    }) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Download,
+                                        contentDescription = null,
+                                        tint = Color.White
+                                    )
+                                }
+                            } else {
+                                IconButton(
+                                    onClick = {
+                                        finalImageBitmap?.let {
+                                            saveMediaToStorage(
+                                                it,
+                                                context
+                                            )
+                                            wallpaperFullScreenViewModel.interstitalState.value =
+                                                true
+                                        }
+                                    }) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Download,
+                                        contentDescription = null,
+                                        tint = Color.White
+                                    )
+                                }
                             }
-//                        }
+                        }
 
                         if (showFitScreenBtn) {
                             IconButton(
@@ -217,118 +230,129 @@ fun LatestFullScreen(
                             }
                         }
 
-                        IconButton(
-                            onClick = {
-                                expanded = !expanded
-                            }) {
-                            Icon(
-                                imageVector = Icons.Default.Brush,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
+                        if (expanded) {
+                            IconButton(
+                                onClick = {
+                                    if (wallpaperFullScreenViewModel.saturationSliderValue.value == 1f && wallpaperFullScreenViewModel.saturationSliderPosition.value == 1f) {
+                                        expanded = false
+                                    } else {
+                                        captureController.capture()
+                                        expanded = false
+                                    }
+                                }) {
+                                Icon(
+                                    imageVector = Icons.Default.Done,
+                                    contentDescription = null,
+                                    tint = Color.White
+                                )
+                            }
+                        } else {
+                            IconButton(
+                                onClick = {
+//                                    expanded = !expanded
+                                    expanded = true
+                                }) {
+                                Icon(
+                                    imageVector = Icons.Default.InvertColors,
+                                    contentDescription = null,
+                                    tint = if (wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f) MaterialTheme.colors.bottomAppBarContentColor else Color.White
+                                )
+                            }
                         }
                     }
                 }
+                AnimatedVisibility(visible = expanded) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 8.dp, end = 0.dp, bottom = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            androidx.compose.material3.Slider(
+                                modifier = Modifier.weight(4.3f),
+                                value = wallpaperFullScreenViewModel.saturationSliderPosition.value,
+                                onValueChange = {
+                                    wallpaperFullScreenViewModel.saturationSliderPosition.value =
+                                        it
+                                },
+                                valueRange = 0f..10f,
+                                onValueChangeFinished = {
+                                    wallpaperFullScreenViewModel.saturationSliderValue.value =
+                                        wallpaperFullScreenViewModel.saturationSliderPosition.value
+                                },
+                                colors = androidx.compose.material3.SliderDefaults.colors(
+                                    activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(
+                                        0.5f
+                                    ),
+                                    thumbColor = MaterialTheme.colors.bottomAppBarContentColor
+                                )
+                            )
 
-//                AnimatedVisibility(visible = expanded) {
-//                    Column(
-//                        modifier = Modifier
-//                            .fillMaxWidth(),
-//                        verticalArrangement = Arrangement.Center,
-//                        horizontalAlignment = Alignment.CenterHorizontally
-//                    ) {
-//                        Row(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .padding(start = 8.dp, end = 0.dp, bottom = 4.dp),
-//                            verticalAlignment = Alignment.CenterVertically,
-//                            horizontalArrangement = Arrangement.SpaceEvenly
-//                        ) {
-//                            androidx.compose.material3.Slider(
-//                                modifier = Modifier.weight(4.3f),
-//                                value = wallpaperFullScreenViewModel.saturationSliderPosition.value,
-//                                onValueChange = {
-//                                    wallpaperFullScreenViewModel.saturationSliderPosition.value = it
-//                                },
-//                                valueRange = 0f..10f,
-//                                onValueChangeFinished = {
-//                                    wallpaperFullScreenViewModel.saturationSliderValue.value =
-//                                        wallpaperFullScreenViewModel.saturationSliderPosition.value
-//                                },
-//                                colors = SliderDefaults.colors(
-//                                    activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(
-//                                        0.5f
-//                                    ),
-//                                    thumbColor = MaterialTheme.colors.bottomAppBarContentColor
-//                                )
-//                            )
-//
-//                            IconButton(onClick = {
-//                                wallpaperFullScreenViewModel.saturationSliderPosition.value = 1f
-//                                wallpaperFullScreenViewModel.saturationSliderValue.value = 1f
-//                            }, modifier = Modifier.weight(1f)) {
-//                                Icon(
-//                                    imageVector = Icons.Default.FormatColorReset,
-//                                    contentDescription = null,
-//                                    tint = Color.White
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
+                            IconButton(onClick = {
+                                wallpaperFullScreenViewModel.saturationSliderPosition.value = 1f
+                                wallpaperFullScreenViewModel.saturationSliderValue.value = 1f
+                                finalImageBitmap = image
+                            }, modifier = Modifier.weight(1f)) {
+                                Icon(
+                                    imageVector = Icons.Default.FormatColorReset,
+                                    contentDescription = null,
+                                    tint = Color.White
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-
-            FloatingActionButton(
-                onClick = {
-                    val intent = Intent(Intent.ACTION_SEND).setType("image/*")
-                    val path = MediaStore.Images.Media.insertImage(
-                        context.contentResolver,
-                        image,
-                        "${System.currentTimeMillis()}",
-                        null
-                    )
-                    if (path != null) {
-                        val uri = Uri.parse(path)
-                        intent.putExtra(Intent.EXTRA_STREAM, uri)
-                        intent.putExtra(
-                            Intent.EXTRA_TEXT,
-                            "Download WallPap for more exciting WallPapers!"
-                        )
-                        context.startActivity(intent)
-                    }
-                },
-                modifier = Modifier.padding(8.dp),
-                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Share,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.bottomAppBarContentColor
-                )
-            }
-
-            FloatingActionButton(
-                onClick = {
-                    wallpaperFullScreenViewModel.setOriginalWallpaperDialog.value = true
-                },
+        AnimatedVisibility(visible = !expanded,
+            enter = slideInVertically { 3000 } + scaleIn(),
+            exit = slideOutVertically { 500 }) {
+            Row(
                 modifier = Modifier
-                    .padding(8.dp),
-                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.Wallpaper,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.bottomAppBarContentColor
-                )
+
+                FloatingActionButton(
+                    onClick = {
+                        shareWallpaper(context, finalImageBitmap, false, false)
+                    },
+                    modifier = Modifier
+                        .padding(8.dp),
+                    backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.bottomAppBarContentColor
+                    )
+                }
+
+                FloatingActionButton(
+                    onClick = {
+                        wallpaperFullScreenViewModel.setOriginalWallpaperDialog.value = true
+                        wallpaperFullScreenViewModel.interstitalState.value = true
+                    },
+                    modifier = Modifier
+                        .padding(8.dp),
+                    backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Wallpaper,
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.bottomAppBarContentColor
+                    )
+                }
             }
         }
     }

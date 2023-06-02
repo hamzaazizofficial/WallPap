@@ -28,7 +28,8 @@ fun SetWallpaperDialog(
     dialogState: MutableState<Boolean>,
     context: Context,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
-    fullUrl: String
+    fullUrl: String,
+    finalImageBitmap: Bitmap?
 ) {
     Dialog(
         onDismissRequest = { dialogState.value = false },
@@ -39,7 +40,8 @@ fun SetWallpaperDialog(
             dialogState,
             context,
             wallpaperFullScreenViewModel,
-            fullUrl
+            fullUrl,
+            finalImageBitmap
         )
     }
 }
@@ -51,7 +53,8 @@ fun SetWallpaperDialogUI(
     dialogState: MutableState<Boolean>,
     context: Context,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
-    fullUrl: String
+    fullUrl: String,
+    finalImageBitmap: Bitmap?
 ) {
     Card(
         shape = RoundedCornerShape(0.dp),
@@ -99,7 +102,7 @@ fun SetWallpaperDialogUI(
                     modifier = Modifier.padding(5.dp),
                     onClick = {
                         wallpaperFullScreenViewModel.setWallpaperAs = 1
-                        setWallPaper(context, fullUrl, wallpaperFullScreenViewModel.setWallpaperAs)
+                        setWallPaper(context, fullUrl, wallpaperFullScreenViewModel.setWallpaperAs, finalImageBitmap)
                         dialogState.value = false
                         wallpaperFullScreenViewModel.interstitalState.value = true
                     }) {
@@ -120,7 +123,8 @@ fun SetWallpaperDialogUI(
                         setWallPaper(
                             context,
                             fullUrl,
-                            wallpaperFullScreenViewModel.setWallpaperAs
+                            wallpaperFullScreenViewModel.setWallpaperAs,
+                            finalImageBitmap
                         )
                         dialogState.value = false
                         wallpaperFullScreenViewModel.interstitalState.value = true
@@ -141,7 +145,8 @@ fun SetWallpaperDialogUI(
                         setWallPaper(
                             context,
                             fullUrl,
-                            wallpaperFullScreenViewModel.setWallpaperAs
+                            wallpaperFullScreenViewModel.setWallpaperAs,
+                            finalImageBitmap
                         )
                         dialogState.value = false
                         wallpaperFullScreenViewModel.interstitalState.value = true
