@@ -1,6 +1,9 @@
 package com.hamza.wallpap.ui.screens.favourite
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.NetworkCheck
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
@@ -28,14 +32,13 @@ import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
-import com.hamza.wallpap.navigation.Screen
-import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
-import com.hamza.wallpap.ui.theme.maven_pro_regular
-import com.hamza.wallpap.ui.theme.systemBarColor
-import com.hamza.wallpap.ui.theme.textColor
+import com.hamza.wallpap.ui.theme.*
+import com.hamza.wallpap.util.isOnline
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
+@RequiresApi(Build.VERSION_CODES.M)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun FavouriteScreen(
     favUrlsViewModel: FavUrlsViewModel,
@@ -47,28 +50,70 @@ fun FavouriteScreen(
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
 
-    if (favouriteItemsData.value.isEmpty()) {
+//    AnimatedVisibility(
+//        visible = favouriteItemsData.value.isEmpty(),
+//        enter = scaleIn() + fadeIn(),
+//        exit = scaleOut() + fadeOut()
+//    ) {
+//
+//    }
+    if (!isOnline(context)) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.background)
+        ) {
+            Icon(
+                tint = MaterialTheme.colors.topAppBarTitle,
+                imageVector = Icons.Default.NetworkCheck, contentDescription = null,
+                modifier = Modifier.size(50.dp)
+            )
+
+            Spacer(modifier = Modifier.padding(8.dp))
+
+            Text(
+                text = "Check your Network Connection\nand reopen the app.",
+                color = MaterialTheme.colors.textColor,
+                fontFamily = maven_pro_regular,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+            )
+        }
+    } else {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background),
-            contentAlignment = Alignment.Center
+            contentAlignment = if (favouriteItemsData.value.isEmpty()) Alignment.Center else Alignment.TopCenter
         ) {
-            Text(
-                text = "Your Favourite Wallpapers will appear here",
-                fontSize = 18.sp,
-                fontFamily = maven_pro_regular,
-                color = MaterialTheme.colors.textColor,
-                textAlign = TextAlign.Center
-            )
+            AnimatedVisibility(
+                visible = favouriteItemsData.value.isEmpty(),
+                enter = scaleIn() + fadeIn(),
+                exit = scaleOut() + fadeOut()
+            ) {
+                Text(
+                    text = "Your Favourite Wallpapers will appear here",
+                    fontSize = 18.sp,
+                    fontFamily = maven_pro_regular,
+                    color = MaterialTheme.colors.textColor,
+                    textAlign = TextAlign.Center
+                )
+            }
+//        else {
+            LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
+                items(favouriteItemsData.value) { favUrl ->
+                    FavouriteItem(favUrl, favUrlsViewModel, navController, context)
+                }
+            })
+//    }
         }
     }
 
-    LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
-        items(favouriteItemsData.value) { favUrl ->
-            FavouriteItem(favUrl, favUrlsViewModel, navController, context)
-        }
-    })
 }
 
 @Composable

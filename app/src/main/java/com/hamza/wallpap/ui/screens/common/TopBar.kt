@@ -19,6 +19,7 @@ import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.*
+import com.hamza.wallpap.util.isOnline
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalPagingApi::class, ExperimentalAnimationApi::class)
@@ -28,12 +29,14 @@ fun TopBar(
     currentRoute: String?,
     onSearchClicked: () -> Unit,
     onUserDetailsClicked: () -> Unit,
+    onRefreshClicked: () -> Unit,
     homeViewModel: HomeViewModel,
     randomScreenViewModel: RandomScreenViewModel,
     favUrlsViewModel: FavUrlsViewModel,
     context: Context,
     customWallpaperViewModel: CustomWallpaperViewModel,
 ) {
+
     if (customWallpaperViewModel.clearEditorDialogState.value) {
         ClearAllDialog(
             dialogState = customWallpaperViewModel.clearEditorDialogState,
@@ -95,6 +98,22 @@ fun TopBar(
             }
         },
         actions = {
+
+//            if (currentRoute.equals(Screen.Home.route)
+//                || currentRoute.equals(Screen.Random.route)
+//                || currentRoute.equals(Screen.Favourite.route)
+//                || currentRoute.equals(Screen.Latest.route)
+//            ) {
+//                if (!isOnline(context)) {
+//                    IconButton(onClick = onRefreshClicked) {
+//                        Icon(
+//                            imageVector = Icons.Default.Refresh,
+//                            contentDescription = "Refresh",
+//                            tint = MaterialTheme.colors.topAppBarContentColor
+//                        )
+//                    }
+//                }
+//            }
 
             if (!currentRoute.equals(Screen.Settings.route)) {
 
@@ -166,7 +185,7 @@ fun TopBar(
                             }) {
                             if (customWallpaperViewModel.editorDropDownExpanded.value) {
                                 Icon(
-                                    imageVector = Icons.Filled.Close,
+                                    imageVector = Icons.Filled.Done,
                                     contentDescription = null,
                                     tint = if ((customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) || customWallpaperViewModel.editorDropDownExpanded.value) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
                                 )

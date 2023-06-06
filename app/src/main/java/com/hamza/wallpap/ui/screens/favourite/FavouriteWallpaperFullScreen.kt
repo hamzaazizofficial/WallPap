@@ -34,6 +34,7 @@ import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
+import com.hamza.wallpap.ui.theme.iconColor
 import com.hamza.wallpap.util.getBitmapFromUrl
 import com.hamza.wallpap.util.loadReducedSizeBitmapFromUrl
 import com.hamza.wallpap.util.saveMediaToStorage
@@ -245,7 +246,7 @@ fun FavouriteWallpaperFullScreen(
                                     Icon(
                                         imageVector = Icons.Default.Done,
                                         contentDescription = null,
-                                        tint = Color.White
+                                        tint = if ((wallpaperFullScreenViewModel.saturationSliderValue.value != 1f && wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f) || expanded) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
                                     )
                                 }
                             } else {
@@ -277,7 +278,7 @@ fun FavouriteWallpaperFullScreen(
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
                                 androidx.compose.material3.Slider(
-                                    modifier = Modifier.weight(4.3f),
+                                    modifier = Modifier.weight(4.5f),
                                     value = wallpaperFullScreenViewModel.saturationSliderPosition.value,
                                     onValueChange = {
                                         wallpaperFullScreenViewModel.saturationSliderPosition.value =
@@ -302,7 +303,7 @@ fun FavouriteWallpaperFullScreen(
                                     finalImageBitmap = originalImage
                                 }, modifier = Modifier.weight(1f)) {
                                     Icon(
-                                        imageVector = Icons.Default.FormatColorReset,
+                                        imageVector = if (wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f && wallpaperFullScreenViewModel.saturationSliderValue.value != 1f) Icons.Default.InvertColorsOff else Icons.Default.InvertColors,
                                         contentDescription = null,
                                         tint = Color.White
                                     )

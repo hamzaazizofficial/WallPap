@@ -35,6 +35,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.ui.theme.textColor
+import com.hamza.wallpap.ui.theme.topAppBarTitle
 import com.hamza.wallpap.util.isOnline
 import kotlinx.coroutines.launch
 import java.net.URLEncoder
@@ -74,15 +75,15 @@ fun LatestScreen(
                 .background(MaterialTheme.colors.background)
         ) {
             Icon(
-                tint = Color.White,
+                tint = MaterialTheme.colors.topAppBarTitle,
                 imageVector = Icons.Default.NetworkCheck, contentDescription = null,
                 modifier = Modifier.size(50.dp)
             )
 
-            Spacer(modifier = Modifier.padding(10.dp))
+            Spacer(modifier = Modifier.padding(8.dp))
 
             Text(
-                text = "Check your Network Connection.",
+                text = "Check your Network Connection\nand reopen the app.",
                 color = MaterialTheme.colors.textColor,
                 fontFamily = maven_pro_regular,
                 fontSize = 16.sp,

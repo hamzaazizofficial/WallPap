@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,6 +28,7 @@ import com.hamza.wallpap.ui.screens.common.HomeListContent
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.textColor
+import com.hamza.wallpap.ui.theme.topAppBarTitle
 import com.hamza.wallpap.util.isOnline
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -75,15 +75,15 @@ fun SearchScreen(
                         .background(MaterialTheme.colors.background)
                 ) {
                     Icon(
-                        tint = Color.White,
+                        tint = MaterialTheme.colors.topAppBarTitle,
                         imageVector = Icons.Default.NetworkCheck, contentDescription = null,
                         modifier = Modifier.size(50.dp)
                     )
 
-                    Spacer(modifier = Modifier.padding(10.dp))
+                    Spacer(modifier = Modifier.padding(8.dp))
 
                     Text(
-                        text = "Check your Network Connection.",
+                        text = "Check your Network Connection\nand reopen the app.",
                         color = MaterialTheme.colors.textColor,
                         fontFamily = maven_pro_regular,
                         fontSize = 16.sp,

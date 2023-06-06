@@ -1,15 +1,14 @@
 package com.hamza.wallpap.ui
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,6 +40,7 @@ fun MainScreen(
     customWallpaperViewModel: CustomWallpaperViewModel = hiltViewModel(),
     onItemSelected: (WallPapTheme) -> Unit,
 ) {
+    val refreshTrigger = remember { mutableStateOf(0) }
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     val context = LocalContext.current
@@ -85,6 +85,9 @@ fun MainScreen(
                             randomScreenViewModel.showUserDetails =
                                 !randomScreenViewModel.showUserDetails
                         }
+                    },
+                    onRefreshClicked = {
+                        refreshTrigger.value++
                     },
                     homeViewModel,
                     randomScreenViewModel,
