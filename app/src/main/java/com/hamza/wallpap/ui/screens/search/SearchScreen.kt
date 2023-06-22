@@ -1,5 +1,6 @@
 package com.hamza.wallpap.ui.screens.search
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -16,14 +17,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.paging.ExperimentalPagingApi
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
+import com.google.accompanist.swiperefresh.SwipeRefreshState
+import com.hamza.wallpap.R
+import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.screens.common.HomeListContent
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
@@ -41,10 +46,12 @@ fun SearchScreen(
     searchViewModel: SearchViewModel,
     homeViewModel: HomeViewModel,
     state: LazyStaggeredGridState,
+    items: LazyPagingItems<UnsplashImage>,
+    refreshState: SwipeRefreshState,
+    context: Context,
 ) {
     val searchQuery by searchViewModel.searchQuery
     val searchedImages = searchViewModel.searchedImages.collectAsLazyPagingItems()
-    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -73,6 +80,7 @@ fun SearchScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colors.background)
+                        .padding(padding)
                 ) {
                     Icon(
                         tint = MaterialTheme.colors.topAppBarTitle,
@@ -83,7 +91,7 @@ fun SearchScreen(
                     Spacer(modifier = Modifier.padding(8.dp))
 
                     Text(
-                        text = "Check your Network Connection\nand reopen the app.",
+                        text = stringResource(id = R.string.check_network) + "\n" + stringResource(id = R.string.reopen_app),
                         color = MaterialTheme.colors.textColor,
                         fontFamily = maven_pro_regular,
                         fontSize = 16.sp,
@@ -98,7 +106,9 @@ fun SearchScreen(
                     items = searchedImages,
                     navController,
                     homeViewModel,
-                    state
+                    state,
+                    { items.refresh() },
+                    refreshState
                 )
             }
         }

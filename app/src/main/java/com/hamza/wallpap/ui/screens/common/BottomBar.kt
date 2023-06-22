@@ -20,8 +20,7 @@ fun BottomBar(
         Screen.Latest,
         Screen.CustomWallpaperEditorScreen,
         Screen.Random,
-        Screen.Favourite,
-//        Screen.Settings,
+        Screen.Favourite
     )
     CompositionLocalProvider(LocalElevationOverlay provides null) {
         BottomNavigation(

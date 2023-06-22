@@ -25,8 +25,6 @@ fun SearchChips(
             modifier = Modifier.padding(vertical = 2.dp),
             onClick = { },
             colors = ButtonDefaults.buttonColors(
-//                contentColor = MaterialTheme.colors.onSecondary,
-//                backgroundColor = MaterialTheme.colors.secondary
                 contentColor = Color.White,
                 backgroundColor = MaterialTheme.colors.bottomAppBarContentColor
             ),

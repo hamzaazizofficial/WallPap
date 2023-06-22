@@ -41,7 +41,6 @@ import com.hamza.wallpap.util.saveMediaToStorage
 import com.hamza.wallpap.util.shareWallpaper
 import dev.shreyaspatil.capturable.Capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
-import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.N)
@@ -53,12 +52,11 @@ fun FavouriteWallpaperFullScreen(
     favUrlsViewModel: FavUrlsViewModel,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
     context: Context,
-    scope: CoroutineScope,
 ) {
     var smallSizeImage by remember { mutableStateOf<Bitmap?>(null) }
     var originalImage by remember { mutableStateOf<Bitmap?>(null) }
     var finalImageBitmap by remember { mutableStateOf<Bitmap?>(null) }
-    val snackbarHostState = remember { androidx.compose.material3.SnackbarHostState() }
+    val snackBarHostState = remember { androidx.compose.material3.SnackbarHostState() }
     var expanded by remember { mutableStateOf(false) }
     val captureController = rememberCaptureController()
     val matrix by remember { mutableStateOf(ColorMatrix()) }
@@ -73,11 +71,12 @@ fun FavouriteWallpaperFullScreen(
 
     androidx.compose.material3.Scaffold(snackbarHost = {
         androidx.compose.material3.SnackbarHost(
-            hostState = snackbarHostState
+            hostState = snackBarHostState
         )
     }) { padding ->
         Box(
             Modifier
+                .padding(padding)
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background),
             contentAlignment = Alignment.BottomCenter
@@ -96,7 +95,7 @@ fun FavouriteWallpaperFullScreen(
             var showFitScreenBtn by remember { mutableStateOf(true) }
             var showCropScreenBtn by remember { mutableStateOf(false) }
 
-            Capturable(controller = captureController, onCaptured = { bitmap, error ->
+            Capturable(controller = captureController, onCaptured = { bitmap, _ ->
                 if (bitmap != null) {
                     finalImageBitmap = bitmap.asAndroidBitmap()
                 }
@@ -130,8 +129,7 @@ fun FavouriteWallpaperFullScreen(
                     .fillMaxWidth()
                     .alpha(ContentAlpha.medium)
                     .align(Alignment.TopEnd)
-                    .animateContentSize(),
-                color = Color.Black
+                    .animateContentSize(), color = Color.Black
             ) {
                 Column {
                     Row(
@@ -142,12 +140,11 @@ fun FavouriteWallpaperFullScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        IconButton(
-                            onClick = {
-                                navController.popBackStack()
-                                wallpaperFullScreenViewModel.saturationSliderPosition.value = 1f
-                                wallpaperFullScreenViewModel.saturationSliderValue.value = 1f
-                            }) {
+                        IconButton(onClick = {
+                            navController.popBackStack()
+                            wallpaperFullScreenViewModel.saturationSliderPosition.value = 1f
+                            wallpaperFullScreenViewModel.saturationSliderValue.value = 1f
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
                                 contentDescription = null,
@@ -161,21 +158,17 @@ fun FavouriteWallpaperFullScreen(
                                 enter = scaleIn() + fadeIn(),
                                 exit = scaleOut() + fadeOut()
                             ) {
-                                if ((wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f &&
-                                            wallpaperFullScreenViewModel.saturationSliderValue.value != 1f)
-                                ) {
-                                    IconButton(
-                                        onClick = {
-                                            captureController.capture()
-                                            finalImageBitmap?.let {
-                                                saveMediaToStorage(
-                                                    it,
-                                                    context
-                                                )
-                                                wallpaperFullScreenViewModel.interstitalState.value =
-                                                    true
-                                            }
-                                        }) {
+                                if ((wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f && wallpaperFullScreenViewModel.saturationSliderValue.value != 1f)) {
+                                    IconButton(onClick = {
+                                        captureController.capture()
+                                        finalImageBitmap?.let {
+                                            saveMediaToStorage(
+                                                it, context
+                                            )
+                                            wallpaperFullScreenViewModel.interstitialState.value =
+                                                true
+                                        }
+                                    }) {
                                         Icon(
                                             imageVector = Icons.Rounded.Download,
                                             contentDescription = null,
@@ -183,17 +176,15 @@ fun FavouriteWallpaperFullScreen(
                                         )
                                     }
                                 } else {
-                                    IconButton(
-                                        onClick = {
-                                            finalImageBitmap?.let {
-                                                saveMediaToStorage(
-                                                    it,
-                                                    context
-                                                )
-                                                wallpaperFullScreenViewModel.interstitalState.value =
-                                                    true
-                                            }
-                                        }) {
+                                    IconButton(onClick = {
+                                        finalImageBitmap?.let {
+                                            saveMediaToStorage(
+                                                it, context
+                                            )
+                                            wallpaperFullScreenViewModel.interstitialState.value =
+                                                true
+                                        }
+                                    }) {
                                         Icon(
                                             imageVector = Icons.Rounded.Download,
                                             contentDescription = null,
@@ -204,12 +195,11 @@ fun FavouriteWallpaperFullScreen(
                             }
 
                             if (showFitScreenBtn) {
-                                IconButton(
-                                    onClick = {
-                                        scale = ContentScale.Fit
-                                        showFitScreenBtn = false
-                                        showCropScreenBtn = true
-                                    }) {
+                                IconButton(onClick = {
+                                    scale = ContentScale.Fit
+                                    showFitScreenBtn = false
+                                    showCropScreenBtn = true
+                                }) {
                                     Icon(
                                         imageVector = Icons.Default.Fullscreen,
                                         contentDescription = null,
@@ -219,12 +209,11 @@ fun FavouriteWallpaperFullScreen(
                             }
 
                             if (showCropScreenBtn) {
-                                IconButton(
-                                    onClick = {
-                                        scale = ContentScale.Crop
-                                        showCropScreenBtn = false
-                                        showFitScreenBtn = true
-                                    }) {
+                                IconButton(onClick = {
+                                    scale = ContentScale.Crop
+                                    showCropScreenBtn = false
+                                    showFitScreenBtn = true
+                                }) {
                                     Icon(
                                         imageVector = Icons.Rounded.Fullscreen,
                                         contentDescription = null,
@@ -234,15 +223,15 @@ fun FavouriteWallpaperFullScreen(
                             }
 
                             if (expanded) {
-                                IconButton(
-                                    onClick = {
+                                IconButton(onClick = {
+                                    expanded =
                                         if (wallpaperFullScreenViewModel.saturationSliderValue.value == 1f && wallpaperFullScreenViewModel.saturationSliderPosition.value == 1f) {
-                                            expanded = false
+                                            false
                                         } else {
                                             captureController.capture()
-                                            expanded = false
+                                            false
                                         }
-                                    }) {
+                                }) {
                                     Icon(
                                         imageVector = Icons.Default.Done,
                                         contentDescription = null,
@@ -250,10 +239,9 @@ fun FavouriteWallpaperFullScreen(
                                     )
                                 }
                             } else {
-                                IconButton(
-                                    onClick = {
-                                        expanded = true
-                                    }) {
+                                IconButton(onClick = {
+                                    expanded = true
+                                }) {
                                     Icon(
                                         imageVector = Icons.Default.InvertColors,
                                         contentDescription = null,
@@ -265,8 +253,7 @@ fun FavouriteWallpaperFullScreen(
                     }
                     AnimatedVisibility(visible = expanded) {
                         Column(
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -281,8 +268,7 @@ fun FavouriteWallpaperFullScreen(
                                     modifier = Modifier.weight(4.5f),
                                     value = wallpaperFullScreenViewModel.saturationSliderPosition.value,
                                     onValueChange = {
-                                        wallpaperFullScreenViewModel.saturationSliderPosition.value =
-                                            it
+                                        wallpaperFullScreenViewModel.saturationSliderPosition.value = it
                                     },
                                     valueRange = 0f..10f,
                                     onValueChangeFinished = {
@@ -290,18 +276,18 @@ fun FavouriteWallpaperFullScreen(
                                             wallpaperFullScreenViewModel.saturationSliderPosition.value
                                     },
                                     colors = androidx.compose.material3.SliderDefaults.colors(
-                                        activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(
-                                            0.5f
-                                        ),
+                                        activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(0.5f),
                                         thumbColor = MaterialTheme.colors.bottomAppBarContentColor
                                     )
                                 )
 
-                                IconButton(onClick = {
-                                    wallpaperFullScreenViewModel.saturationSliderPosition.value = 1f
-                                    wallpaperFullScreenViewModel.saturationSliderValue.value = 1f
-                                    finalImageBitmap = originalImage
-                                }, modifier = Modifier.weight(1f)) {
+                                IconButton(
+                                    onClick = {
+                                        wallpaperFullScreenViewModel.saturationSliderPosition.value = 1f
+                                        wallpaperFullScreenViewModel.saturationSliderValue.value = 1f
+                                        finalImageBitmap = originalImage
+                                    }, modifier = Modifier.weight(1f))
+                                {
                                     Icon(
                                         imageVector = if (wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f && wallpaperFullScreenViewModel.saturationSliderValue.value != 1f) Icons.Default.InvertColorsOff else Icons.Default.InvertColors,
                                         contentDescription = null,
@@ -314,9 +300,11 @@ fun FavouriteWallpaperFullScreen(
                 }
             }
 
-            AnimatedVisibility(visible = !expanded,
+            AnimatedVisibility(
+                visible = !expanded,
                 enter = slideInVertically { 3000 } + scaleIn(),
-                exit = slideOutVertically { 500 }) {
+                exit = slideOutVertically { 500 })
+            {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -327,10 +315,14 @@ fun FavouriteWallpaperFullScreen(
 
                     FloatingActionButton(
                         onClick = {
-                            shareWallpaper(context, finalImageBitmap, false, false)
+                            shareWallpaper(
+                                context,
+                                finalImageBitmap,
+                                shareWithWhatsAppOnly = false,
+                                saveToDrive = false
+                            )
                         },
-                        modifier = Modifier
-                            .padding(8.dp),
+                        modifier = Modifier.padding(8.dp),
                         backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
                     ) {
                         Icon(
@@ -344,15 +336,12 @@ fun FavouriteWallpaperFullScreen(
                         onClick = {
                             favUrlsViewModel.deleteFavouriteUrl(
                                 FavouriteUrls(
-                                    wallpaperFullScreenViewModel.id,
-                                    fullUrl,
-                                    regularUrl
+                                    wallpaperFullScreenViewModel.id, fullUrl, regularUrl
                                 )
                             )
-                            Toast.makeText(context, "Removed!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Removed from favorites!", Toast.LENGTH_SHORT).show()
                         },
-                        modifier = Modifier
-                            .padding(8.dp),
+                        modifier = Modifier.padding(8.dp),
                         backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
                     ) {
                         Icon(
@@ -365,10 +354,9 @@ fun FavouriteWallpaperFullScreen(
                     FloatingActionButton(
                         onClick = {
                             wallpaperFullScreenViewModel.setOriginalWallpaperDialog.value = true
-                            wallpaperFullScreenViewModel.interstitalState.value = true
+                            wallpaperFullScreenViewModel.interstitialState.value = true
                         },
-                        modifier = Modifier
-                            .padding(8.dp),
+                        modifier = Modifier.padding(8.dp),
                         backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
                     ) {
                         Icon(

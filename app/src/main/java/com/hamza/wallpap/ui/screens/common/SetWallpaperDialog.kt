@@ -4,20 +4,29 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Wallpaper
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.ui.theme.*
 import com.hamza.wallpap.util.setWallPaper
@@ -29,7 +38,7 @@ fun SetWallpaperDialog(
     context: Context,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
     fullUrl: String,
-    finalImageBitmap: Bitmap?
+    finalImageBitmap: Bitmap?,
 ) {
     Dialog(
         onDismissRequest = { dialogState.value = false },
@@ -54,30 +63,43 @@ fun SetWallpaperDialogUI(
     context: Context,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
     fullUrl: String,
-    finalImageBitmap: Bitmap?
+    finalImageBitmap: Bitmap?,
 ) {
     Card(
-        shape = RoundedCornerShape(0.dp),
+        shape = RoundedCornerShape(10.dp),
         modifier = Modifier.padding(10.dp, 5.dp, 10.dp, 10.dp),
         elevation = 0.dp,
     ) {
+        var state by remember { mutableStateOf(true) }
         Column(
-            modifier
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
                 .background(color = MaterialTheme.colors.background)
         ) {
-            Icon(
-                tint = MaterialTheme.colors.iconColor,
-                imageVector = Icons.Outlined.Wallpaper,
+//            Icon(
+//                tint = MaterialTheme.colors.iconColor,
+//                imageVector = Icons.Outlined.Wallpaper,
+//                contentDescription = null,
+//                modifier = Modifier
+//                    .padding(top = 35.dp)
+//                    .height(70.dp)
+//                    .fillMaxWidth(),
+//            )
+
+            Image(
+                painterResource(id = R.drawable.wattpad),
                 contentDescription = null,
-                modifier = Modifier
-                    .padding(top = 35.dp)
-                    .height(70.dp)
-                    .fillMaxWidth(),
+                contentScale = ContentScale.Fit, modifier = modifier
+                    .padding(top = 10.dp, bottom = 10.dp)
+                    .size(80.dp)
             )
 
+
+
             Column(modifier = Modifier.padding(16.dp)) {
+
                 Text(
-                    text = "Set Wallpaper as",
+                    text = "Choose Scale",
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(top = 5.dp)
@@ -85,7 +107,76 @@ fun SetWallpaperDialogUI(
                     style = MaterialTheme.typography.subtitle1,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colors.textColor
+                    color = MaterialTheme.colors.textColor,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .selectableGroup()
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "Center Crop",
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.subtitle1,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            color = MaterialTheme.colors.textColor
+                        )
+                        RadioButton(
+                            colors = RadioButtonDefaults.colors(
+                                selectedColor = MaterialTheme.colors.bottomAppBarContentColor,
+                                unselectedColor = MaterialTheme.colors.topAppBarTitle
+                            ),
+                            selected = state,
+                            onClick = { state = true },
+                            modifier = Modifier.semantics {
+                                contentDescription = "Localized Description"
+                            }
+                        )
+                    }
+
+                    Spacer(modifier = modifier.padding(horizontal = 4.dp))
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "Fit",
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.subtitle1,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            color = MaterialTheme.colors.textColor
+                        )
+                        RadioButton(
+                            colors = RadioButtonDefaults.colors(
+                                selectedColor = MaterialTheme.colors.bottomAppBarContentColor,
+                                unselectedColor = MaterialTheme.colors.topAppBarTitle
+                            ),
+                            selected = !state,
+                            onClick = { state = false },
+                            modifier = Modifier.semantics {
+                                contentDescription = "Localized Description"
+                            }
+                        )
+                    }
+
+                }
+
+                Text(
+                    text = stringResource(id = R.string.set_wallpaper),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(top = 5.dp)
+                        .fillMaxWidth(),
+                    style = MaterialTheme.typography.subtitle1,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colors.textColor,
+                    fontWeight = FontWeight.Bold
                 )
             }
             Row(
@@ -102,17 +193,23 @@ fun SetWallpaperDialogUI(
                     modifier = Modifier.padding(5.dp),
                     onClick = {
                         wallpaperFullScreenViewModel.setWallpaperAs = 1
-                        setWallPaper(context, fullUrl, wallpaperFullScreenViewModel.setWallpaperAs, finalImageBitmap)
+                        setWallPaper(
+                            context,
+                            fullUrl,
+                            wallpaperFullScreenViewModel.setWallpaperAs,
+                            finalImageBitmap
+                        )
                         dialogState.value = false
-                        wallpaperFullScreenViewModel.interstitalState.value = true
+                        wallpaperFullScreenViewModel.interstitialState.value = true
                     }) {
                     Text(
                         textAlign = TextAlign.Center,
-                        text = "System",
+                        text = stringResource(id = R.string.system),
                         color = MaterialTheme.colors.bottomAppBarContentColor,
                         modifier = Modifier,
                         style = MaterialTheme.typography.subtitle1,
-                        fontFamily = maven_pro_regular
+                        fontFamily = maven_pro_regular,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
@@ -127,14 +224,15 @@ fun SetWallpaperDialogUI(
                             finalImageBitmap
                         )
                         dialogState.value = false
-                        wallpaperFullScreenViewModel.interstitalState.value = true
+                        wallpaperFullScreenViewModel.interstitialState.value = true
                     }) {
                     Text(
-                        text = "Lock Screen",
+                        text = stringResource(id = R.string.lock),
                         color = MaterialTheme.colors.bottomAppBarContentColor,
                         modifier = Modifier,
                         style = MaterialTheme.typography.subtitle1,
-                        fontFamily = maven_pro_regular
+                        fontFamily = maven_pro_regular,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
@@ -149,14 +247,15 @@ fun SetWallpaperDialogUI(
                             finalImageBitmap
                         )
                         dialogState.value = false
-                        wallpaperFullScreenViewModel.interstitalState.value = true
+                        wallpaperFullScreenViewModel.interstitialState.value = true
                     }) {
                     Text(
-                        text = "Both",
+                        text = stringResource(id = R.string.both),
                         color = MaterialTheme.colors.bottomAppBarContentColor,
                         modifier = Modifier,
                         style = MaterialTheme.typography.subtitle1,
-                        fontFamily = maven_pro_regular
+                        fontFamily = maven_pro_regular,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }

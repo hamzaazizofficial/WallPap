@@ -14,14 +14,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NetworkCheck
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -31,7 +30,10 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.ui.theme.textColor
@@ -49,12 +51,21 @@ fun LatestScreen(
     navController: NavHostController,
     amoledViewModel: LatestViewModel,
     scaffoldState: ScaffoldState,
+    systemUiController: SystemUiController,
 ) {
-    val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     val data = amoledViewModel.wallpaperItems
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+
+    var isRefreshing by remember { mutableStateOf(false) }
+
+    val refreshAction: () -> Unit = {
+        isRefreshing = true
+        amoledViewModel.refreshWallpaperItems().apply {
+            isRefreshing = false
+        }
+    }
 
     BackHandler {
         if (scaffoldState.drawerState.isOpen) {
@@ -83,7 +94,7 @@ fun LatestScreen(
             Spacer(modifier = Modifier.padding(8.dp))
 
             Text(
-                text = "Check your Network Connection\nand reopen the app.",
+                text = stringResource(id = R.string.check_network) + "\n" + stringResource(id = R.string.reopen_app),
                 color = MaterialTheme.colors.textColor,
                 fontFamily = maven_pro_regular,
                 fontSize = 16.sp,
@@ -94,14 +105,19 @@ fun LatestScreen(
             )
         }
     } else {
-        LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(2)) {
-            data.forEach { url ->
-                item()
-                {
-                    val height = remember {
-                        Random.nextInt(140, 380).dp
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+            onRefresh = refreshAction
+        ) {
+            LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(2)) {
+                data.forEach { url ->
+                    item()
+                    {
+                        val height = remember {
+                            Random.nextInt(140, 380).dp
+                        }
+                        LatestItem(amoledUrl = url, navController, height, context)
                     }
-                    LatestItem(amoledUrl = url, navController, height, context)
                 }
             }
         }
@@ -113,7 +129,7 @@ fun LatestItem(
     amoledUrl: String,
     navController: NavHostController,
     height: Dp,
-    context: Context
+    context: Context,
 ) {
     val fullEncodedUrl = URLEncoder.encode(amoledUrl, StandardCharsets.UTF_8.toString())
 

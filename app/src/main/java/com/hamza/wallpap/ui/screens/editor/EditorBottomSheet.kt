@@ -1,6 +1,7 @@
 package com.hamza.wallpap.ui.screens.editor
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -23,17 +24,20 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
 import com.hamza.wallpap.R
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
@@ -44,16 +48,16 @@ import com.hamza.wallpap.util.isOnline
 import com.hamza.wallpap.util.saveMediaToStorage
 import com.hamza.wallpap.util.shareWallpaper
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(
     ExperimentalMaterialApi::class,
-    ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class
 )
 @Composable
 fun EditorBottomSheet(
-    navController: NavHostController,
     itemList: MutableList<CustomWallpaperBackgroundColor>,
     customWallpaperViewModel: CustomWallpaperViewModel,
     bottomSheetState: ModalBottomSheetState,
@@ -61,11 +65,13 @@ fun EditorBottomSheet(
     randomItems: LazyPagingItems<UnsplashImage>,
     context: Context,
     singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
+    keyboardController: SoftwareKeyboardController?,
+    focusManager: FocusManager,
+    isWhatsAppInstalled: Boolean,
 ) {
     if (customWallpaperViewModel.wallpaperDialogState.value) {
         TextFormatDialog(
             dialogState = customWallpaperViewModel.wallpaperDialogState,
-            context = context,
             itemList,
             customWallpaperViewModel
         )
@@ -74,7 +80,6 @@ fun EditorBottomSheet(
     if (customWallpaperViewModel.colorPickerDialogState.value) {
         ColorPickerDialog(
             dialogState = customWallpaperViewModel.colorPickerDialogState,
-            context = context,
             customWallpaperViewModel = customWallpaperViewModel
         )
     }
@@ -113,7 +118,7 @@ fun EditorBottomSheet(
                 ) {
                     Text(
                         textAlign = TextAlign.Start,
-                        text = "Background Color",
+                        text = stringResource(id = R.string.bg_color),
                         color = MaterialTheme.colors.topAppBarTitle,
                         fontWeight = FontWeight.ExtraBold,
                         fontFamily = maven_pro_regular,
@@ -123,7 +128,6 @@ fun EditorBottomSheet(
                         onClick = {
                             scope.launch {
                                 bottomSheetState.hide()
-//                                bottomSheetState.bottomSheetState.collapse()
                             }
                             customWallpaperViewModel.bgColorBottomSheet.value = false
                             customWallpaperViewModel.textBottomSheet.value = false
@@ -133,7 +137,7 @@ fun EditorBottomSheet(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.close),
                             tint = MaterialTheme.colors.topAppBarTitle,
                         )
                     }
@@ -168,7 +172,7 @@ fun EditorBottomSheet(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Colorize,
-                                contentDescription = null,
+                                contentDescription = stringResource(id = R.string.bg_color),
                                 tint = MaterialTheme.colors.topAppBarTitle,
                             )
                         }
@@ -214,7 +218,7 @@ fun EditorBottomSheet(
                 ) {
                     Text(
                         textAlign = TextAlign.Start,
-                        text = "Text",
+                        text = stringResource(id = R.string.text),
                         color = MaterialTheme.colors.topAppBarTitle,
                         fontWeight = FontWeight.ExtraBold,
                         fontFamily = maven_pro_regular,
@@ -224,7 +228,6 @@ fun EditorBottomSheet(
                         onClick = {
                             scope.launch {
                                 bottomSheetState.hide()
-//                                bottomSheetState.bottomSheetState.collapse()
                             }
                             customWallpaperViewModel.bgColorBottomSheet.value = false
                             customWallpaperViewModel.textBottomSheet.value = false
@@ -234,7 +237,7 @@ fun EditorBottomSheet(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.close),
                             tint = MaterialTheme.colors.topAppBarTitle,
                         )
                     }
@@ -247,10 +250,12 @@ fun EditorBottomSheet(
                     value = customWallpaperViewModel.wallpaperText.value,
                     singleLine = true,
                     maxLines = 1,
-                    onValueChange = { customWallpaperViewModel.wallpaperText.value = it },
+                    onValueChange = {
+                        customWallpaperViewModel.wallpaperText.value = it
+                    },
                     label = {
                         androidx.compose.material3.Text(
-                            "Enter text here",
+                            stringResource(id = R.string.enter_text),
                             color = MaterialTheme.colors.textColor,
                             fontFamily = maven_pro_regular,
                         )
@@ -271,7 +276,7 @@ fun EditorBottomSheet(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
-                                contentDescription = null,
+                                contentDescription = stringResource(id = R.string.clear_text),
                                 tint = MaterialTheme.colors.topAppBarContentColor
                             )
                         }
@@ -279,12 +284,17 @@ fun EditorBottomSheet(
                     trailingIcon = {
                         IconButton(
                             onClick = {
-                                customWallpaperViewModel.wallpaperDialogState.value = true
+                                scope.launch {
+                                    keyboardController?.hide()
+                                    focusManager.clearFocus()
+                                    delay(200)
+                                    customWallpaperViewModel.wallpaperDialogState.value = true
+                                }
                             }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.TextFormat,
-                                contentDescription = null,
+                                contentDescription = stringResource(id = R.string.text_style),
                                 tint = MaterialTheme.colors.bottomAppBarContentColor,
                             )
                         }
@@ -314,7 +324,7 @@ fun EditorBottomSheet(
                 ) {
                     Text(
                         textAlign = TextAlign.Start,
-                        text = "Background Image",
+                        text = stringResource(id = R.string.bg_image),
                         color = MaterialTheme.colors.topAppBarTitle,
                         fontWeight = FontWeight.ExtraBold,
                         fontFamily = maven_pro_regular,
@@ -324,7 +334,6 @@ fun EditorBottomSheet(
                         onClick = {
                             scope.launch {
                                 bottomSheetState.hide()
-//                                bottomSheetState.bottomSheetState.collapse()
                             }
                             customWallpaperViewModel.bgColorBottomSheet.value = false
                             customWallpaperViewModel.textBottomSheet.value = false
@@ -334,7 +343,7 @@ fun EditorBottomSheet(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.close),
                             tint = MaterialTheme.colors.topAppBarTitle,
                         )
                     }
@@ -355,9 +364,9 @@ fun EditorBottomSheet(
                             .width(80.dp)
                             .clip(RoundedCornerShape(4.dp))
                             .border(
-                                1.dp,
-                                MaterialTheme.colors.topAppBarTitle,
-                                RoundedCornerShape(4.dp)
+                                width = 1.dp,
+                                color = MaterialTheme.colors.topAppBarTitle,
+                                shape = RoundedCornerShape(4.dp)
                             ),
                     ) {
                         Box(
@@ -385,7 +394,7 @@ fun EditorBottomSheet(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.AddAPhoto,
-                                    contentDescription = null,
+                                    contentDescription = stringResource(id = R.string.add_photo),
                                     tint = Color.White,
                                 )
                             }
@@ -413,16 +422,13 @@ fun EditorBottomSheet(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Connect with internet to load \nonline wallpapers.",
+                                text = stringResource(id = R.string.connect_internet) + "\n" + stringResource(
+                                    id = R.string.online_wallpapers
+                                ),
                                 modifier = Modifier.fillMaxWidth(),
                                 textAlign = TextAlign.Center,
                                 fontFamily = maven_pro_regular
                             )
-//                            Spacer(modifier = Modifier.padding(4.dp))
-//                            Icon(
-//                                imageVector = Icons.Default.SentimentVeryDissatisfied,
-//                                contentDescription = null
-//                            )
                         }
                     }
 
@@ -432,7 +438,7 @@ fun EditorBottomSheet(
 
                 Text(
                     textAlign = TextAlign.Start,
-                    text = "Image Clarity",
+                    text = stringResource(id = R.string.img_clarity),
                     color = MaterialTheme.colors.topAppBarTitle,
                     fontWeight = FontWeight.ExtraBold,
                     fontFamily = maven_pro_regular,
@@ -459,28 +465,16 @@ fun EditorBottomSheet(
                     )
                 )
 
-                Spacer(modifier = Modifier.padding(6.dp))
-
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    verticalAlignment = Alignment.Top,
-//                    horizontalArrangement = Arrangement.Center
-//                ) {
-//                    Column(
-//                        verticalArrangement = Arrangement.Center,
-//                        horizontalAlignment = Alignment.Start,
-//                        modifier = Modifier.weight(2f)
-//                    ) {
                 Text(
                     textAlign = TextAlign.Start,
-                    text = "Image Style",
+                    text = stringResource(id = R.string.img_style),
                     color = MaterialTheme.colors.topAppBarTitle,
                     fontWeight = FontWeight.ExtraBold,
                     fontFamily = maven_pro_regular,
                     fontSize = 16.sp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 12.dp)
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
                 )
 
                 Row(
@@ -494,24 +488,22 @@ fun EditorBottomSheet(
                     if (customWallpaperViewModel.contentScale.value == ContentScale.Crop) {
                         IconButton(
                             onClick = {
-                                customWallpaperViewModel.contentScale.value =
-                                    ContentScale.Fit
+                                customWallpaperViewModel.contentScale.value = ContentScale.Fit
                             }) {
                             Icon(
                                 imageVector = Icons.Default.ZoomInMap,
-                                contentDescription = null,
+                                contentDescription = stringResource(id = R.string.zoom_in_img),
                                 tint = MaterialTheme.colors.topAppBarContentColor
                             )
                         }
                     } else {
                         IconButton(
                             onClick = {
-                                customWallpaperViewModel.contentScale.value =
-                                    ContentScale.Crop
+                                customWallpaperViewModel.contentScale.value = ContentScale.Crop
                             }) {
                             Icon(
                                 imageVector = Icons.Default.ZoomOutMap,
-                                contentDescription = null,
+                                contentDescription = stringResource(id = R.string.zoom_out_img),
                                 tint = MaterialTheme.colors.topAppBarContentColor
                             )
                         }
@@ -523,7 +515,7 @@ fun EditorBottomSheet(
                         }) {
                         Icon(
                             imageVector = Icons.Default.Rotate90DegreesCcw,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.rotate_ccw),
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
@@ -534,7 +526,7 @@ fun EditorBottomSheet(
                         }) {
                         Icon(
                             imageVector = Icons.Default.Rotate90DegreesCw,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.rotate_cw),
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
@@ -549,21 +541,15 @@ fun EditorBottomSheet(
                         }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.delete_img),
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
-
-
                 }
 
                 Spacer(modifier = Modifier.padding(vertical = 6.dp))
-//                    }
-
-//
-
-//                }
             }
+
             Spacer(modifier = Modifier.padding(vertical = 6.dp))
         }
     }
@@ -586,7 +572,7 @@ fun EditorBottomSheet(
                 ) {
                     Text(
                         textAlign = TextAlign.Start,
-                        text = "Download & Share",
+                        text = stringResource(id = R.string.download_and_share),
                         color = MaterialTheme.colors.topAppBarTitle,
                         fontWeight = FontWeight.ExtraBold,
                         fontFamily = maven_pro_regular,
@@ -596,7 +582,6 @@ fun EditorBottomSheet(
                         onClick = {
                             scope.launch {
                                 bottomSheetState.hide()
-//                                bottomSheetState.bottomSheetState.collapse()
                             }
                             customWallpaperViewModel.bgColorBottomSheet.value = false
                             customWallpaperViewModel.saveImageBottomSheet.value = false
@@ -606,7 +591,7 @@ fun EditorBottomSheet(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.close),
                             tint = MaterialTheme.colors.topAppBarTitle,
                         )
                     }
@@ -703,13 +688,16 @@ fun EditorBottomSheet(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Download,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.download),
                             tint = MaterialTheme.colors.topAppBarContentColor,
                             modifier = Modifier.padding(4.dp)
                         )
+
                         Spacer(modifier = Modifier.padding(horizontal = 6.dp))
+
                         Text(
-                            text = "Download", color = MaterialTheme.colors.topAppBarTitle,
+                            text = stringResource(id = R.string.download),
+                            color = MaterialTheme.colors.topAppBarTitle,
                             fontWeight = FontWeight.Normal,
                             fontFamily = maven_pro_regular,
                             fontSize = 16.sp,
@@ -736,13 +724,14 @@ fun EditorBottomSheet(
                     ) {
                         Icon(
                             imageVector = Icons.Default.AddToDrive,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.save_to_drive),
                             tint = Color(0xFFffbb00),
                             modifier = Modifier.padding(4.dp)
                         )
                         Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                         Text(
-                            text = "Save to Drive", color = MaterialTheme.colors.topAppBarTitle,
+                            text = stringResource(id = R.string.save_to_drive),
+                            color = MaterialTheme.colors.topAppBarTitle,
                             fontWeight = FontWeight.Normal,
                             fontFamily = maven_pro_regular,
                             fontSize = 16.sp,
@@ -757,25 +746,33 @@ fun EditorBottomSheet(
                             .fillMaxWidth()
                             .clip(shape = RoundedCornerShape(5.dp))
                             .clickable {
-                                shareWallpaper(
-                                    context,
-                                    customWallpaperViewModel.savedImageBitmap.value,
-                                    true,
-                                    false
-                                )
+                                if (isWhatsAppInstalled) {
+                                    shareWallpaper(
+                                        context,
+                                        customWallpaperViewModel.savedImageBitmap.value,
+                                        shareWithWhatsAppOnly = true,
+                                        saveToDrive = false
+                                    )
+                                } else {
+                                    val playStoreIntent = Intent(Intent.ACTION_VIEW)
+                                    playStoreIntent.data =
+                                        Uri.parse("market://details?id=com.whatsapp")
+                                    context.startActivity(playStoreIntent)
+                                }
                             },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Start
                     ) {
                         Icon(
                             imageVector = Icons.Default.Whatsapp,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.whatsapp),
                             tint = Color(0xFF25D366),
                             modifier = Modifier.padding(4.dp)
                         )
                         Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                         Text(
-                            text = "WhatsApp", color = MaterialTheme.colors.topAppBarTitle,
+                            text = stringResource(id = R.string.whatsapp),
+                            color = MaterialTheme.colors.topAppBarTitle,
                             fontWeight = FontWeight.Normal,
                             fontFamily = maven_pro_regular,
                             fontSize = 16.sp,
@@ -793,7 +790,7 @@ fun EditorBottomSheet(
                                 shareWallpaper(
                                     context,
                                     customWallpaperViewModel.savedImageBitmap.value,
-                                    false,
+                                    shareWithWhatsAppOnly = false,
                                     saveToDrive = false
                                 )
                             },
@@ -802,13 +799,14 @@ fun EditorBottomSheet(
                     ) {
                         Icon(
                             imageVector = Icons.Default.MoreHoriz,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.more_apps),
                             tint = MaterialTheme.colors.topAppBarContentColor,
                             modifier = Modifier.padding(4.dp)
                         )
                         Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                         Text(
-                            text = "More Apps", color = MaterialTheme.colors.topAppBarTitle,
+                            text = stringResource(id = R.string.more_apps),
+                            color = MaterialTheme.colors.topAppBarTitle,
                             fontWeight = FontWeight.Normal,
                             fontFamily = maven_pro_regular,
                             fontSize = 16.sp,
@@ -822,3 +820,5 @@ fun EditorBottomSheet(
         }
     }
 }
+
+

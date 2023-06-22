@@ -25,10 +25,10 @@ class CustomWallpaperViewModel : ViewModel() {
     var imageRotate = mutableStateOf(0f)
     var contentScale = mutableStateOf(ContentScale.Crop)
     var redColorSliderPosition = mutableStateOf(0f)
-    var blueColorSliderPosition =  mutableStateOf(0f)
-    var greenColorSliderPosition =   mutableStateOf(0f)
-    var alphaColorSliderPosition =  mutableStateOf(255f)
-    var redColorValue =  mutableStateOf(0)
+    var blueColorSliderPosition = mutableStateOf(0f)
+    var greenColorSliderPosition = mutableStateOf(0f)
+    var alphaColorSliderPosition = mutableStateOf(255f)
+    var redColorValue = mutableStateOf(0)
     var blueColorValue = mutableStateOf(0)
     var greenColorValue = mutableStateOf(0)
     var alphaColorValue = mutableStateOf(255)
@@ -302,9 +302,12 @@ class CustomWallpaperViewModel : ViewModel() {
 
     var clearEditorDialogState = mutableStateOf(false)
     var colorPickerDialogState = mutableStateOf(false)
-    var textFormatColorPickerState = mutableStateOf(false)
 
     var shareWallpaperVisible = mutableStateOf(false)
+
+//    var selectedBottomColorButton = mutableStateOf(false)
+//    var selectedBottomTextButton = mutableStateOf(false)
+//    var selectedBottomImageButton = mutableStateOf(false)
 
     var savedImageBitmap = mutableStateOf<Bitmap?>(null)
 
@@ -321,9 +324,7 @@ class CustomWallpaperViewModel : ViewModel() {
     var wallpaperTextDecoration = mutableStateOf(TextDecoration.None)
     var wallpaperTextFontStyle = mutableStateOf(FontStyle.Normal)
     var textSliderPosition = mutableStateOf(24f)
-
     var imageTransparencySliderPosition = mutableStateOf(1f)
-    var colorTransparencySliderPosition = mutableStateOf(0f)
 
     /* Text Format Icons Checked */
     var textAlignCenterChecked = mutableStateOf(false)
