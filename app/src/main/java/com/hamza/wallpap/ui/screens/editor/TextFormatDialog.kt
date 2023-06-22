@@ -1,11 +1,9 @@
 package com.hamza.wallpap.ui.screens.editor
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -13,8 +11,8 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -25,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.hamza.wallpap.R
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.iconColor
@@ -37,7 +36,6 @@ data class FontFamilySearchChip(val fontTitle: String, val font: FontFamily)
 @Composable
 fun TextFormatDialog(
     dialogState: MutableState<Boolean>,
-    context: Context,
     itemList: MutableList<CustomWallpaperBackgroundColor>,
     customWallpaperViewModel: CustomWallpaperViewModel,
 ) {
@@ -48,7 +46,6 @@ fun TextFormatDialog(
         TextFormatDialogUI(
             modifier = Modifier,
             dialogState,
-            context,
             itemList,
             customWallpaperViewModel
         )
@@ -60,13 +57,13 @@ fun TextFormatDialog(
 fun TextFormatDialogUI(
     modifier: Modifier = Modifier,
     dialogState: MutableState<Boolean>,
-    context: Context,
     itemList: MutableList<CustomWallpaperBackgroundColor>,
     customWallpaperViewModel: CustomWallpaperViewModel,
 ) {
+
     Card(
         shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(10.dp, 10.dp, 10.dp, 10.dp),
         elevation = 4.dp,
@@ -75,30 +72,31 @@ fun TextFormatDialogUI(
             modifier
                 .fillMaxWidth()
                 .background(color = MaterialTheme.colors.background)
+                .padding(10.dp, 10.dp, 10.dp, 10.dp),
         ) {
             Spacer(modifier = Modifier.padding(6.dp))
 
             Text(
                 textAlign = TextAlign.Start,
-                text = "Font Color",
+                text = stringResource(id = R.string.font_color),
                 color = MaterialTheme.colors.textColor,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.sp,
                 fontFamily = maven_pro_regular,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp)
             )
 
-            Spacer(modifier = Modifier.padding(2.dp))
+            Spacer(modifier = modifier.padding(2.dp))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = modifier.fillMaxWidth()
             )
             {
                 Row(
-                    modifier = Modifier
+                    modifier = modifier
                         .padding(horizontal = 6.dp, vertical = 6.dp)
                         .horizontalScroll(rememberScrollState())
                 ) {
@@ -115,24 +113,22 @@ fun TextFormatDialogUI(
                 }
             }
 
-
-
-            Spacer(modifier = Modifier.padding(6.dp))
+            Spacer(modifier = modifier.padding(6.dp))
 
             Text(
                 textAlign = TextAlign.Start,
-                text = "Font Size",
+                text = stringResource(id = R.string.font_size),
                 fontFamily = maven_pro_regular,
                 color = MaterialTheme.colors.textColor,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp)
             )
 
             androidx.compose.material3.Slider(
-                modifier = Modifier.padding(horizontal = 10.dp),
+                modifier = modifier.padding(horizontal = 10.dp),
                 value = customWallpaperViewModel.textSliderPosition.value,
                 onValueChange = { customWallpaperViewModel.textSliderPosition.value = it },
                 valueRange = 12f..250f,
@@ -147,7 +143,7 @@ fun TextFormatDialogUI(
             )
 
             Row(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -156,7 +152,7 @@ fun TextFormatDialogUI(
 
                 Text(
                     textAlign = TextAlign.Start,
-                    text = "Font Family",
+                    text = stringResource(id = R.string.font_family),
                     fontFamily = maven_pro_regular,
                     color = MaterialTheme.colors.textColor,
                     fontWeight = FontWeight.ExtraBold,
@@ -165,12 +161,14 @@ fun TextFormatDialogUI(
 
                 Card(
                     backgroundColor =
-                    if (customWallpaperViewModel.wallpaperTextColor.value == Color(0xFF000000)) Color.White
-                    else if (customWallpaperViewModel.wallpaperTextColor.value == Color(0xFFFFFFFF)) Color.Black
-                    else MaterialTheme.colors.background
+                    when (customWallpaperViewModel.wallpaperTextColor.value) {
+                        Color(0xFF000000) -> Color.White
+                        Color(0xFFFFFFFF) -> Color.Black
+                        else -> MaterialTheme.colors.background
+                    }
                 ) {
                     Text(
-                        modifier = Modifier.padding(4.dp),
+                        modifier = modifier.padding(4.dp),
                         textAlign = TextAlign.Start,
                         text = customWallpaperViewModel.fontFamilyName.value,
                         style = TextStyle(
@@ -187,7 +185,7 @@ fun TextFormatDialogUI(
             }
 
             Row(
-                modifier = Modifier
+                modifier = modifier
                     .padding(horizontal = 6.dp, vertical = 6.dp)
                     .horizontalScroll(rememberScrollState())
             ) {
@@ -200,26 +198,26 @@ fun TextFormatDialogUI(
                         customWallpaperViewModel.selectedFontFamilyIndex.value = index
                         customWallpaperViewModel.textFontFamily.value = s.font
                     }
-                    Spacer(modifier = Modifier.padding(horizontal = 6.dp))
+                    Spacer(modifier = modifier.padding(horizontal = 6.dp))
                 }
             }
 
             Text(
                 textAlign = TextAlign.Start,
-                text = "Font Style",
+                text = stringResource(id = R.string.font_style),
                 fontFamily = maven_pro_regular,
                 color = MaterialTheme.colors.textColor,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.sp,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
-                    .padding(start = 12.dp)
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
             )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp)
             ) {
@@ -227,7 +225,7 @@ fun TextFormatDialogUI(
                     checked = customWallpaperViewModel.textAlignCenterChecked.value,
                     onCheckedChange = {
                         customWallpaperViewModel.textAlignCenterChecked.value = it
-                        if (customWallpaperViewModel.textAlignCenterChecked.value){
+                        if (customWallpaperViewModel.textAlignCenterChecked.value) {
                             customWallpaperViewModel.textAlignJustifyChecked.value = false
                             customWallpaperViewModel.textAlignRightChecked.value = false
                             customWallpaperViewModel.textAlignLeftChecked.value = false
@@ -249,13 +247,13 @@ fun TextFormatDialogUI(
                     }
                 }
 
-                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+                Spacer(modifier = modifier.padding(horizontal = 4.dp))
 
                 IconToggleButton(
                     checked = customWallpaperViewModel.textAlignJustifyChecked.value,
                     onCheckedChange = {
                         customWallpaperViewModel.textAlignJustifyChecked.value = it
-                        if (customWallpaperViewModel.textAlignJustifyChecked.value){
+                        if (customWallpaperViewModel.textAlignJustifyChecked.value) {
                             customWallpaperViewModel.textAlignCenterChecked.value = false
                             customWallpaperViewModel.textAlignRightChecked.value = false
                             customWallpaperViewModel.textAlignLeftChecked.value = false
@@ -277,13 +275,13 @@ fun TextFormatDialogUI(
                     }
                 }
 
-                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+                Spacer(modifier = modifier.padding(horizontal = 4.dp))
 
                 IconToggleButton(
                     checked = customWallpaperViewModel.textAlignRightChecked.value,
                     onCheckedChange = {
                         customWallpaperViewModel.textAlignRightChecked.value = it
-                        if (customWallpaperViewModel.textAlignRightChecked.value){
+                        if (customWallpaperViewModel.textAlignRightChecked.value) {
                             customWallpaperViewModel.textAlignCenterChecked.value = false
                             customWallpaperViewModel.textAlignJustifyChecked.value = false
                             customWallpaperViewModel.textAlignLeftChecked.value = false
@@ -305,13 +303,13 @@ fun TextFormatDialogUI(
                     }
                 }
 
-                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+                Spacer(modifier = modifier.padding(horizontal = 4.dp))
 
                 IconToggleButton(
                     checked = customWallpaperViewModel.textAlignLeftChecked.value,
                     onCheckedChange = {
                         customWallpaperViewModel.textAlignLeftChecked.value = it
-                        if (customWallpaperViewModel.textAlignLeftChecked.value){
+                        if (customWallpaperViewModel.textAlignLeftChecked.value) {
                             customWallpaperViewModel.textAlignCenterChecked.value = false
                             customWallpaperViewModel.textAlignRightChecked.value = false
                             customWallpaperViewModel.textAlignJustifyChecked.value = false
@@ -337,7 +335,7 @@ fun TextFormatDialogUI(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp)
             ) {
@@ -364,7 +362,7 @@ fun TextFormatDialogUI(
                     }
                 }
 
-                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+                Spacer(modifier = modifier.padding(horizontal = 4.dp))
 
                 IconToggleButton(
                     checked = customWallpaperViewModel.textFontItalicChecked.value,
@@ -388,7 +386,7 @@ fun TextFormatDialogUI(
                     }
                 }
 
-                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+                Spacer(modifier = modifier.padding(horizontal = 4.dp))
 
                 IconToggleButton(
                     checked = customWallpaperViewModel.textFontStrikethroughChecked.value,
@@ -413,20 +411,23 @@ fun TextFormatDialogUI(
                     }
                 }
 
-                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+                Spacer(modifier = modifier.padding(horizontal = 4.dp))
             }
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(4.dp)
             ) {
                 TextButton(
                     onClick = { dialogState.value = false }
                 ) {
-                    Text(text = "Close", color = MaterialTheme.colors.textColor)
+                    Text(
+                        text = stringResource(id = R.string.close),
+                        color = MaterialTheme.colors.textColor
+                    )
                 }
             }
         }

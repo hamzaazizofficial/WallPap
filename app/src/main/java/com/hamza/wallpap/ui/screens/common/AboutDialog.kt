@@ -1,7 +1,6 @@
 package com.hamza.wallpap.ui.screens.common
 
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
@@ -14,11 +13,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -30,15 +29,14 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
+import com.hamza.wallpap.ui.theme.iconColor
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.textColor
 
 @RequiresApi(Build.VERSION_CODES.N)
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AboutDialog(
     dialogState: MutableState<Boolean>,
-    context: Context,
 ) {
     Dialog(
         onDismissRequest = { dialogState.value = false },
@@ -46,8 +44,7 @@ fun AboutDialog(
     ) {
         AboutDialogUI(
             modifier = Modifier,
-            dialogState,
-            context
+            dialogState
         )
     }
 }
@@ -57,7 +54,6 @@ fun AboutDialog(
 fun AboutDialogUI(
     modifier: Modifier = Modifier,
     dialogState: MutableState<Boolean>,
-    context: Context,
 ) {
     Card(
         shape = RoundedCornerShape(0.dp),
@@ -79,7 +75,7 @@ fun AboutDialogUI(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painterResource(id = R.drawable.letter_w),
+                        painterResource(id = R.drawable.wattpad),
                         contentDescription = null,
                         contentScale = ContentScale.Fit, modifier = Modifier
                             .padding(top = 0.dp, bottom = 10.dp)
@@ -87,29 +83,30 @@ fun AboutDialogUI(
                     )
 
                     Text(
-                        buildAnnotatedString {
+                        text = buildAnnotatedString {
                             withStyle(
                                 style = SpanStyle(
-                                    color = Color(0xFF243447),
-                                    fontSize = 29.sp,
+                                    color = MaterialTheme.colors.iconColor,
+                                    fontSize = 22.sp,
                                     fontWeight = FontWeight.Bold,
                                     fontFamily = maven_pro_regular
                                 )
                             ) {
-                                append("Wall")
+                                append(stringResource(id = R.string.wall))
                             }
 
                             withStyle(
                                 style = SpanStyle(
-                                    color = Color(0xFFFF5252),
-                                    fontSize = 29.sp,
+                                    color = Color(0xFFfe6c40),
+                                    fontSize = 22.sp,
                                     fontWeight = FontWeight.Bold,
                                     fontFamily = maven_pro_regular
                                 )
                             ) {
-                                append("Pap")
+                                append(stringResource(id = R.string.pap))
                             }
-                        })
+                        }
+                    )
                     Divider(
                         Modifier.padding(10.dp),
                         thickness = 1.dp,
@@ -131,7 +128,7 @@ fun AboutDialogUI(
                                         fontFamily = maven_pro_regular
                                     )
                                 ) {
-                                    append("WallPap is a Wallpaper app which provides HD and 4K wallpapers for mobile.")
+                                    append(stringResource(id = R.string.wallpap_slogan))
                                 }
                             })
                     }
@@ -157,7 +154,7 @@ fun AboutDialogUI(
                         dialogState.value = false
                     }) {
                     Text(
-                        text = "Close",
+                        text = stringResource(id = R.string.close),
                         color = MaterialTheme.colors.textColor,
                         style = TextStyle(
                             fontSize = MaterialTheme.typography.subtitle1.fontSize,
@@ -170,4 +167,3 @@ fun AboutDialogUI(
         }
     }
 }
-

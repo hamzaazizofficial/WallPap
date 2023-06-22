@@ -21,8 +21,6 @@ fun BannerAd(modifier: Modifier = Modifier) {
     val isInEditMode = LocalInspectionMode.current
 //    val adView = AdView(LocalContext.current)
 //    adView.setAdSize(AdSize.BANNER)
-
-    // ok
     if (isInEditMode) {
         Text(
             modifier = modifier

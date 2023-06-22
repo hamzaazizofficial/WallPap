@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +36,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
+import com.hamza.wallpap.R
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
@@ -59,9 +61,11 @@ fun RandomListContent(
         contentPadding = PaddingValues(2.dp)
     ) {
         items(items.itemCount) {
+
             val height = remember {
                 Random.nextInt(140, 380).dp
             }
+
             items[it]?.let { unsplashImage ->
                 RandomUnsplashItem(
                     unsplashImage = unsplashImage,
@@ -97,14 +101,6 @@ fun RandomUnsplashItem(
             .height(height)
             .clickable {
                 navController.navigate("home_wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl")
-//                {
-//                    navController.graph.startDestinationRoute?.let { route ->
-//                        popUpTo(route) {
-//                            saveState = true
-//                        }
-//                    }
-//                    restoreState = true
-//                }
             },
     ) {
         Box(
@@ -163,11 +159,11 @@ fun RandomUnsplashItem(
                 ) {
                     Text(
                         text = buildAnnotatedString {
-                            append("Photo by ")
+                            append(stringResource(id = R.string.photo_by) + " ")
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Black)) {
                                 append(unsplashImage.user.username)
                             }
-                            append(" on Unsplash")
+                            append(" " + stringResource(id = R.string.on_unsplash))
                         },
                         color = Color.White,
                         fontSize = MaterialTheme.typography.caption.fontSize,

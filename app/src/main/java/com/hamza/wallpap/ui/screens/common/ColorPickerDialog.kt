@@ -1,6 +1,5 @@
 package com.hamza.wallpap.ui.screens.common
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -11,10 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.theme.textColor
 
@@ -22,7 +23,6 @@ import com.hamza.wallpap.ui.theme.textColor
 @Composable
 fun ColorPickerDialog(
     dialogState: MutableState<Boolean>,
-    context: Context,
     customWallpaperViewModel: CustomWallpaperViewModel,
 ) {
     Dialog(
@@ -32,7 +32,6 @@ fun ColorPickerDialog(
         ColorPickerDialogUI(
             modifier = Modifier,
             dialogState,
-            context,
             customWallpaperViewModel
         )
     }
@@ -43,7 +42,6 @@ fun ColorPickerDialog(
 fun ColorPickerDialogUI(
     modifier: Modifier = Modifier,
     dialogState: MutableState<Boolean>,
-    context: Context,
     customWallpaperViewModel: CustomWallpaperViewModel,
 ) {
     val colorPickerBoxColor by remember(
@@ -64,7 +62,7 @@ fun ColorPickerDialogUI(
 
     Card(
         shape = RoundedCornerShape(20.dp),
-        modifier = Modifier.padding(10.dp, 5.dp, 10.dp, 10.dp),
+        modifier = modifier.padding(10.dp, 5.dp, 10.dp, 10.dp),
         elevation = 2.dp,
     ) {
         Column(
@@ -73,26 +71,26 @@ fun ColorPickerDialogUI(
         ) {
 
             Box(
-                modifier = Modifier
+                modifier = modifier
                     .padding(16.dp)
                     .fillMaxWidth(), contentAlignment = Alignment.Center
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Red (${customWallpaperViewModel.redColorValue.value})",
+                        text = stringResource(id = R.string.red) + " (${customWallpaperViewModel.redColorValue.value})",
                         style = MaterialTheme.typography.body2,
                         textAlign = TextAlign.Start,
                         color = MaterialTheme.colors.textColor,
-                        modifier = Modifier
+                        modifier = modifier
                             .fillMaxWidth()
                             .padding(horizontal = 10.dp)
                     )
 
                     androidx.compose.material3.Slider(
-                        modifier = Modifier.padding(horizontal = 10.dp),
+                        modifier = modifier.padding(horizontal = 10.dp),
                         value = customWallpaperViewModel.redColorSliderPosition.value,
                         onValueChange = {
                             customWallpaperViewModel.redColorSliderPosition.value = it
@@ -109,17 +107,17 @@ fun ColorPickerDialogUI(
                     )
 
                     Text(
-                        text = "Green (${customWallpaperViewModel.greenColorValue.value})",
+                        text = stringResource(id = R.string.green) + " (${customWallpaperViewModel.greenColorValue.value})",
                         style = MaterialTheme.typography.body2,
                         textAlign = TextAlign.Start,
                         color = MaterialTheme.colors.textColor,
-                        modifier = Modifier
+                        modifier = modifier
                             .fillMaxWidth()
                             .padding(horizontal = 10.dp)
                     )
 
                     androidx.compose.material3.Slider(
-                        modifier = Modifier.padding(horizontal = 10.dp),
+                        modifier = modifier.padding(horizontal = 10.dp),
                         value = customWallpaperViewModel.greenColorSliderPosition.value,
                         onValueChange = {
                             customWallpaperViewModel.greenColorSliderPosition.value = it
@@ -136,17 +134,17 @@ fun ColorPickerDialogUI(
                     )
 
                     Text(
-                        text = "Blue (${customWallpaperViewModel.blueColorValue.value})",
+                        text = stringResource(id = R.string.blue) + " (${customWallpaperViewModel.blueColorValue.value})",
                         style = MaterialTheme.typography.body2,
                         textAlign = TextAlign.Start,
                         color = MaterialTheme.colors.textColor,
-                        modifier = Modifier
+                        modifier = modifier
                             .fillMaxWidth()
                             .padding(horizontal = 10.dp)
                     )
 
                     androidx.compose.material3.Slider(
-                        modifier = Modifier.padding(horizontal = 10.dp),
+                        modifier = modifier.padding(horizontal = 10.dp),
                         value = customWallpaperViewModel.blueColorSliderPosition.value,
                         onValueChange = {
                             customWallpaperViewModel.blueColorSliderPosition.value = it
@@ -163,17 +161,17 @@ fun ColorPickerDialogUI(
                     )
 
                     Text(
-                        text = "Alpha (${customWallpaperViewModel.alphaColorValue.value})",
+                        text = stringResource(id = R.string.alpha) + " (${customWallpaperViewModel.alphaColorValue.value})",
                         style = MaterialTheme.typography.body2,
                         textAlign = TextAlign.Start,
                         color = MaterialTheme.colors.textColor,
-                        modifier = Modifier
+                        modifier = modifier
                             .fillMaxWidth()
                             .padding(horizontal = 10.dp)
                     )
 
                     androidx.compose.material3.Slider(
-                        modifier = Modifier.padding(horizontal = 10.dp),
+                        modifier = modifier.padding(horizontal = 10.dp),
                         value = customWallpaperViewModel.alphaColorSliderPosition.value,
                         onValueChange = {
                             customWallpaperViewModel.alphaColorSliderPosition.value = it
@@ -190,7 +188,7 @@ fun ColorPickerDialogUI(
                     )
 
                     Box(
-                        modifier = Modifier
+                        modifier = modifier
                             .fillMaxWidth()
                             .height(60.dp)
                             .padding(10.dp)
@@ -202,7 +200,7 @@ fun ColorPickerDialogUI(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(4.dp)
             ) {
@@ -213,7 +211,7 @@ fun ColorPickerDialogUI(
                         dialogState.value = false
                     }
                 ) {
-                    Text(text = "Pick", color = MaterialTheme.colors.textColor)
+                    Text(text = stringResource(id = R.string.pick), color = MaterialTheme.colors.textColor)
                 }
             }
         }

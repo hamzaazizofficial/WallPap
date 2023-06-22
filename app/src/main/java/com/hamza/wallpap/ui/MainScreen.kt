@@ -1,7 +1,6 @@
 package com.hamza.wallpap.ui
 
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -12,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.paging.ExperimentalPagingApi
@@ -25,6 +25,7 @@ import com.hamza.wallpap.ui.screens.common.TopBar
 import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
+import com.hamza.wallpap.ui.screens.settings.SettingsViewModel
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
@@ -38,9 +39,9 @@ fun MainScreen(
     randomScreenViewModel: RandomScreenViewModel = hiltViewModel(),
     favUrlsViewModel: FavUrlsViewModel = hiltViewModel(),
     customWallpaperViewModel: CustomWallpaperViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = viewModel(),
     onItemSelected: (WallPapTheme) -> Unit,
 ) {
-    val refreshTrigger = remember { mutableStateOf(0) }
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     val context = LocalContext.current
@@ -86,9 +87,6 @@ fun MainScreen(
                                 !randomScreenViewModel.showUserDetails
                         }
                     },
-                    onRefreshClicked = {
-                        refreshTrigger.value++
-                    },
                     homeViewModel,
                     randomScreenViewModel,
                     favUrlsViewModel,
@@ -109,7 +107,13 @@ fun MainScreen(
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
-            NavDrawer(scaffoldState = scaffoldState, navController, scope)
+            NavDrawer(
+                scaffoldState = scaffoldState,
+                navController,
+                scope,
+                settingsViewModel,
+                context
+            )
         }
     ) { padding ->
         Column(Modifier.padding(padding)) {
@@ -119,7 +123,8 @@ fun MainScreen(
                 onItemSelected,
                 currentRoute,
                 context,
-                scope
+                scope,
+                systemUiController
             )
         }
     }

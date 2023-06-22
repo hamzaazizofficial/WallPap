@@ -3,7 +3,9 @@ package com.hamza.wallpap.ui.screens.editor
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -22,11 +24,15 @@ import androidx.compose.material.icons.outlined.FormatColorFill
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -37,7 +43,8 @@ import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.hamza.wallpap.R
 import com.hamza.wallpap.model.UnsplashImage
 import com.hamza.wallpap.ui.theme.*
 import dev.shreyaspatil.capturable.Capturable
@@ -48,28 +55,33 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(
     ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class, ExperimentalAnimationApi::class
+    ExperimentalFoundationApi::class, ExperimentalAnimationApi::class,
+    ExperimentalComposeUiApi::class, ExperimentalComposeUiApi::class
 )
 @SuppressLint("SourceLockedOrientationActivity")
 @Composable
 fun CustomWallpaperScreen(
     navController: NavHostController,
-    scaffoldState: ScaffoldState,
     customWallpaperViewModel: CustomWallpaperViewModel,
     randomItems: LazyPagingItems<UnsplashImage>,
     context: Context,
+    systemUiController: SystemUiController,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     val activity = context as? Activity
     activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
 
     val modalBottomSheetState = rememberModalBottomSheetState(
         skipHalfExpanded = true,
         initialValue = ModalBottomSheetValue.Hidden,
     )
+
     val captureController = rememberCaptureController()
     val scope = rememberCoroutineScope()
+
+    val isWhatsAppInstalled = isWhatsAppInstalled(context)
 
     var xPosText by remember { mutableStateOf(0) }
     var yPosText by remember { mutableStateOf(0) }
@@ -99,14 +111,16 @@ fun CustomWallpaperScreen(
         sheetState = modalBottomSheetState,
         sheetContent = {
             EditorBottomSheet(
-                navController,
                 customWallpaperViewModel.colorItems,
                 customWallpaperViewModel,
                 modalBottomSheetState,
                 scope,
                 randomItems,
                 context,
-                singlePhotoPickerLauncher
+                singlePhotoPickerLauncher,
+                keyboardController,
+                focusManager,
+                isWhatsAppInstalled
             )
         },
         content = {
@@ -119,9 +133,7 @@ fun CustomWallpaperScreen(
                             AnimatedVisibility(
                                 visible = customWallpaperViewModel.bgImageFullUrl.value != null
                                         || customWallpaperViewModel.bgImageUri.value != null
-                                        || customWallpaperViewModel.bgBoxColor.value != Color(
-                                    0xF1FFFFFF
-                                )
+                                        || customWallpaperViewModel.bgBoxColor.value != Color(0xF1FFFFFF)
                                         || customWallpaperViewModel.wallpaperText.value != "",
                                 enter = scaleIn() + fadeIn(),
                                 exit = scaleOut() + fadeOut()
@@ -139,7 +151,6 @@ fun CustomWallpaperScreen(
                                                 delay(2000)
                                                 captureController.capture()
                                             }
-
                                         } else {
                                             captureController.capture()
                                         }
@@ -148,7 +159,7 @@ fun CustomWallpaperScreen(
                                 {
                                     Icon(
                                         Icons.Default.Download,
-                                        contentDescription = null,
+                                        contentDescription = stringResource(id = R.string.download),
                                         tint = Color.White
                                     )
                                 }
@@ -164,7 +175,7 @@ fun CustomWallpaperScreen(
                                 }) {
                                 Icon(
                                     Icons.Outlined.FormatColorFill,
-                                    contentDescription = null,
+                                    contentDescription = stringResource(id = R.string.bg_color),
                                     tint = MaterialTheme.colors.topAppBarTitle
                                 )
                             }
@@ -178,7 +189,7 @@ fun CustomWallpaperScreen(
                                 }) {
                                 Icon(
                                     Icons.Default.TextFields,
-                                    contentDescription = null,
+                                    contentDescription = stringResource(id = R.string.add_text),
                                     tint = MaterialTheme.colors.topAppBarTitle
                                 )
                             }
@@ -192,7 +203,7 @@ fun CustomWallpaperScreen(
                                 }) {
                                 Icon(
                                     Icons.Default.Image,
-                                    contentDescription = null,
+                                    contentDescription = stringResource(id = R.string.bg_image),
                                     tint = MaterialTheme.colors.topAppBarTitle
                                 )
                             }
@@ -208,7 +219,7 @@ fun CustomWallpaperScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Capturable(controller = captureController, onCaptured = { bitmap, error ->
+                    Capturable(controller = captureController, onCaptured = { bitmap, _ ->
                         if (bitmap != null) {
                             customWallpaperViewModel.savedImageBitmap.value =
                                 bitmap.asAndroidBitmap()
@@ -223,8 +234,7 @@ fun CustomWallpaperScreen(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .pointerInput(Unit) {
-                                    detectTransformGestures { centroid, pan, zoom, rotation ->
-//                                        scale *= zoom
+                                    detectTransformGestures { _, _, zoom, _ ->
                                         customWallpaperViewModel.wallpaperTextSize.value *= zoom
                                         customWallpaperViewModel.textSliderPosition.value *= zoom
                                     }
@@ -245,7 +255,7 @@ fun CustomWallpaperScreen(
                                 && customWallpaperViewModel.wallpaperText.value == ""
                             ) {
                                 Text(
-                                    text = "Add something here.",
+                                    text = stringResource(id = R.string.add_something),
                                     fontSize = 18.sp,
                                     fontFamily = maven_pro_regular
                                 )
@@ -319,19 +329,22 @@ fun CustomWallpaperScreen(
                                                                 )
                                                             )
 
-                                                            IconButton(onClick = {
-                                                                customWallpaperViewModel.saturationSliderPosition.value =
-                                                                    1f
-                                                                customWallpaperViewModel.saturationSliderValue.value =
-                                                                    1f
-                                                            }, modifier = Modifier.weight(1f)) {
-                                                                Icon(
-                                                                    imageVector = if (customWallpaperViewModel.saturationSliderPosition.value ==
-                                                                        1f &&
-                                                                        customWallpaperViewModel.saturationSliderValue.value ==
+                                                            IconButton(
+                                                                onClick = {
+                                                                    customWallpaperViewModel.saturationSliderPosition.value =
                                                                         1f
+                                                                    customWallpaperViewModel.saturationSliderValue.value =
+                                                                        1f
+                                                                }, modifier = Modifier.weight(1f)
+                                                            ) {
+                                                                Icon(
+                                                                    imageVector = if (
+                                                                        customWallpaperViewModel.saturationSliderPosition.value == 1f &&
+                                                                        customWallpaperViewModel.saturationSliderValue.value == 1f
                                                                     ) Icons.Default.InvertColors else Icons.Default.InvertColorsOff,
-                                                                    contentDescription = null,
+                                                                    contentDescription = stringResource(
+                                                                        id = R.string.reset_colorize
+                                                                    ),
                                                                     tint = MaterialTheme.colors.iconColor
                                                                 )
                                                             }
@@ -392,19 +405,22 @@ fun CustomWallpaperScreen(
                                                                 )
                                                             )
 
-                                                            IconButton(onClick = {
-                                                                customWallpaperViewModel.saturationSliderPosition.value =
-                                                                    1f
-                                                                customWallpaperViewModel.saturationSliderValue.value =
-                                                                    1f
-                                                            }, modifier = Modifier.weight(1f)) {
-                                                                Icon(
-                                                                    imageVector = if (customWallpaperViewModel.saturationSliderPosition.value ==
-                                                                        1f &&
-                                                                        customWallpaperViewModel.saturationSliderValue.value ==
+                                                            IconButton(
+                                                                onClick = {
+                                                                    customWallpaperViewModel.saturationSliderPosition.value =
                                                                         1f
+                                                                    customWallpaperViewModel.saturationSliderValue.value =
+                                                                        1f
+                                                                }, modifier = Modifier.weight(1f)
+                                                            ) {
+                                                                Icon(
+                                                                    imageVector = if (
+                                                                        customWallpaperViewModel.saturationSliderPosition.value == 1f &&
+                                                                        customWallpaperViewModel.saturationSliderValue.value == 1f
                                                                     ) Icons.Default.InvertColors else Icons.Default.InvertColorsOff,
-                                                                    contentDescription = null,
+                                                                    contentDescription = stringResource(
+                                                                        id = R.string.reset_colorize
+                                                                    ),
                                                                     tint = MaterialTheme.colors.iconColor
                                                                 )
                                                             }
@@ -473,19 +489,20 @@ fun CustomWallpaperScreen(
                                                         )
                                                     )
 
-                                                    IconButton(onClick = {
-                                                        customWallpaperViewModel.saturationSliderPosition.value =
-                                                            1f
-                                                        customWallpaperViewModel.saturationSliderValue.value =
-                                                            1f
-                                                    }, modifier = Modifier.weight(1f)) {
-                                                        Icon(
-                                                            imageVector = if (customWallpaperViewModel.saturationSliderPosition.value ==
-                                                                1f &&
-                                                                customWallpaperViewModel.saturationSliderValue.value ==
+                                                    IconButton(
+                                                        onClick = {
+                                                            customWallpaperViewModel.saturationSliderPosition.value =
                                                                 1f
+                                                            customWallpaperViewModel.saturationSliderValue.value =
+                                                                1f
+                                                        }, modifier = Modifier.weight(1f)
+                                                    ) {
+                                                        Icon(
+                                                            imageVector = if (
+                                                                customWallpaperViewModel.saturationSliderPosition.value == 1f &&
+                                                                customWallpaperViewModel.saturationSliderValue.value == 1f
                                                             ) Icons.Default.InvertColors else Icons.Default.InvertColorsOff,
-                                                            contentDescription = null,
+                                                            contentDescription = stringResource(id = R.string.reset_colorize),
                                                             tint = MaterialTheme.colors.iconColor
                                                         )
                                                     }
@@ -519,13 +536,9 @@ fun CustomWallpaperScreen(
                                                     modalBottomSheetState.show()
                                                 }
                                             }
-                                        },
-//                                        onLongClick = {
-//
-//                                        }
+                                        }
                                     )
                             )
-
                         }
                     }
                 }
@@ -534,5 +547,12 @@ fun CustomWallpaperScreen(
     )
 }
 
+fun isWhatsAppInstalled(context: Context): Boolean {
+    val packageManager = context.packageManager
+    val whatsappIntent = Intent(Intent.ACTION_SEND)
+    whatsappIntent.type = "text/plain"
+    whatsappIntent.setPackage("com.whatsapp")
 
-
+    val resolveInfo = packageManager.resolveActivity(whatsappIntent, PackageManager.MATCH_DEFAULT_ONLY)
+    return resolveInfo != null
+}

@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
 class SettingsViewModel : ViewModel() {
-    val themes = listOf(
+    private val themes = listOf(
         "Original",
         "Dracula"
     )

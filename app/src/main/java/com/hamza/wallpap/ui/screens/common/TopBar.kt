@@ -11,15 +11,16 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.ExperimentalPagingApi
+import com.hamza.wallpap.R
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.navigation.Screen
 import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.*
-import com.hamza.wallpap.util.isOnline
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalPagingApi::class, ExperimentalAnimationApi::class)
@@ -29,7 +30,6 @@ fun TopBar(
     currentRoute: String?,
     onSearchClicked: () -> Unit,
     onUserDetailsClicked: () -> Unit,
-    onRefreshClicked: () -> Unit,
     homeViewModel: HomeViewModel,
     randomScreenViewModel: RandomScreenViewModel,
     favUrlsViewModel: FavUrlsViewModel,
@@ -42,7 +42,7 @@ fun TopBar(
             dialogState = customWallpaperViewModel.clearEditorDialogState,
             context = context,
             customWallpaperViewModel,
-            "Are you sure want to clear the screen?",
+            stringResource(id = R.string.clear_screen),
             currentRoute,
             favUrlsViewModel
         )
@@ -53,7 +53,7 @@ fun TopBar(
             dialogState = favUrlsViewModel.clearAllImagesDialogState,
             context = context,
             customWallpaperViewModel,
-            "Are you sure want to remove all images?",
+            stringResource(id = R.string.clear_images),
             currentRoute,
             favUrlsViewModel
         )
@@ -64,13 +64,15 @@ fun TopBar(
         title = {
             Text(
                 text =
-                if (currentRoute.equals(Screen.Home.route)) "Home"
-                else if (currentRoute.equals(Screen.Settings.route)) "Settings"
-                else if (currentRoute.equals(Screen.Random.route)) "Random"
-                else if (currentRoute.equals(Screen.Favourite.route)) "Favourite"
-                else if (currentRoute.equals(Screen.Latest.route)) "Latest"
-                else if (currentRoute.equals(Screen.CustomWallpaperEditorScreen.route)) "Editor"
-                else "Home",
+                if (currentRoute.equals(Screen.Home.route)) stringResource(id = R.string.home)
+                else if (currentRoute.equals(Screen.Settings.route)) stringResource(id = R.string.settings)
+                else if (currentRoute.equals(Screen.Random.route)) stringResource(id = R.string.random)
+                else if (currentRoute.equals(Screen.Favourite.route)) stringResource(id = R.string.favourite)
+                else if (currentRoute.equals(Screen.Latest.route)) stringResource(id = R.string.latest)
+                else if (currentRoute.equals(Screen.CustomWallpaperEditorScreen.route)) stringResource(
+                    id = R.string.editor
+                )
+                else stringResource(id = R.string.home),
                 color = MaterialTheme.colors.topAppBarTitle,
             )
         },
@@ -99,29 +101,13 @@ fun TopBar(
         },
         actions = {
 
-//            if (currentRoute.equals(Screen.Home.route)
-//                || currentRoute.equals(Screen.Random.route)
-//                || currentRoute.equals(Screen.Favourite.route)
-//                || currentRoute.equals(Screen.Latest.route)
-//            ) {
-//                if (!isOnline(context)) {
-//                    IconButton(onClick = onRefreshClicked) {
-//                        Icon(
-//                            imageVector = Icons.Default.Refresh,
-//                            contentDescription = "Refresh",
-//                            tint = MaterialTheme.colors.topAppBarContentColor
-//                        )
-//                    }
-//                }
-//            }
-
             if (!currentRoute.equals(Screen.Settings.route)) {
 
                 if (currentRoute.equals(Screen.Home.route)) {
                     IconButton(onClick = onUserDetailsClicked) {
                         Icon(
                             imageVector = if (homeViewModel.showUserDetails) Icons.Default.Info else Icons.Outlined.Info,
-                            contentDescription = "Show user details icon",
+                            contentDescription = stringResource(id = R.string.show_user_details),
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
@@ -130,7 +116,7 @@ fun TopBar(
                     IconButton(onClick = onUserDetailsClicked) {
                         Icon(
                             imageVector = if (randomScreenViewModel.showUserDetails) Icons.Default.Info else Icons.Outlined.Info,
-                            contentDescription = "Show user details icon",
+                            contentDescription = stringResource(id = R.string.show_user_details),
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
@@ -145,7 +131,7 @@ fun TopBar(
                         }) {
                         Icon(
                             imageVector = Icons.Default.DeleteSweep,
-                            contentDescription = "Show user details icon",
+                            contentDescription = stringResource(id = R.string.clear_images_button),
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
@@ -166,7 +152,7 @@ fun TopBar(
                             }) {
                             Icon(
                                 imageVector = Icons.Default.ClearAll,
-                                contentDescription = "Clear Screen",
+                                contentDescription = stringResource(id = R.string.clear_screen_button),
                                 tint = MaterialTheme.colors.topAppBarContentColor
                             )
                         }
@@ -186,13 +172,14 @@ fun TopBar(
                             if (customWallpaperViewModel.editorDropDownExpanded.value) {
                                 Icon(
                                     imageVector = Icons.Filled.Done,
-                                    contentDescription = null,
-                                    tint = if ((customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) || customWallpaperViewModel.editorDropDownExpanded.value) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
+                                    contentDescription = stringResource(id = R.string.done),
+                                    tint = if (
+                                        (customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) || customWallpaperViewModel.editorDropDownExpanded.value) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
                                 )
                             } else {
                                 Icon(
                                     imageVector = Icons.Default.InvertColors,
-                                    contentDescription = null,
+                                    contentDescription = stringResource(id = R.string.colorize),
                                     tint = if (customWallpaperViewModel.saturationSliderValue.value != 1f && customWallpaperViewModel.saturationSliderPosition.value != 1f) MaterialTheme.colors.bottomAppBarContentColor else MaterialTheme.colors.iconColor
                                 )
                             }
@@ -208,7 +195,7 @@ fun TopBar(
                     IconButton(onClick = onSearchClicked) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search Icon",
+                            contentDescription = stringResource(id = R.string.search),
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }

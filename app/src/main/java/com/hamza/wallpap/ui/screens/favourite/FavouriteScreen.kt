@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,7 +30,8 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.hamza.wallpap.R
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.theme.*
@@ -43,20 +45,12 @@ import java.nio.charset.StandardCharsets
 fun FavouriteScreen(
     favUrlsViewModel: FavUrlsViewModel,
     navController: NavHostController,
-    scaffoldState: ScaffoldState,
     context: Context,
     favouriteItemsData: State<List<FavouriteUrls>>,
+    systemUiController: SystemUiController,
 ) {
-    val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
 
-//    AnimatedVisibility(
-//        visible = favouriteItemsData.value.isEmpty(),
-//        enter = scaleIn() + fadeIn(),
-//        exit = scaleOut() + fadeOut()
-//    ) {
-//
-//    }
     if (!isOnline(context)) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -67,14 +61,15 @@ fun FavouriteScreen(
         ) {
             Icon(
                 tint = MaterialTheme.colors.topAppBarTitle,
-                imageVector = Icons.Default.NetworkCheck, contentDescription = null,
+                imageVector = Icons.Default.NetworkCheck,
+                contentDescription = null,
                 modifier = Modifier.size(50.dp)
             )
 
             Spacer(modifier = Modifier.padding(8.dp))
 
             Text(
-                text = "Check your Network Connection\nand reopen the app.",
+                text = stringResource(id = R.string.check_network) + "\n" + stringResource(id = R.string.reopen_app),
                 color = MaterialTheme.colors.textColor,
                 fontFamily = maven_pro_regular,
                 fontSize = 16.sp,
@@ -97,20 +92,21 @@ fun FavouriteScreen(
                 exit = scaleOut() + fadeOut()
             ) {
                 Text(
-                    text = "Your Favourite Wallpapers will appear here",
+                    text = stringResource(id = R.string.your_fav_wallpapers),
                     fontSize = 18.sp,
                     fontFamily = maven_pro_regular,
                     color = MaterialTheme.colors.textColor,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
                 )
             }
-//        else {
             LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
                 items(favouriteItemsData.value) { favUrl ->
                     FavouriteItem(favUrl, favUrlsViewModel, navController, context)
                 }
             })
-//    }
         }
     }
 
@@ -141,11 +137,7 @@ fun FavouriteItem(
             contentAlignment = Alignment.BottomCenter
         ) {
             SubcomposeAsyncImage(
-                model = ImageRequest
-                    .Builder(context)
-                    .data(favUrl.regular)
-                    .crossfade(1000)
-                    .build(),
+                model = ImageRequest.Builder(context).data(favUrl.regular).crossfade(1000).build(),
                 contentScale = ContentScale.Crop,
                 contentDescription = null
             ) {

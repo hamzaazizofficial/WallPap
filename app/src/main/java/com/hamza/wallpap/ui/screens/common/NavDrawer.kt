@@ -1,5 +1,6 @@
 package com.hamza.wallpap.ui.screens.common
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -21,8 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -33,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.hamza.wallpap.BuildConfig
 import com.hamza.wallpap.R
@@ -48,16 +48,15 @@ fun NavDrawer(
     scaffoldState: ScaffoldState,
     navController: NavHostController,
     scope: CoroutineScope,
+    settingsViewModel: SettingsViewModel,
+    context: Context,
 ) {
-    val context = LocalContext.current
-    var settingsViewModel: SettingsViewModel = viewModel()
-
     if (settingsViewModel.dialogState.value) {
         GetProDialog(dialogState = settingsViewModel.dialogState, context = context)
     }
 
     if (settingsViewModel.dialogStateAbout.value) {
-        AboutDialog(dialogState = settingsViewModel.dialogStateAbout, context = context)
+        AboutDialog(dialogState = settingsViewModel.dialogStateAbout)
     }
 
     Column(
@@ -67,8 +66,8 @@ fun NavDrawer(
     ) {
 
         val constraints = ConstraintSet {
-            val appName = createRefFor("appname")
-            val bgNavImg = createRefFor("bgnavimg")
+            val appName = createRefFor("app_name")
+            val bgNavImg = createRefFor("bg_nav_img")
             val appLogo = createRefFor("logo")
 
             constrain(bgNavImg) {
@@ -98,7 +97,7 @@ fun NavDrawer(
                         color = MaterialTheme.colors.navDrawerBgColor
                     )
                     .height(90.dp)
-                    .layoutId("bgnavimg")
+                    .layoutId("bg_nav_img")
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -106,7 +105,7 @@ fun NavDrawer(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 0.dp)
-                    .layoutId("appname")
+                    .layoutId("app_name")
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -131,7 +130,7 @@ fun NavDrawer(
                                     fontFamily = maven_pro_regular
                                 )
                             ) {
-                                append("Wall")
+                                append(stringResource(id = R.string.wall))
                             }
 
                             withStyle(
@@ -142,7 +141,7 @@ fun NavDrawer(
                                     fontFamily = maven_pro_regular
                                 )
                             ) {
-                                append("Pap")
+                                append(stringResource(id = R.string.pap))
                             }
                         }
                     )
@@ -165,19 +164,19 @@ fun NavDrawer(
         }
 
         NavOption(
-            title = "Rate the App",
+            title = stringResource(id = R.string.rate_app),
             scaffoldState = scaffoldState,
             Icons.Default.Star
         )
 
         NavOption(
-            title = "Share the App",
+            title = stringResource(id = R.string.share_app),
             scaffoldState = scaffoldState,
             Icons.Default.Share
         )
 
         NavOption(
-            title = "Remove ads",
+            title = stringResource(id = R.string.remove_ads),
             scaffoldState = scaffoldState,
             Icons.Default.DoNotDisturb,
             modifier = Modifier.clickable {
@@ -186,7 +185,7 @@ fun NavDrawer(
         )
 
         NavOption(
-            title = "About Us",
+            title = stringResource(id = R.string.about_us),
             scaffoldState = scaffoldState,
             Icons.Default.Info,
             modifier = Modifier.clickable {
@@ -195,7 +194,7 @@ fun NavDrawer(
         )
 
         NavOption(
-            title = "Settings",
+            title = stringResource(id = R.string.settings),
             scaffoldState = scaffoldState,
             Icons.Default.Settings,
             modifier = Modifier.clickable {
@@ -209,7 +208,7 @@ fun NavDrawer(
         Divider(color = MaterialTheme.colors.iconColor.copy(0.5f))
 
         Text(
-            text = "More",
+            text = stringResource(id = R.string.more),
             color = MaterialTheme.colors.topAppBarTitle,
             fontSize = 17.sp,
             style = TextStyle(
@@ -221,7 +220,7 @@ fun NavDrawer(
         )
 
         NavOption(
-            title = "Email Us",
+            title = stringResource(id = R.string.email_us),
             scaffoldState = scaffoldState,
             Icons.Default.Email,
             modifier = Modifier.clickable {
@@ -243,7 +242,7 @@ fun NavDrawer(
             })
 
         NavOption(
-            title = "More Apps",
+            title = stringResource(id = R.string.more_apps),
             scaffoldState = scaffoldState,
             Icons.Default.Apps,
             modifier = Modifier.clickable {

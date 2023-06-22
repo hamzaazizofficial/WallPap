@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -81,12 +82,12 @@ fun ClearAllDialogUI(
         ) {
 
             Box(
-                modifier = Modifier
+                modifier = modifier
                     .padding(16.dp)
                     .fillMaxWidth(), contentAlignment = Alignment.Center
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
@@ -98,13 +99,13 @@ fun ClearAllDialogUI(
                     )
 
                     Divider(
-                        Modifier.padding(10.dp),
+                        modifier.padding(10.dp),
                         thickness = 1.dp,
                         color = MaterialTheme.colors.textColor
                     )
 
                     Column(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.Start
                     ) {
 
@@ -125,7 +126,7 @@ fun ClearAllDialogUI(
                 }
             }
             Row(
-                Modifier
+                modifier
                     .fillMaxWidth()
                     .background(
                         color = MaterialTheme.colors.bottomAppBarBackgroundColor
@@ -134,7 +135,7 @@ fun ClearAllDialogUI(
 
                 TextButton(
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
+                    modifier = modifier
                         .padding(8.dp)
                         .width(80.dp),
                     onClick = {
@@ -163,14 +164,15 @@ fun ClearAllDialogUI(
                             customWallpaperViewModel.saturationSliderPosition.value = 1f
                             dialogState.value = false
                         }
-                        if (currentRoute.equals(Screen.Favourite.route)){
+                        if (currentRoute.equals(Screen.Favourite.route)) {
                             favUrlsViewModel.deleteAllFavouriteUrls()
-                            Toast.makeText(context, "Removed all images!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Removed all images!", Toast.LENGTH_SHORT)
+                                .show()
                             dialogState.value = false
                         }
                     }) {
                     Text(
-                        text = "Yes",
+                        text = stringResource(id = R.string.yes),
                         color = MaterialTheme.colors.textColor,
                         style = TextStyle(
                             fontSize = MaterialTheme.typography.subtitle1.fontSize,
@@ -182,14 +184,14 @@ fun ClearAllDialogUI(
 
                 TextButton(
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
+                    modifier = modifier
                         .padding(8.dp)
                         .width(80.dp),
                     onClick = {
                         dialogState.value = false
                     }) {
                     Text(
-                        text = "No",
+                        text = stringResource(id = R.string.no),
                         color = MaterialTheme.colors.textColor,
                         style = TextStyle(
                             fontSize = MaterialTheme.typography.subtitle1.fontSize,

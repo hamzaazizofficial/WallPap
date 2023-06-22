@@ -11,16 +11,14 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -37,8 +35,10 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshState
+import com.hamza.wallpap.R
 import com.hamza.wallpap.model.UnsplashImage
-import com.hamza.wallpap.navigation.Screen
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import java.net.URLEncoder
@@ -53,24 +53,31 @@ fun HomeListContent(
     navController: NavHostController,
     homeViewModel: HomeViewModel,
     state: LazyStaggeredGridState,
+    onRefresh: () -> Unit,
+    refreshState: SwipeRefreshState,
 ) {
-    LazyVerticalStaggeredGrid(
-        state = state,
-        columns = StaggeredGridCells.Fixed(2),
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(2.dp)
+    SwipeRefresh(
+        state = refreshState,
+        onRefresh = onRefresh
     ) {
-        items(items.itemCount) {
-            val height by remember {
-                mutableStateOf(Random.nextInt(140, 380).dp)
-            }
-            items[it]?.let { unsplashImage ->
-                UnsplashItem(
-                    unsplashImage = unsplashImage,
-                    navController,
-                    homeViewModel,
-                    height
-                )
+        LazyVerticalStaggeredGrid(
+            state = state,
+            columns = StaggeredGridCells.Fixed(2),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(2.dp)
+        ) {
+            items(items.itemCount) {
+                val height by remember {
+                    mutableStateOf(Random.nextInt(140, 380).dp)
+                }
+                items[it]?.let { unsplashImage ->
+                    UnsplashItem(
+                        unsplashImage = unsplashImage,
+                        navController,
+                        homeViewModel,
+                        height
+                    )
+                }
             }
         }
     }
@@ -97,18 +104,8 @@ fun UnsplashItem(
         modifier = Modifier
             .padding(2.5.dp)
             .height(height)
-//            .clip(RoundedCornerShape(2.dp))
-//            .border(1.5.dp, randomColor, RoundedCornerShape(2.dp))
             .clickable {
                 navController.navigate("home_wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl")
-//                {
-//                    navController.graph.startDestinationRoute?.let { route ->
-//                        popUpTo(route) {
-//                            saveState = true
-//                        }
-//                    }
-//                    restoreState = true
-//                }
             },
     ) {
         Box(
@@ -164,11 +161,11 @@ fun UnsplashItem(
                 ) {
                     Text(
                         text = buildAnnotatedString {
-                            append("Photo by ")
+                            append(stringResource(id = R.string.photo_by) + " ")
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Black)) {
                                 append(unsplashImage.user.username)
                             }
-                            append(" on Unsplash")
+                            append(" " + stringResource(id = R.string.on_unsplash))
                         },
                         color = Color.White,
                         fontSize = MaterialTheme.typography.caption.fontSize,
@@ -181,4 +178,3 @@ fun UnsplashItem(
         }
     }
 }
-

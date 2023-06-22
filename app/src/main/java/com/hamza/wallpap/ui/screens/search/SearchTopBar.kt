@@ -12,12 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.theme.topAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.topAppBarContentColor
 
@@ -34,7 +36,7 @@ fun SearchWidget(
             .fillMaxWidth()
             .height(56.dp)
             .semantics {
-                contentDescription = "SearchWidget"
+                contentDescription = "Search Widget"
             },
         elevation = AppBarDefaults.TopAppBarElevation,
         color = MaterialTheme.colors.topAppBarBackgroundColor
@@ -43,7 +45,7 @@ fun SearchWidget(
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics {
-                    contentDescription = "TextField"
+                    contentDescription = "Search Text Field"
                 },
             value = text,
             onValueChange = { onTextChange(it) },
@@ -51,7 +53,7 @@ fun SearchWidget(
                 Text(
                     modifier = Modifier
                         .alpha(alpha = ContentAlpha.medium),
-                    text = "Search here...",
+                    text = stringResource(id = R.string.search_here),
                     color = Color.White
                 )
             },
@@ -69,7 +71,7 @@ fun SearchWidget(
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Arrow back Icon",
+                        contentDescription = null,
                         tint = MaterialTheme.colors.topAppBarContentColor
                     )
                 }
@@ -78,7 +80,7 @@ fun SearchWidget(
                 IconButton(
                     modifier = Modifier
                         .semantics {
-                            contentDescription = "CloseButton"
+                            contentDescription = "Close Button"
                         },
                     onClick = {
                         if (text.isNotEmpty()) {
@@ -90,7 +92,7 @@ fun SearchWidget(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = "Close Icon",
+                        contentDescription = stringResource(id = R.string.close),
                         tint = MaterialTheme.colors.topAppBarContentColor
                     )
                 }
@@ -117,7 +119,7 @@ fun SearchWidget(
 @Preview
 fun SearchWidgetPreview() {
     SearchWidget(
-        text = "Search",
+        text = stringResource(id = R.string.search),
         onTextChange = {},
         onSearchClicked = {},
         onCloseClicked = {},

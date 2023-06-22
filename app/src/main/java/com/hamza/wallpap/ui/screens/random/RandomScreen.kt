@@ -1,5 +1,6 @@
 package com.hamza.wallpap.ui.screens.random
 
+import android.content.Context
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
@@ -14,22 +15,24 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NetworkCheck
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
-import com.hamza.wallpap.ui.screens.common.RandomListContent
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.hamza.wallpap.R
 import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.screens.common.RandomListContent
 import com.hamza.wallpap.ui.theme.maven_pro_regular
+import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.ui.theme.textColor
 import com.hamza.wallpap.ui.theme.topAppBarTitle
 import com.hamza.wallpap.util.isOnline
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -40,10 +43,12 @@ fun RandomScreen(
     scaffoldState: ScaffoldState,
     randomScreenViewModel: RandomScreenViewModel,
     items: LazyPagingItems<UnsplashImage>,
-    lazyStaggeredGridState: LazyStaggeredGridState
+    lazyStaggeredGridState: LazyStaggeredGridState,
+    systemUiController: SystemUiController,
+    context: Context,
+    scope: CoroutineScope,
 ) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
+    systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     BackHandler {
         if (scaffoldState.drawerState.isOpen) {
             scope.launch {
@@ -71,7 +76,7 @@ fun RandomScreen(
             Spacer(modifier = Modifier.padding(8.dp))
 
             Text(
-                text = "Check your Network Connection\nand reopen the app.",
+                text = stringResource(id = R.string.check_network) + "\n" + stringResource(id = R.string.reopen_app),
                 color = MaterialTheme.colors.textColor,
                 fontFamily = maven_pro_regular,
                 fontSize = 16.sp,
@@ -86,7 +91,12 @@ fun RandomScreen(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.background(MaterialTheme.colors.background)
         ) {
-            RandomListContent(items = items, navController, randomScreenViewModel, lazyStaggeredGridState)
+            RandomListContent(
+                items = items,
+                navController,
+                randomScreenViewModel,
+                lazyStaggeredGridState
+            )
         }
     }
 }
