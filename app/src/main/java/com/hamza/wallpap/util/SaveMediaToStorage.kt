@@ -55,6 +55,5 @@ fun saveMediaToStorage(bitmap: Bitmap, context: Context) {
         //Finally writing the bitmap to the output stream that we opened
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
 //        context?.toast("Saved to Photos")
-        Toast.makeText(context, "Saved to Gallery!", Toast.LENGTH_SHORT).show()
     }
 }

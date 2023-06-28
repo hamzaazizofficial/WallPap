@@ -3,34 +3,72 @@ package com.hamza.wallpap.util
 import android.app.WallpaperManager
 import android.content.Context
 import android.os.Build
-import android.util.DisplayMetrics
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 
 @RequiresApi(Build.VERSION_CODES.N)
-fun setWallPaper(context: Context, fullUrl: String, wallpaperAs: Int, finalImageBitmap: Bitmap?) {
+fun setWallPaper(
+    context: Context,
+    fullUrl: String,
+    wallpaperAs: Int,
+    finalImageBitmap: Bitmap?,
+    wallpaperFullScreenViewModel: WallpaperFullScreenViewModel
+) {
     val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val screenWidth = windowManager.defaultDisplay.width
     val screenHeight = windowManager.defaultDisplay.height
-
     val wallpaperManager = WallpaperManager.getInstance(context)
-    Toast.makeText(context, "Setting your Wallpaper...", Toast.LENGTH_LONG).show()
+    wallpaperManager.suggestDesiredDimensions(screenWidth, screenHeight)
+    val width = wallpaperManager.desiredMinimumWidth
+    val height = wallpaperManager.desiredMinimumHeight
+
+//    Toast.makeText(context, "Setting your Wallpaper...", Toast.LENGTH_LONG).show()
+//    wallpaperFullScreenViewModel.interstitialState.value = !wallpaperFullScreenViewModel.interstitialState.value
 
     val thread = Thread {
         try {
-            val wallpaper = finalImageBitmap?.let {
-                scaleAndCropBitmap(it, screenWidth, screenHeight)
-            }
-            when (wallpaperAs) {
-                1 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
-                2 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
-                3 -> {
-                    wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
-                    wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+            when (wallpaperFullScreenViewModel.finalScaleState) {
+                wallpaperFullScreenViewModel.scaleCropState -> {
+                    val wallpaper = finalImageBitmap?.let {
+                        scaleAndCropBitmap(it, screenWidth, screenHeight)
+                    }
+                    when (wallpaperAs) {
+                        1 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+                        2 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+                        3 -> {
+                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+                        }
+                    }
+                }
+                wallpaperFullScreenViewModel.scaleStretchState -> {
+                    val wallpaper = finalImageBitmap?.let { Bitmap.createScaledBitmap(it, width, height, true) }
+                    when (wallpaperAs) {
+                        1 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+                        2 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+                        3 -> {
+                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+                        }
+                    }
+                }
+                else -> {
+                    val wallpaper = finalImageBitmap?.let {
+                        scaleAndFitBitmap(it, screenWidth, screenHeight)
+                    }
+                    when (wallpaperAs) {
+                        1 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+                        2 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+                        3 -> {
+                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+                        }
+                    }
                 }
             }
         } catch (e: Exception) {

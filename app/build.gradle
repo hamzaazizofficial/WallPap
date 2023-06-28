@@ -126,7 +126,10 @@ dependencies {
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
     implementation "com.google.accompanist:accompanist-swiperefresh:0.27.0"
 
-    // WindowManager
+    // Cropper
+//    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+
+    // WindowManagerZ
     implementation("androidx.window:window:1.1.0-alpha06")
 
     // Splash Api
