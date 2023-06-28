@@ -1,8 +1,11 @@
 package com.hamza.wallpap.ui.screens.wallpaper
 
 import android.content.Context
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
@@ -14,12 +17,14 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
@@ -29,7 +34,6 @@ import com.google.accompanist.systemuicontroller.SystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
-import com.hamza.wallpap.ui.screens.common.admob.MainInterstitialAd
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
 import com.hamza.wallpap.ui.theme.bottomAppBarContentColor
 import com.hamza.wallpap.ui.theme.iconColor
@@ -54,6 +58,7 @@ fun WallpaperFullScreen(
     context: Context,
 ) {
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
+    val configuration = LocalConfiguration.current
     var expanded by remember { mutableStateOf(false) }
 
     val matrix by remember { mutableStateOf(ColorMatrix()) }
@@ -63,7 +68,21 @@ fun WallpaperFullScreen(
     var smallSizeImage by remember { mutableStateOf<Bitmap?>(null) }
     var originalImage by remember { mutableStateOf<Bitmap?>(null) }
     var finalImageBitmap by remember { mutableStateOf<Bitmap?>(null) }
+    val snackBarHostState = remember { androidx.compose.material3.SnackbarHostState() }
 
+
+    DisposableEffect(Unit) {
+        val activity = context as? ComponentActivity
+        activity?.requestedOrientation = when (configuration.orientation) {
+            Configuration.ORIENTATION_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            Configuration.ORIENTATION_PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+            else -> activity?.requestedOrientation ?: ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+
+        onDispose {
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
 
     if (wallpaperFullScreenViewModel.setOriginalWallpaperDialog.value) {
         SetWallpaperDialog(
@@ -81,11 +100,7 @@ fun WallpaperFullScreen(
         finalImageBitmap = originalImage
     })
 
-    var scale by remember { mutableStateOf(ContentScale.Crop) }
-    var showFitScreenBtn by remember { mutableStateOf(true) }
-    var showCropScreenBtn by remember { mutableStateOf(false) }
     val captureController = rememberCaptureController()
-    val snackBarHostState = remember { androidx.compose.material3.SnackbarHostState() }
 
     BackHandler {
         navController.popBackStack()
@@ -112,7 +127,7 @@ fun WallpaperFullScreen(
             }, content = {
                 SubcomposeAsyncImage(
                     model = smallSizeImage,
-                    contentScale = scale,
+                    contentScale = wallpaperFullScreenViewModel.scale,
                     contentDescription = null,
                     colorFilter = colorFilter
                 ) {
@@ -124,7 +139,7 @@ fun WallpaperFullScreen(
                         ) {
                             SubcomposeAsyncImage(
                                 modifier = Modifier.fillMaxSize(),
-                                contentScale = scale,
+                                contentScale = wallpaperFullScreenViewModel.scale,
                                 model = regularUrl,
                                 contentDescription = null
                             )
@@ -140,10 +155,6 @@ fun WallpaperFullScreen(
                     }
                 }
             })
-
-            if (wallpaperFullScreenViewModel.interstitialState.value) {
-                MainInterstitialAd()
-            }
 
             Surface(
                 modifier = Modifier
@@ -192,8 +203,13 @@ fun WallpaperFullScreen(
                                                     it,
                                                     context
                                                 )
-                                                wallpaperFullScreenViewModel.interstitialState.value =
-                                                    true
+                                            }
+                                            scope.launch {
+                                                snackBarHostState.showSnackbar(
+                                                    "Saved to Gallery!",
+                                                    withDismissAction = true,
+                                                    duration = SnackbarDuration.Short
+                                                )
                                             }
                                         }) {
                                         Icon(
@@ -210,8 +226,13 @@ fun WallpaperFullScreen(
                                                     it,
                                                     context
                                                 )
-                                                wallpaperFullScreenViewModel.interstitialState.value =
-                                                    true
+                                            }
+                                            scope.launch {
+                                                snackBarHostState.showSnackbar(
+                                                    "Saved to Gallery!",
+                                                    withDismissAction = true,
+                                                    duration = SnackbarDuration.Short
+                                                )
                                             }
                                         }) {
                                         Icon(
@@ -223,12 +244,12 @@ fun WallpaperFullScreen(
                                 }
                             }
 
-                            if (showFitScreenBtn) {
+                            if (wallpaperFullScreenViewModel.showFitScreenBtn) {
                                 IconButton(
                                     onClick = {
-                                        scale = ContentScale.Fit
-                                        showFitScreenBtn = false
-                                        showCropScreenBtn = true
+                                        wallpaperFullScreenViewModel.scale = ContentScale.Fit
+                                        wallpaperFullScreenViewModel.showFitScreenBtn = false
+                                        wallpaperFullScreenViewModel.showCropScreenBtn = true
                                     }) {
                                     Icon(
                                         imageVector = Icons.Default.Fullscreen,
@@ -238,12 +259,12 @@ fun WallpaperFullScreen(
                                 }
                             }
 
-                            if (showCropScreenBtn) {
+                            if (wallpaperFullScreenViewModel.showCropScreenBtn) {
                                 IconButton(
                                     onClick = {
-                                        scale = ContentScale.Crop
-                                        showCropScreenBtn = false
-                                        showFitScreenBtn = true
+                                        wallpaperFullScreenViewModel.scale = ContentScale.Crop
+                                        wallpaperFullScreenViewModel.showCropScreenBtn = false
+                                        wallpaperFullScreenViewModel.showFitScreenBtn = true
                                     }) {
                                     Icon(
                                         imageVector = Icons.Rounded.Fullscreen,
@@ -384,7 +405,8 @@ fun WallpaperFullScreen(
                                 scope.launch {
                                     snackBarHostState.showSnackbar(
                                         "Added to Favourites!",
-                                        withDismissAction = true
+                                        withDismissAction = true,
+                                        duration = SnackbarDuration.Short
                                     )
                                 }
                             },
@@ -403,7 +425,6 @@ fun WallpaperFullScreen(
                     FloatingActionButton(
                         onClick = {
                             wallpaperFullScreenViewModel.setOriginalWallpaperDialog.value = true
-                            wallpaperFullScreenViewModel.interstitialState.value = true
                         },
                         modifier = Modifier
                             .padding(8.dp),
@@ -421,88 +442,6 @@ fun WallpaperFullScreen(
     }
 }
 
-
-//@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
-//@RequiresApi(Build.VERSION_CODES.N)
-//@Composable
-//fun WallpaperFullScreen(
-//    regularUrl: String,
-//    fullUrl: String,
-//    navController: NavHostController,
-//    wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
-//    context: Context,
-//) {
-//    var originalImage by remember { mutableStateOf<Bitmap?>(null) }
-//    var finalImageBitmap by remember { mutableStateOf<Bitmap?>(null) }
-//
-//    LaunchedEffect(key1 = "bitmap", block = {
-//        originalImage = getBitmapFromUrl(fullUrl)
-//        finalImageBitmap = originalImage
-//    })
-//    val snackBarHostState = remember { androidx.compose.material3.SnackbarHostState() }
-//
-//    BackHandler {
-//        navController.popBackStack()
-//    }
-//
-//    androidx.compose.material3.Scaffold(snackbarHost = {
-//        androidx.compose.material3.SnackbarHost(
-//            hostState = snackBarHostState
-//        )
-//    }) { padding ->
-//        Box(
-//            Modifier
-//                .padding(padding)
-//                .fillMaxSize()
-//                .background(MaterialTheme.colors.background),
-//            contentAlignment = Alignment.BottomCenter
-//        ) {
-//
-//            SubcomposeAsyncImage(
-//                model = originalImage,
-//                contentDescription = null
-//            ) {
-//                val state = painter.state
-//                if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-//                    Box(
-//                        contentAlignment = Alignment.Center,
-//                        modifier = Modifier.fillMaxSize()
-//                    ) {
-//                        SubcomposeAsyncImage(
-//                            modifier = Modifier.fillMaxSize(),
-//                            model = regularUrl,
-//                            contentDescription = null
-//                        )
-//                    }
-//                } else {
-//                    SubcomposeAsyncImageContent(
-//                        modifier = Modifier.fillMaxSize()
-//                    )
-//                }
-//            }
-//            FloatingActionButton(
-//                onClick = {
-//                    setWallPaper(
-//                        context,
-//                        fullUrl,
-//                        wallpaperFullScreenViewModel.setWallpaperAs,
-//                        finalImageBitmap
-//                    )
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp),
-//                backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.Wallpaper,
-//                    contentDescription = null,
-//                    tint = MaterialTheme.colors.bottomAppBarContentColor
-//                )
-//            }
-//            }
-//        }
-//    }
-//}
 
 
 

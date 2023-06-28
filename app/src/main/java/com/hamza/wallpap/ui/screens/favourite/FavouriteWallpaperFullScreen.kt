@@ -1,9 +1,11 @@
 package com.hamza.wallpap.ui.screens.favourite
 
 import android.content.Context
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
-import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
@@ -14,6 +16,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +26,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
@@ -41,6 +45,8 @@ import com.hamza.wallpap.util.saveMediaToStorage
 import com.hamza.wallpap.util.shareWallpaper
 import dev.shreyaspatil.capturable.Capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.N)
@@ -52,7 +58,9 @@ fun FavouriteWallpaperFullScreen(
     favUrlsViewModel: FavUrlsViewModel,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
     context: Context,
+    scope: CoroutineScope,
 ) {
+    val configuration = LocalConfiguration.current
     var smallSizeImage by remember { mutableStateOf<Bitmap?>(null) }
     var originalImage by remember { mutableStateOf<Bitmap?>(null) }
     var finalImageBitmap by remember { mutableStateOf<Bitmap?>(null) }
@@ -68,6 +76,19 @@ fun FavouriteWallpaperFullScreen(
         smallSizeImage = loadReducedSizeBitmapFromUrl(fullUrl)
         finalImageBitmap = originalImage
     })
+
+    DisposableEffect(Unit) {
+        val activity = context as? ComponentActivity
+        activity?.requestedOrientation = when (configuration.orientation) {
+            Configuration.ORIENTATION_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            Configuration.ORIENTATION_PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+            else -> activity?.requestedOrientation ?: ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+
+        onDispose {
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
 
     androidx.compose.material3.Scaffold(snackbarHost = {
         androidx.compose.material3.SnackbarHost(
@@ -87,7 +108,7 @@ fun FavouriteWallpaperFullScreen(
                     context = context,
                     wallpaperFullScreenViewModel,
                     fullUrl,
-                    finalImageBitmap
+                    finalImageBitmap,
                 )
             }
 
@@ -165,8 +186,13 @@ fun FavouriteWallpaperFullScreen(
                                             saveMediaToStorage(
                                                 it, context
                                             )
-                                            wallpaperFullScreenViewModel.interstitialState.value =
-                                                true
+                                        }
+                                        scope.launch {
+                                            snackBarHostState.showSnackbar(
+                                                "Saved to Gallery!",
+                                                withDismissAction = true,
+                                                duration = SnackbarDuration.Short
+                                            )
                                         }
                                     }) {
                                         Icon(
@@ -181,8 +207,13 @@ fun FavouriteWallpaperFullScreen(
                                             saveMediaToStorage(
                                                 it, context
                                             )
-                                            wallpaperFullScreenViewModel.interstitialState.value =
-                                                true
+                                        }
+                                        scope.launch {
+                                            snackBarHostState.showSnackbar(
+                                                "Saved to Gallery!",
+                                                withDismissAction = true,
+                                                duration = SnackbarDuration.Short
+                                            )
                                         }
                                     }) {
                                         Icon(
@@ -268,7 +299,8 @@ fun FavouriteWallpaperFullScreen(
                                     modifier = Modifier.weight(4.5f),
                                     value = wallpaperFullScreenViewModel.saturationSliderPosition.value,
                                     onValueChange = {
-                                        wallpaperFullScreenViewModel.saturationSliderPosition.value = it
+                                        wallpaperFullScreenViewModel.saturationSliderPosition.value =
+                                            it
                                     },
                                     valueRange = 0f..10f,
                                     onValueChangeFinished = {
@@ -276,17 +308,22 @@ fun FavouriteWallpaperFullScreen(
                                             wallpaperFullScreenViewModel.saturationSliderPosition.value
                                     },
                                     colors = androidx.compose.material3.SliderDefaults.colors(
-                                        activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(0.5f),
+                                        activeTrackColor = MaterialTheme.colors.bottomAppBarContentColor.copy(
+                                            0.5f
+                                        ),
                                         thumbColor = MaterialTheme.colors.bottomAppBarContentColor
                                     )
                                 )
 
                                 IconButton(
                                     onClick = {
-                                        wallpaperFullScreenViewModel.saturationSliderPosition.value = 1f
-                                        wallpaperFullScreenViewModel.saturationSliderValue.value = 1f
+                                        wallpaperFullScreenViewModel.saturationSliderPosition.value =
+                                            1f
+                                        wallpaperFullScreenViewModel.saturationSliderValue.value =
+                                            1f
                                         finalImageBitmap = originalImage
-                                    }, modifier = Modifier.weight(1f))
+                                    }, modifier = Modifier.weight(1f)
+                                )
                                 {
                                     Icon(
                                         imageVector = if (wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f && wallpaperFullScreenViewModel.saturationSliderValue.value != 1f) Icons.Default.InvertColorsOff else Icons.Default.InvertColors,
@@ -339,7 +376,13 @@ fun FavouriteWallpaperFullScreen(
                                     wallpaperFullScreenViewModel.id, fullUrl, regularUrl
                                 )
                             )
-                            Toast.makeText(context, "Removed from favorites!", Toast.LENGTH_SHORT).show()
+                            scope.launch {
+                                snackBarHostState.showSnackbar(
+                                    "Removed from favourites",
+                                    withDismissAction = true,
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                         },
                         modifier = Modifier.padding(8.dp),
                         backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
@@ -354,7 +397,6 @@ fun FavouriteWallpaperFullScreen(
                     FloatingActionButton(
                         onClick = {
                             wallpaperFullScreenViewModel.setOriginalWallpaperDialog.value = true
-                            wallpaperFullScreenViewModel.interstitialState.value = true
                         },
                         modifier = Modifier.padding(8.dp),
                         backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor

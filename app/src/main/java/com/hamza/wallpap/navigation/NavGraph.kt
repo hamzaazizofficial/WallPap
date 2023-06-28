@@ -217,7 +217,8 @@ fun NavGraph(
                     navController,
                     favUrlsViewModel,
                     wallpaperFullScreenViewModel,
-                    context
+                    context,
+                    scope
                 )
             }
         }
@@ -251,7 +252,7 @@ fun NavGraph(
             val amoledUrl = it.arguments?.getString("amoledUrl")
             if (amoledUrl != null) {
                 LatestFullScreen(
-                    amoledUrl, navController, wallpaperFullScreenViewModel, context
+                    amoledUrl, navController, wallpaperFullScreenViewModel, context, scope
                 )
             }
         }

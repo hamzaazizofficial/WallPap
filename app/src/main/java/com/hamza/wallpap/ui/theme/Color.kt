@@ -47,6 +47,9 @@ val Colors.bottomAppBarBackgroundColor: Color
 val Colors.customDialogBottomColor: Color
     get() = if (isLight) Color(0x1AFA5A4B) else Color(0xFF243447)
 
+//val Colors.setWallpaperDialogTextButtonColor : Color
+//    get() = if (isLight) Color(0x1AFA5A4B) else Color(0xFF1B2936)
+
 val Colors.textColor: Color
     get() = if (isLight) Color.Black else Color.White
 
