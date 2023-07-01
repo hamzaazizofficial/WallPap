@@ -103,24 +103,24 @@ fun TopBar(
 
             if (!currentRoute.equals(Screen.Settings.route)) {
 
-                if (currentRoute.equals(Screen.Home.route)) {
-                    IconButton(onClick = onUserDetailsClicked) {
-                        Icon(
-                            imageVector = if (homeViewModel.showUserDetails) Icons.Default.Info else Icons.Outlined.Info,
-                            contentDescription = stringResource(id = R.string.show_user_details),
-                            tint = MaterialTheme.colors.topAppBarContentColor
-                        )
-                    }
-                }
-                if (currentRoute.equals(Screen.Random.route)) {
-                    IconButton(onClick = onUserDetailsClicked) {
-                        Icon(
-                            imageVector = if (randomScreenViewModel.showUserDetails) Icons.Default.Info else Icons.Outlined.Info,
-                            contentDescription = stringResource(id = R.string.show_user_details),
-                            tint = MaterialTheme.colors.topAppBarContentColor
-                        )
-                    }
-                }
+//                if (currentRoute.equals(Screen.Home.route)) {
+//                    IconButton(onClick = onUserDetailsClicked) {
+//                        Icon(
+//                            imageVector = if (homeViewModel.showUserDetails) Icons.Default.Info else Icons.Outlined.Info,
+//                            contentDescription = stringResource(id = R.string.show_user_details),
+//                            tint = MaterialTheme.colors.topAppBarContentColor
+//                        )
+//                    }
+//                }
+//                if (currentRoute.equals(Screen.Random.route)) {
+//                    IconButton(onClick = onUserDetailsClicked) {
+//                        Icon(
+//                            imageVector = if (randomScreenViewModel.showUserDetails) Icons.Default.Info else Icons.Outlined.Info,
+//                            contentDescription = stringResource(id = R.string.show_user_details),
+//                            tint = MaterialTheme.colors.topAppBarContentColor
+//                        )
+//                    }
+//                }
 
                 if (currentRoute.equals(Screen.Favourite.route) &&
                     favUrlsViewModel.getAllFavUrls.observeAsState(listOf()).value.isNotEmpty()

@@ -70,9 +70,12 @@ fun NavGraph(
     val favUrlsViewModel: FavUrlsViewModel = viewModel()
     val latestViewModel: LatestViewModel = viewModel()
     val homeItems = homeViewModel.itemsFlow.collectAsLazyPagingItems()
-    val refreshState =
-        rememberSwipeRefreshState(isRefreshing = homeItems.loadState.refresh is LoadState.Loading)
     val randomItems = randomScreenViewModel.itemsFlow.collectAsLazyPagingItems()
+    val latestItems = latestViewModel.wallpaperItems
+    val homeRefreshState =
+        rememberSwipeRefreshState(isRefreshing = homeItems.loadState.refresh is LoadState.Loading)
+    val randomRefreshState =
+        rememberSwipeRefreshState(isRefreshing = randomItems.loadState.refresh is LoadState.Loading)
     val favouriteItemsData = favUrlsViewModel.getAllFavUrls.observeAsState(listOf())
     val lazyStaggeredGridState = rememberLazyStaggeredGridState()
     val customWallpaperViewModel: CustomWallpaperViewModel = viewModel()
@@ -93,7 +96,7 @@ fun NavGraph(
                 scaffoldState,
                 homeItems,
                 lazyStaggeredGridState,
-                refreshState,
+                homeRefreshState,
                 context,
                 scope,
                 systemUiController
@@ -117,7 +120,7 @@ fun NavGraph(
                 homeViewModel,
                 lazyStaggeredGridState,
                 homeItems,
-                refreshState,
+                homeRefreshState,
                 context
             )
         }
@@ -135,7 +138,8 @@ fun NavGraph(
                 onItemSelected,
                 systemUiController,
                 context,
-                scope
+                scope,
+                homeViewModel
             )
         }
 
@@ -154,7 +158,9 @@ fun NavGraph(
                 lazyStaggeredGridState,
                 systemUiController,
                 context,
-                scope
+                scope,
+                randomRefreshState,
+                homeViewModel
             )
         }
 
@@ -232,7 +238,15 @@ fun NavGraph(
 
         // FireStore Screens
         composable(Screen.Latest.route) {
-            LatestScreen(navController, latestViewModel, scaffoldState, systemUiController)
+            LatestScreen(
+                navController,
+                latestViewModel,
+                scaffoldState,
+                systemUiController,
+                latestItems,
+                context,
+                scope
+            )
         }
 
         composable(Screen.LatestFullScreen.route, enterTransition = {

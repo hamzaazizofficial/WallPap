@@ -19,10 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -39,30 +37,29 @@ import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.ui.theme.textColor
 import com.hamza.wallpap.ui.theme.topAppBarTitle
 import com.hamza.wallpap.util.isOnline
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.M)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LatestScreen(
     navController: NavHostController,
-    amoledViewModel: LatestViewModel,
+    latestViewModel: LatestViewModel,
     scaffoldState: ScaffoldState,
     systemUiController: SystemUiController,
+    items: List<WallpaperItem>,
+    context: Context,
+    scope: CoroutineScope,
 ) {
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
-    val data = amoledViewModel.wallpaperItems
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-
     var isRefreshing by remember { mutableStateOf(false) }
 
     val refreshAction: () -> Unit = {
         isRefreshing = true
-        amoledViewModel.refreshWallpaperItems().apply {
+        latestViewModel.refreshWallpaperItems().apply {
             isRefreshing = false
         }
     }
@@ -110,13 +107,10 @@ fun LatestScreen(
             onRefresh = refreshAction
         ) {
             LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(2)) {
-                data.forEach { url ->
+                items.forEach { latestItem ->
                     item()
                     {
-                        val height = remember {
-                            Random.nextInt(140, 380).dp
-                        }
-                        LatestItem(amoledUrl = url, navController, height, context)
+                        LatestItem(latestItem = latestItem, navController, context)
                     }
                 }
             }
@@ -126,19 +120,18 @@ fun LatestScreen(
 
 @Composable
 fun LatestItem(
-    amoledUrl: String,
+    latestItem: WallpaperItem,
     navController: NavHostController,
-    height: Dp,
     context: Context,
 ) {
-    val fullEncodedUrl = URLEncoder.encode(amoledUrl, StandardCharsets.UTF_8.toString())
+    val fullEncodedUrl = URLEncoder.encode(latestItem.imageUrl, StandardCharsets.UTF_8.toString())
 
     Card(
         backgroundColor = Color.Black,
         shape = RoundedCornerShape(2.dp),
         modifier = Modifier
             .padding(2.5.dp)
-            .height(height)
+            .height(latestItem.height.dp)
             .clickable { navController.navigate("latest_full_screen/$fullEncodedUrl") },
     ) {
         Box(
@@ -151,7 +144,7 @@ fun LatestItem(
             SubcomposeAsyncImage(
                 model = ImageRequest
                     .Builder(context)
-                    .data(amoledUrl)
+                    .data(latestItem.imageUrl)
                     .crossfade(1000)
                     .build(),
                 contentScale = ContentScale.Crop,

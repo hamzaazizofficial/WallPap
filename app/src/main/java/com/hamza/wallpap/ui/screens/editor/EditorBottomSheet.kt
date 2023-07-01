@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
 import com.hamza.wallpap.R
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
-import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.screens.common.ColorPickerDialog
 import com.hamza.wallpap.ui.theme.*
 import com.hamza.wallpap.util.isOnline
@@ -62,7 +62,7 @@ fun EditorBottomSheet(
     customWallpaperViewModel: CustomWallpaperViewModel,
     bottomSheetState: ModalBottomSheetState,
     scope: CoroutineScope,
-    randomItems: LazyPagingItems<UnsplashImage>,
+    randomItems: LazyPagingItems<UnsplashImageUI>,
     context: Context,
     singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
     keyboardController: SoftwareKeyboardController?,
@@ -264,7 +264,7 @@ fun EditorBottomSheet(
                         focusedLabelColor = MaterialTheme.colors.textColor,
                         focusedBorderColor = MaterialTheme.colors.textColor,
                         unfocusedBorderColor = MaterialTheme.colors.iconColor,
-                        textColor = MaterialTheme.colors.textColor
+                        containerColor = MaterialTheme.colors.textColor
                     ),
                     leadingIcon = {
                         IconButton(

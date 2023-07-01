@@ -45,7 +45,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.hamza.wallpap.R
-import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.theme.*
 import dev.shreyaspatil.capturable.Capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
@@ -63,7 +63,7 @@ import kotlinx.coroutines.launch
 fun CustomWallpaperScreen(
     navController: NavHostController,
     customWallpaperViewModel: CustomWallpaperViewModel,
-    randomItems: LazyPagingItems<UnsplashImage>,
+    randomItems: LazyPagingItems<UnsplashImageUI>,
     context: Context,
     systemUiController: SystemUiController,
 ) {

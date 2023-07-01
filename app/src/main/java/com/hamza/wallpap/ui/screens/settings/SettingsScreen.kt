@@ -12,8 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,15 +22,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.paging.ExperimentalPagingApi
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.hamza.wallpap.BuildConfig
 import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.screens.common.GetProDialog
+import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.theme.*
 import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPagingApi::class)
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun SettingsScreen(
@@ -42,9 +44,8 @@ fun SettingsScreen(
     systemUiController: SystemUiController,
     context: Context,
     scope: CoroutineScope,
+    homeViewModel: HomeViewModel,
 ) {
-    systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
-
     val dataStore = DataStorePreferenceRepository(context)
     val themeValue = dataStore.getThemeValue.collectAsState(initial = 0)
 
@@ -118,6 +119,35 @@ fun SettingsScreen(
                         )
                     }
                 }
+            }
+
+            Spacer(modifier = Modifier.padding(2.dp))
+            Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp)
+            Spacer(modifier = Modifier.padding(2.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(id = R.string.wallpaper_info),
+                    color = MaterialTheme.colors.textColor,
+                    fontSize = 16.sp,
+                    style = TextStyle(
+                        fontStyle = MaterialTheme.typography.subtitle1.fontStyle,
+                        fontFamily = maven_pro_regular
+                    )
+                )
+
+                Switch(
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colors.bottomAppBarContentColor,
+                        uncheckedThumbColor = MaterialTheme.colors.topAppBarTitle,
+                        checkedTrackAlpha = 0.2f
+                    ),
+                    checked = homeViewModel.showUserDetails,
+                    onCheckedChange = { homeViewModel.showUserDetails = it })
             }
 
             Spacer(modifier = Modifier.padding(2.dp))

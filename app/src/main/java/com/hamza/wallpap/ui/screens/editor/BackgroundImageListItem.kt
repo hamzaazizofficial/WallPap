@@ -23,12 +23,12 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.hamza.wallpap.R
-import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.theme.topAppBarTitle
 
 @Composable
 fun BackgroundImageListItem(
-    unsplashImage: UnsplashImage,
+    unsplashImage: UnsplashImageUI,
     customWallpaperViewModel: CustomWallpaperViewModel,
     context: Context,
 ) {
@@ -46,8 +46,8 @@ fun BackgroundImageListItem(
                 .height(120.dp)
                 .width(80.dp)
                 .clickable {
-                    customWallpaperViewModel.bgImageFullUrl.value = unsplashImage.urls.full
-                    customWallpaperViewModel.bgImageRegularUrl.value = unsplashImage.urls.regular
+                    customWallpaperViewModel.bgImageFullUrl.value = unsplashImage.image.urls.full
+                    customWallpaperViewModel.bgImageRegularUrl.value = unsplashImage.image.urls.regular
                     customWallpaperViewModel.selectBgImageState.value = true
                     customWallpaperViewModel.bgImageUri.value = null
                     customWallpaperViewModel.imageRotate.value = 0f
@@ -59,7 +59,7 @@ fun BackgroundImageListItem(
             SubcomposeAsyncImage(
                 model = ImageRequest
                     .Builder(context)
-                    .data(unsplashImage.urls.regular)
+                    .data(unsplashImage.image.urls.regular)
                     .crossfade(1000)
                     .error(R.drawable.ic_placeholder)
                     .build(),

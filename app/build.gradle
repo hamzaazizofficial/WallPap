@@ -5,6 +5,11 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'kotlinx-serialization'
     id 'com.google.gms.google-services'
+    id 'applovin-quality-service'
+}
+
+applovin {
+    apiKey = "TEV_KafszQlaZnIIC_cKv8nPdt6z3ZZTbcnU9E6JOuTepxL6vHxyN_suTTgRVVWezaGTJ842apHc8GfQo6cGG5"
 }
 
 android {
@@ -126,8 +131,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
     implementation "com.google.accompanist:accompanist-swiperefresh:0.27.0"
 
-    // Cropper
-//    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+    // Applovin
+    implementation("com.applovin:applovin-sdk:11.10.1")
 
     // WindowManagerZ
     implementation("androidx.window:window:1.1.0-alpha06")
