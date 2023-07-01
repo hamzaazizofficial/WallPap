@@ -30,65 +30,80 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavHostController
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.LazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.hamza.wallpap.R
-import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.UnsplashImageUI
+import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import kotlin.random.Random
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalCoilApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalCoilApi::class, ExperimentalPagingApi::class)
 @Composable
 fun RandomListContent(
-    items: LazyPagingItems<UnsplashImage>,
+    items: LazyPagingItems<UnsplashImageUI>,
     navController: NavHostController,
-    hotViewModel: RandomScreenViewModel,
+    randomViewModel: RandomScreenViewModel,
+    homeViewModel: HomeViewModel,
     lazyStaggeredGridState: LazyStaggeredGridState,
+    refreshState: SwipeRefreshState,
+    onRefresh: () -> Unit,
 ) {
     Log.d("Error", items.loadState.toString())
 
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(2),
-        state = lazyStaggeredGridState,
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(2.dp)
+    SwipeRefresh(
+        state = refreshState,
+        onRefresh = onRefresh
     ) {
-        items(items.itemCount) {
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Fixed(2),
+            state = lazyStaggeredGridState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(2.dp)
+        ) {
+            items(items.itemCount) {
 
-            val height = remember {
-                Random.nextInt(140, 380).dp
-            }
+                val height = remember {
+                    Random.nextInt(140, 380).dp
+                }
 
-            items[it]?.let { unsplashImage ->
-                RandomUnsplashItem(
-                    unsplashImage = unsplashImage,
-                    navController,
-                    hotViewModel,
-                    height
-                )
+                items[it]?.let { unsplashImage ->
+                    RandomUnsplashItem(
+                        unsplashImage = unsplashImage,
+                        navController,
+                        randomViewModel,
+                        height,
+                        homeViewModel
+                    )
+                }
             }
         }
     }
 }
 
+@OptIn(ExperimentalPagingApi::class, ExperimentalAnimationApi::class)
 @ExperimentalCoilApi
 @Composable
 fun RandomUnsplashItem(
-    unsplashImage: UnsplashImage,
+    unsplashImage: UnsplashImageUI,
     navController: NavHostController,
-    hotViewModel: RandomScreenViewModel,
+    randomViewModel: RandomScreenViewModel,
     height: Dp,
+    homeViewModel: HomeViewModel,
 ) {
 
-    val regularUrl = unsplashImage.urls.regular
-    val fullUrl = unsplashImage.urls.full
+    val regularUrl = unsplashImage.image.urls.regular
+    val fullUrl = unsplashImage.image.urls.full
     val regularEncodedUrl = URLEncoder.encode(regularUrl, StandardCharsets.UTF_8.toString())
     val fullEncodedUrl = URLEncoder.encode(fullUrl, StandardCharsets.UTF_8.toString())
     val context = LocalContext.current
@@ -113,7 +128,7 @@ fun RandomUnsplashItem(
             SubcomposeAsyncImage(
                 model = ImageRequest
                     .Builder(context)
-                    .data(unsplashImage.urls.regular)
+                    .data(unsplashImage.image.urls.regular)
                     .crossfade(1000)
                     .build(),
                 contentScale = ContentScale.Crop,
@@ -131,7 +146,7 @@ fun RandomUnsplashItem(
             }
 
             AnimatedVisibility(
-                visible = hotViewModel.showUserDetails,
+                visible = homeViewModel.showUserDetails,
                 enter = slideInHorizontally() + fadeIn(),
                 exit = slideOutHorizontally() + fadeOut(),
             ) {
@@ -142,7 +157,7 @@ fun RandomUnsplashItem(
                         .clickable {
                             val browserIntent = Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("https://unsplash.com/@${unsplashImage.user.username}?utm_source=DemoApp&utm_medium=referral")
+                                Uri.parse("https://unsplash.com/@${unsplashImage.image.user.username}?utm_source=DemoApp&utm_medium=referral")
                             )
                             startActivity(context, browserIntent, null)
                         }
@@ -161,7 +176,7 @@ fun RandomUnsplashItem(
                         text = buildAnnotatedString {
                             append(stringResource(id = R.string.photo_by) + " ")
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Black)) {
-                                append(unsplashImage.user.username)
+                                append(unsplashImage.image.user.username)
                             }
                             append(" " + stringResource(id = R.string.on_unsplash))
                         },

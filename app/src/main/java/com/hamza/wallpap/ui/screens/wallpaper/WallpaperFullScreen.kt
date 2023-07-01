@@ -210,6 +210,9 @@ fun WallpaperFullScreen(
                                                     withDismissAction = true,
                                                     duration = SnackbarDuration.Short
                                                 )
+//                                                if (interstitialAd.isReady) {
+//                                                    interstitialAd.showAd()
+//                                                }
                                             }
                                         }) {
                                         Icon(
@@ -441,10 +444,3 @@ fun WallpaperFullScreen(
         }
     }
 }
-
-
-
-
-
-
-

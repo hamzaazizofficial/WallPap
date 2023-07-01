@@ -22,11 +22,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.LazyPagingItems
+import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.hamza.wallpap.R
-import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.screens.common.RandomListContent
+import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.ui.theme.textColor
@@ -35,18 +38,20 @@ import com.hamza.wallpap.util.isOnline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalPagingApi::class)
 @RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun RandomScreen(
     navController: NavHostController,
     scaffoldState: ScaffoldState,
     randomScreenViewModel: RandomScreenViewModel,
-    items: LazyPagingItems<UnsplashImage>,
+    items: LazyPagingItems<UnsplashImageUI>,
     lazyStaggeredGridState: LazyStaggeredGridState,
     systemUiController: SystemUiController,
     context: Context,
     scope: CoroutineScope,
+    randomRefreshState: SwipeRefreshState,
+    homeViewModel: HomeViewModel,
 ) {
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     BackHandler {
@@ -95,8 +100,10 @@ fun RandomScreen(
                 items = items,
                 navController,
                 randomScreenViewModel,
-                lazyStaggeredGridState
-            )
+                homeViewModel,
+                lazyStaggeredGridState,
+                randomRefreshState,
+            ) { items.refresh() }
         }
     }
 }

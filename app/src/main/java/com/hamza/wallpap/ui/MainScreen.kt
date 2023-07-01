@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -17,6 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.paging.ExperimentalPagingApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
+import com.hamza.wallpap.interstitialAd
 import com.hamza.wallpap.navigation.NavGraph
 import com.hamza.wallpap.navigation.Screen
 import com.hamza.wallpap.ui.screens.common.BottomBar
@@ -47,6 +49,7 @@ fun MainScreen(
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val savable = rememberSaveable { navBackStackEntry?.arguments!! }
     val currentRoute = navBackStackEntry?.destination?.route
     val scope = rememberCoroutineScope()
 
@@ -79,13 +82,13 @@ fun MainScreen(
                         navController.navigate(Screen.Search.route)
                     },
                     onUserDetailsClicked = {
-                        if (currentRoute.equals(Screen.Home.route)) {
-                            homeViewModel.showUserDetails = !homeViewModel.showUserDetails
-                        }
-                        if (currentRoute.equals(Screen.Random.route)) {
-                            randomScreenViewModel.showUserDetails =
-                                !randomScreenViewModel.showUserDetails
-                        }
+//                        if (currentRoute.equals(Screen.Home.route)) {
+//                            homeViewModel.showUserDetails = !homeViewModel.showUserDetails
+//                        }
+//                        if (currentRoute.equals(Screen.Random.route)) {
+//                            randomScreenViewModel.showUserDetails =
+//                                !randomScreenViewModel.showUserDetails
+//                        }
                     },
                     homeViewModel,
                     randomScreenViewModel,

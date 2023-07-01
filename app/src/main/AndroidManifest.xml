@@ -15,6 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_new_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WallPap">
+
+        <meta-data android:name="applovin.sdk.key"
+            android:value="B-k33krZDCeJyi8okEQuqdGHSR9SLyZ1iAbRd2DRo9buOmnqwVGVPwAFzADDUBC7cFpZB_utZFE7VWU5JufPCL"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

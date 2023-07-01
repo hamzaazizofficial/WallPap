@@ -33,9 +33,6 @@ class SearchPagingSource(
             LoadResult.Error(e)
         }
     }
-
-    override fun getRefreshKey(state: PagingState<Int, UnsplashImage>): Int? {
-        return state.anchorPosition
-    }
+    override fun getRefreshKey(state: PagingState<Int, UnsplashImage>): Int? { return state.anchorPosition }
 
 }

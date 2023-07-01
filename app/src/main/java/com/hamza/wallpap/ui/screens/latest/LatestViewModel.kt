@@ -3,11 +3,18 @@ package com.hamza.wallpap.ui.screens.latest
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import kotlin.random.Random
+
+data class WallpaperItem(val imageUrl: String, val height: Int)
 
 class LatestViewModel : ViewModel() {
 
     private val _wallpaperItems = mutableStateListOf<String>()
-    val wallpaperItems: List<String> get() = _wallpaperItems
+//    val wallpaperItems: List<String> get() = _wallpaperItems
+    val wallpaperItems: List<WallpaperItem>
+        get() = _wallpaperItems.map { wallpaperItem ->
+        WallpaperItem(imageUrl = wallpaperItem, height = Random.nextInt(140, 380))
+    }
 
     init {
         // Initialize the wallpaper items with the initial data

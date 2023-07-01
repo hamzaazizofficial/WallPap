@@ -28,7 +28,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.hamza.wallpap.R
-import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.screens.common.HomeListContent
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
@@ -46,7 +46,7 @@ fun SearchScreen(
     searchViewModel: SearchViewModel,
     homeViewModel: HomeViewModel,
     state: LazyStaggeredGridState,
-    items: LazyPagingItems<UnsplashImage>,
+    items: LazyPagingItems<UnsplashImageUI>,
     refreshState: SwipeRefreshState,
     context: Context,
 ) {

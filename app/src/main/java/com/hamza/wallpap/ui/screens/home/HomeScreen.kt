@@ -31,7 +31,7 @@ import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.hamza.wallpap.R
-import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.screens.common.HomeListContent
 import com.hamza.wallpap.ui.screens.search.SearchChips
 import com.hamza.wallpap.ui.theme.maven_pro_regular
@@ -51,7 +51,7 @@ fun HomeScreen(
     navController: NavHostController,
     homeViewModel: HomeViewModel,
     scaffoldState: ScaffoldState,
-    items: LazyPagingItems<UnsplashImage>,
+    items: LazyPagingItems<UnsplashImageUI>,
     state: LazyStaggeredGridState,
     refreshState: SwipeRefreshState,
     context: Context,

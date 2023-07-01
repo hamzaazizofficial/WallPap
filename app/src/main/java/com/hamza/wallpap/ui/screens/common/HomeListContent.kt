@@ -38,18 +38,17 @@ import coil.request.ImageRequest
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.hamza.wallpap.R
-import com.hamza.wallpap.model.UnsplashImage
+import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-import kotlin.random.Random
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalPagingApi::class)
 @ExperimentalCoilApi
 @Composable
 fun HomeListContent(
-    items: LazyPagingItems<UnsplashImage>,
+    items: LazyPagingItems<UnsplashImageUI>,
     navController: NavHostController,
     homeViewModel: HomeViewModel,
     state: LazyStaggeredGridState,
@@ -67,15 +66,14 @@ fun HomeListContent(
             contentPadding = PaddingValues(2.dp)
         ) {
             items(items.itemCount) {
-                val height by remember {
-                    mutableStateOf(Random.nextInt(140, 380).dp)
-                }
+//                val height by remember {
+//                    mutableStateOf(Random.nextInt(140, 380).dp)
+//                }
                 items[it]?.let { unsplashImage ->
                     UnsplashItem(
                         unsplashImage = unsplashImage,
                         navController,
-                        homeViewModel,
-                        height
+                        homeViewModel
                     )
                 }
             }
@@ -87,13 +85,13 @@ fun HomeListContent(
 @ExperimentalCoilApi
 @Composable
 fun UnsplashItem(
-    unsplashImage: UnsplashImage,
+    unsplashImage: UnsplashImageUI,
     navController: NavHostController,
-    homeViewModel: HomeViewModel,
-    height: Dp,
+    homeViewModel: HomeViewModel
 ) {
-    val regularUrl = unsplashImage.urls.regular
-    val fullUrl = unsplashImage.urls.full
+    val regularUrl = unsplashImage.image.urls.regular
+    val fullUrl = unsplashImage.image.urls.full
+    val height = unsplashImage.height
     val regularEncodedUrl = URLEncoder.encode(regularUrl, StandardCharsets.UTF_8.toString())
     val fullEncodedUrl = URLEncoder.encode(fullUrl, StandardCharsets.UTF_8.toString())
     val context = LocalContext.current
@@ -103,7 +101,7 @@ fun UnsplashItem(
         shape = RoundedCornerShape(2.dp),
         modifier = Modifier
             .padding(2.5.dp)
-            .height(height)
+            .height(height.dp)
             .clickable {
                 navController.navigate("home_wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl")
             },
@@ -115,7 +113,7 @@ fun UnsplashItem(
             SubcomposeAsyncImage(
                 model = ImageRequest
                     .Builder(context)
-                    .data(unsplashImage.urls.regular)
+                    .data(unsplashImage.image.urls.regular)
                     .crossfade(1000)
                     .build(),
                 contentScale = ContentScale.Crop,
@@ -144,7 +142,7 @@ fun UnsplashItem(
                         .clickable {
                             val browserIntent = Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("https://unsplash.com/@${unsplashImage.user.username}?utm_source=DemoApp&utm_medium=referral")
+                                Uri.parse("https://unsplash.com/@${unsplashImage.image.user.username}?utm_source=DemoApp&utm_medium=referral")
                             )
                             startActivity(context, browserIntent, null)
                         }
@@ -163,7 +161,7 @@ fun UnsplashItem(
                         text = buildAnnotatedString {
                             append(stringResource(id = R.string.photo_by) + " ")
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Black)) {
-                                append(unsplashImage.user.username)
+                                append(unsplashImage.image.user.username)
                             }
                             append(" " + stringResource(id = R.string.on_unsplash))
                         },
