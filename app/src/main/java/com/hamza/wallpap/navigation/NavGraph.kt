@@ -9,7 +9,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -71,13 +74,12 @@ fun NavGraph(
     val latestViewModel: LatestViewModel = viewModel()
     val homeItems = homeViewModel.itemsFlow.collectAsLazyPagingItems()
     val randomItems = randomScreenViewModel.itemsFlow.collectAsLazyPagingItems()
-    val latestItems = latestViewModel.wallpaperItems
+    val latestItems by remember { mutableStateOf(latestViewModel.wallpaperItems) }
     val homeRefreshState =
         rememberSwipeRefreshState(isRefreshing = homeItems.loadState.refresh is LoadState.Loading)
     val randomRefreshState =
         rememberSwipeRefreshState(isRefreshing = randomItems.loadState.refresh is LoadState.Loading)
     val favouriteItemsData = favUrlsViewModel.getAllFavUrls.observeAsState(listOf())
-    val lazyStaggeredGridState = rememberLazyStaggeredGridState()
     val customWallpaperViewModel: CustomWallpaperViewModel = viewModel()
 
     AnimatedNavHost(
@@ -95,7 +97,6 @@ fun NavGraph(
                 homeViewModel,
                 scaffoldState,
                 homeItems,
-                lazyStaggeredGridState,
                 homeRefreshState,
                 context,
                 scope,
@@ -118,7 +119,6 @@ fun NavGraph(
                 navController = navController,
                 searchViewModel,
                 homeViewModel,
-                lazyStaggeredGridState,
                 homeItems,
                 homeRefreshState,
                 context
@@ -155,7 +155,6 @@ fun NavGraph(
                 scaffoldState,
                 randomScreenViewModel,
                 randomItems,
-                lazyStaggeredGridState,
                 systemUiController,
                 context,
                 scope,

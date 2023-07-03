@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -51,24 +52,20 @@ fun HomeListContent(
     items: LazyPagingItems<UnsplashImageUI>,
     navController: NavHostController,
     homeViewModel: HomeViewModel,
-    state: LazyStaggeredGridState,
     onRefresh: () -> Unit,
     refreshState: SwipeRefreshState,
 ) {
-    SwipeRefresh(
-        state = refreshState,
-        onRefresh = onRefresh
-    ) {
+//    SwipeRefresh(
+//        state = refreshState,
+//        onRefresh = onRefresh
+//    ) {
         LazyVerticalStaggeredGrid(
-            state = state,
+            state = rememberLazyStaggeredGridState(),
             columns = StaggeredGridCells.Fixed(2),
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(2.dp)
         ) {
             items(items.itemCount) {
-//                val height by remember {
-//                    mutableStateOf(Random.nextInt(140, 380).dp)
-//                }
                 items[it]?.let { unsplashImage ->
                     UnsplashItem(
                         unsplashImage = unsplashImage,
@@ -78,7 +75,7 @@ fun HomeListContent(
                 }
             }
         }
-    }
+//    }
 }
 
 @OptIn(ExperimentalPagingApi::class)

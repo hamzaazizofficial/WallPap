@@ -10,10 +10,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -26,7 +26,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavHostController
@@ -46,7 +45,6 @@ import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-import kotlin.random.Random
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalCoilApi::class, ExperimentalPagingApi::class)
 @Composable
@@ -55,40 +53,33 @@ fun RandomListContent(
     navController: NavHostController,
     randomViewModel: RandomScreenViewModel,
     homeViewModel: HomeViewModel,
-    lazyStaggeredGridState: LazyStaggeredGridState,
     refreshState: SwipeRefreshState,
     onRefresh: () -> Unit,
 ) {
     Log.d("Error", items.loadState.toString())
 
-    SwipeRefresh(
-        state = refreshState,
-        onRefresh = onRefresh
-    ) {
+//    SwipeRefresh(
+//        state = refreshState,
+//        onRefresh = onRefresh
+//    ) {
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Fixed(2),
-            state = lazyStaggeredGridState,
+            state = rememberLazyStaggeredGridState(),
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(2.dp)
         ) {
             items(items.itemCount) {
-
-                val height = remember {
-                    Random.nextInt(140, 380).dp
-                }
-
                 items[it]?.let { unsplashImage ->
                     RandomUnsplashItem(
                         unsplashImage = unsplashImage,
                         navController,
                         randomViewModel,
-                        height,
                         homeViewModel
                     )
                 }
             }
         }
-    }
+//    }
 }
 
 @OptIn(ExperimentalPagingApi::class, ExperimentalAnimationApi::class)
@@ -98,7 +89,6 @@ fun RandomUnsplashItem(
     unsplashImage: UnsplashImageUI,
     navController: NavHostController,
     randomViewModel: RandomScreenViewModel,
-    height: Dp,
     homeViewModel: HomeViewModel,
 ) {
 
@@ -113,7 +103,7 @@ fun RandomUnsplashItem(
         shape = RoundedCornerShape(2.dp),
         modifier = Modifier
             .padding(2.5.dp)
-            .height(height)
+            .height(unsplashImage.height.dp)
             .clickable {
                 navController.navigate("home_wallpaper_screen/$regularEncodedUrl/$fullEncodedUrl")
             },

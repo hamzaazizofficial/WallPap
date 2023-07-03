@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -102,11 +103,14 @@ fun LatestScreen(
             )
         }
     } else {
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-            onRefresh = refreshAction
-        ) {
-            LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(2)) {
+//        SwipeRefresh(
+//            state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+//            onRefresh = refreshAction
+//        ) {
+            LazyVerticalStaggeredGrid(
+                state = rememberLazyStaggeredGridState(),
+                columns = StaggeredGridCells.Fixed(2)
+            ) {
                 items.forEach { latestItem ->
                     item()
                     {
@@ -114,7 +118,7 @@ fun LatestScreen(
                     }
                 }
             }
-        }
+//        }
     }
 }
 
