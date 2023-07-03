@@ -34,6 +34,8 @@ class HomeViewModel @Inject constructor(
     val query = MutableStateFlow<String?>("digital art")
     var showUserDetails by mutableStateOf(false)
 
+    private val heightMap = hashMapOf<String, Int>()
+
     val itemsFlow =
         query.flatMapLatest {
             if (it.isNullOrEmpty()) {
@@ -44,7 +46,13 @@ class HomeViewModel @Inject constructor(
         }.map { pagingData ->
             Log.d("check", "amshar")
             pagingData.map { image: UnsplashImage ->
-                UnsplashImageUI(image = image, height = Random.nextInt(140, 380))
+                UnsplashImageUI(image = image, height = heightFor(image.id))
             }
         }
+
+    private fun heightFor(imageId: String) : Int {
+        return heightMap[imageId] ?: Random.nextInt(140, 380).also {
+            heightMap[imageId] = it
+        }
+    }
 }

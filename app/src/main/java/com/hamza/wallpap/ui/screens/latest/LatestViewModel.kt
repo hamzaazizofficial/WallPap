@@ -1,8 +1,11 @@
 package com.hamza.wallpap.ui.screens.latest
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import java.time.Instant
 import kotlin.random.Random
 
 data class WallpaperItem(val imageUrl: String, val height: Int)
@@ -10,10 +13,12 @@ data class WallpaperItem(val imageUrl: String, val height: Int)
 class LatestViewModel : ViewModel() {
 
     private val _wallpaperItems = mutableStateListOf<String>()
+    private val heightMap = hashMapOf<String, Int>()
 //    val wallpaperItems: List<String> get() = _wallpaperItems
     val wallpaperItems: List<WallpaperItem>
+        @RequiresApi(Build.VERSION_CODES.O)
         get() = _wallpaperItems.map { wallpaperItem ->
-        WallpaperItem(imageUrl = wallpaperItem, height = Random.nextInt(140, 380))
+        WallpaperItem(imageUrl = wallpaperItem, height = heightFor(generateRandomID()))
     }
 
     init {
@@ -45,8 +50,6 @@ class LatestViewModel : ViewModel() {
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/surface-of-the-moon-amoled-4cu1xswhbvqa2soa.jpg?alt=media&token=d9a6b696-ffa6-495d-bc01-f34084bfb4c5",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1469493.jpg?alt=media&token=90ceb3f5-72be-4696-ad6f-79180cd83cc4",
             "https://w0.peakpx.com/wallpaper/789/24/HD-wallpaper-amoled-floral-purple-super-amoled.jpg",
-
-
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792605773.jpg?alt=media&token=5ed643dd-43b3-4125-9d37-3891e7eab210",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791526526.jpg?alt=media&token=c53367a5-513b-467a-ba29-f3d7247c0467",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792592725.jpg?alt=media&token=47ef861c-f892-4fec-b9ba-50d86c25cddf",
@@ -128,8 +131,6 @@ class LatestViewModel : ViewModel() {
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/surface-of-the-moon-amoled-4cu1xswhbvqa2soa.jpg?alt=media&token=d9a6b696-ffa6-495d-bc01-f34084bfb4c5",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1469493.jpg?alt=media&token=90ceb3f5-72be-4696-ad6f-79180cd83cc4",
             "https://w0.peakpx.com/wallpaper/789/24/HD-wallpaper-amoled-floral-purple-super-amoled.jpg",
-
-
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792605773.jpg?alt=media&token=5ed643dd-43b3-4125-9d37-3891e7eab210",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657791526526.jpg?alt=media&token=c53367a5-513b-467a-ba29-f3d7247c0467",
             "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792592725.jpg?alt=media&token=47ef861c-f892-4fec-b9ba-50d86c25cddf",
@@ -269,6 +270,19 @@ class LatestViewModel : ViewModel() {
 //            "https://firebasestorage.googleapis.com/v0/b/wallpap-4f199.appspot.com/o/1657792592725.jpg?alt=media&token=47ef861c-f892-4fec-b9ba-50d86c25cddf",
 //            //356.12kb
 //        )
+
+    private fun heightFor(imageId: String) : Int {
+        return heightMap[imageId] ?: Random.nextInt(140, 380).also {
+            heightMap[imageId] = it
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun generateRandomID(): String {
+        val currentTime = Instant.now().toEpochMilli()
+        val randomSuffix = Random.nextInt(1000)
+        return "$currentTime$randomSuffix"
+    }
 
     var saturationSliderValue = mutableStateOf(1f)
     var saturationSliderPosition = mutableStateOf(1f)

@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -45,7 +44,6 @@ fun SearchScreen(
     navController: NavHostController,
     searchViewModel: SearchViewModel,
     homeViewModel: HomeViewModel,
-    state: LazyStaggeredGridState,
     items: LazyPagingItems<UnsplashImageUI>,
     refreshState: SwipeRefreshState,
     context: Context,
@@ -91,7 +89,9 @@ fun SearchScreen(
                     Spacer(modifier = Modifier.padding(8.dp))
 
                     Text(
-                        text = stringResource(id = R.string.check_network) + "\n" + stringResource(id = R.string.reopen_app),
+                        text = stringResource(id = R.string.check_network) + "\n" + stringResource(
+                            id = R.string.reopen_app
+                        ),
                         color = MaterialTheme.colors.textColor,
                         fontFamily = maven_pro_regular,
                         fontSize = 16.sp,
@@ -106,7 +106,6 @@ fun SearchScreen(
                     items = searchedImages,
                     navController,
                     homeViewModel,
-                    state,
                     { items.refresh() },
                     refreshState
                 )

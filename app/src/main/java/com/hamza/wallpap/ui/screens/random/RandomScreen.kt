@@ -4,10 +4,8 @@ import android.content.Context
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
@@ -38,7 +36,7 @@ import com.hamza.wallpap.util.isOnline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalPagingApi::class)
+@OptIn(ExperimentalPagingApi::class)
 @RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun RandomScreen(
@@ -46,7 +44,6 @@ fun RandomScreen(
     scaffoldState: ScaffoldState,
     randomScreenViewModel: RandomScreenViewModel,
     items: LazyPagingItems<UnsplashImageUI>,
-    lazyStaggeredGridState: LazyStaggeredGridState,
     systemUiController: SystemUiController,
     context: Context,
     scope: CoroutineScope,
@@ -101,7 +98,6 @@ fun RandomScreen(
                 navController,
                 randomScreenViewModel,
                 homeViewModel,
-                lazyStaggeredGridState,
                 randomRefreshState,
             ) { items.refresh() }
         }

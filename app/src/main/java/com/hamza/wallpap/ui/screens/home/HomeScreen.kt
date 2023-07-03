@@ -9,7 +9,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -52,7 +51,6 @@ fun HomeScreen(
     homeViewModel: HomeViewModel,
     scaffoldState: ScaffoldState,
     items: LazyPagingItems<UnsplashImageUI>,
-    state: LazyStaggeredGridState,
     refreshState: SwipeRefreshState,
     context: Context,
     scope: CoroutineScope,
@@ -123,7 +121,6 @@ fun HomeScreen(
                 items = items,
                 navController,
                 homeViewModel,
-                state,
                 onRefresh = { items.refresh() },
                 refreshState
             )
