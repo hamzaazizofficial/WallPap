@@ -73,12 +73,14 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:2.45"
 
     // Admob
-    implementation 'com.google.android.gms:play-services-ads:21.5.0'
+    implementation 'com.google.android.gms:play-services-ads:22.2.0'
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.0'
+
     // Apply the Crashlytics Gradle plugin
     apply plugin: 'com.google.firebase.crashlytics'
 
@@ -138,7 +140,7 @@ dependencies {
     implementation("androidx.window:window:1.1.0-alpha06")
 
     // Splash Api
-    implementation "androidx.core:core-splashscreen:1.0.0"
+    implementation "androidx.core:core-splashscreen:1.0.0-alpha02"
 
     // Material 3
     implementation 'androidx.compose.material3:material3:1.1.0-alpha03'

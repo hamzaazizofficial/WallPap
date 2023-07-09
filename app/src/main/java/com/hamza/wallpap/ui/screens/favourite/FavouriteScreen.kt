@@ -1,6 +1,7 @@
 package com.hamza.wallpap.ui.screens.favourite
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,6 +52,8 @@ fun FavouriteScreen(
     systemUiController: SystemUiController,
 ) {
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
+    val configuration = LocalConfiguration.current
+    val orientation = configuration.orientation
 
     if (!isOnline(context)) {
         Column(
@@ -102,14 +106,15 @@ fun FavouriteScreen(
                         .padding(10.dp)
                 )
             }
-            LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
-                items(favouriteItemsData.value) { favUrl ->
-                    FavouriteItem(favUrl, favUrlsViewModel, navController, context)
-                }
-            })
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 3 else 2),
+                content = {
+                    items(favouriteItemsData.value) { favUrl ->
+                        FavouriteItem(favUrl, favUrlsViewModel, navController, context)
+                    }
+                })
         }
     }
-
 }
 
 @Composable

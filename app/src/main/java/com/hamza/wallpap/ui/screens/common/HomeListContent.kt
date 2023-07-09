@@ -1,12 +1,12 @@
 package com.hamza.wallpap.ui.screens.common
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -25,7 +26,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavHostController
@@ -36,7 +36,6 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
-import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.UnsplashImageUI
@@ -59,23 +58,24 @@ fun HomeListContent(
 //        state = refreshState,
 //        onRefresh = onRefresh
 //    ) {
-        LazyVerticalStaggeredGrid(
-            state = rememberLazyStaggeredGridState(),
-            columns = StaggeredGridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(2.dp)
-        ) {
-            items(items.itemCount) {
-                items[it]?.let { unsplashImage ->
-                    UnsplashItem(
-                        unsplashImage = unsplashImage,
-                        navController,
-                        homeViewModel
-                    )
-                }
+    val configuration = LocalConfiguration.current
+    val orientation = configuration.orientation
+    LazyVerticalStaggeredGrid(
+        state = rememberLazyStaggeredGridState(),
+        columns = StaggeredGridCells.Fixed(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 3 else 2),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(2.dp)
+    ) {
+        items(items.itemCount) {
+            items[it]?.let { unsplashImage ->
+                UnsplashItem(
+                    unsplashImage = unsplashImage,
+                    navController,
+                    homeViewModel
+                )
             }
         }
-//    }
+    }
 }
 
 @OptIn(ExperimentalPagingApi::class)
@@ -84,7 +84,7 @@ fun HomeListContent(
 fun UnsplashItem(
     unsplashImage: UnsplashImageUI,
     navController: NavHostController,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
 ) {
     val regularUrl = unsplashImage.image.urls.regular
     val fullUrl = unsplashImage.image.urls.full

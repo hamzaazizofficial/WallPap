@@ -2,6 +2,7 @@ package com.hamza.wallpap.ui.screens.home
 
 import android.app.Activity
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi

@@ -1,6 +1,7 @@
 package com.hamza.wallpap.ui.screens.latest
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
@@ -16,10 +17,12 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NetworkCheck
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,8 +32,6 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.theme.maven_pro_regular
@@ -55,8 +56,11 @@ fun LatestScreen(
     context: Context,
     scope: CoroutineScope,
 ) {
+    val imageUrls by latestViewModel.images.observeAsState(emptyList())
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     var isRefreshing by remember { mutableStateOf(false) }
+    val configuration = LocalConfiguration.current
+    val orientation = configuration.orientation
 
     val refreshAction: () -> Unit = {
         isRefreshing = true
@@ -109,9 +113,9 @@ fun LatestScreen(
 //        ) {
             LazyVerticalStaggeredGrid(
                 state = rememberLazyStaggeredGridState(),
-                columns = StaggeredGridCells.Fixed(2)
+                columns = StaggeredGridCells.Fixed(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 3 else 2)
             ) {
-                items.forEach { latestItem ->
+                imageUrls.forEach { latestItem ->
                     item()
                     {
                         LatestItem(latestItem = latestItem, navController, context)
@@ -128,7 +132,7 @@ fun LatestItem(
     navController: NavHostController,
     context: Context,
 ) {
-    val fullEncodedUrl = URLEncoder.encode(latestItem.imageUrl, StandardCharsets.UTF_8.toString())
+    val fullEncodedUrl = URLEncoder.encode(latestItem.url, StandardCharsets.UTF_8.toString())
 
     Card(
         backgroundColor = Color.Black,
@@ -148,7 +152,7 @@ fun LatestItem(
             SubcomposeAsyncImage(
                 model = ImageRequest
                     .Builder(context)
-                    .data(latestItem.imageUrl)
+                    .data(latestItem.url)
                     .crossfade(1000)
                     .build(),
                 contentScale = ContentScale.Crop,
