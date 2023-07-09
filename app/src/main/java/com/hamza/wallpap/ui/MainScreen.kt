@@ -26,6 +26,7 @@ import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.screens.settings.SettingsViewModel
+import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.ui.theme.systemBarColor
 import com.hamza.wallpap.util.WallPapTheme
 import kotlinx.coroutines.launch
@@ -34,6 +35,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagingApi::class)
 @Composable
 fun MainScreen(
+    wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
     navController: NavHostController,
     homeViewModel: HomeViewModel = hiltViewModel(),
     randomScreenViewModel: RandomScreenViewModel = hiltViewModel(),
@@ -124,7 +126,8 @@ fun MainScreen(
                 currentRoute,
                 context,
                 scope,
-                systemUiController
+                systemUiController,
+                wallpaperFullScreenViewModel
             )
         }
     }

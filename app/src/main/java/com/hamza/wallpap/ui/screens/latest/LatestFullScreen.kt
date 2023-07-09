@@ -1,11 +1,11 @@
 package com.hamza.wallpap.ui.screens.latest
 
+import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
@@ -33,6 +33,10 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import com.hamza.wallpap.MainActivity
+import com.hamza.wallpap.createInterstitialAd
+import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
+import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.ui.theme.bottomAppBarBackgroundColor
@@ -50,12 +54,15 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun LatestFullScreen(
-    amoledUrl: String,
+    latestUrl: String,
     navController: NavHostController,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
     context: Context,
     scope: CoroutineScope,
+    favUrlsViewModel: FavUrlsViewModel,
+    latestViewModel: LatestViewModel,
 ) {
+    val activity = (context as? Activity)
     val configuration = LocalConfiguration.current
     var expanded by remember { mutableStateOf(false) }
     var image by remember { mutableStateOf<Bitmap?>(null) }
@@ -72,7 +79,7 @@ fun LatestFullScreen(
             dialogState = wallpaperFullScreenViewModel.setOriginalWallpaperDialog,
             context = context,
             wallpaperFullScreenViewModel,
-            amoledUrl,
+            latestUrl,
             finalImageBitmap
         )
     }
@@ -84,12 +91,11 @@ fun LatestFullScreen(
     }
 
     LaunchedEffect(key1 = "image", block = {
-        image = getBitmapFromUrl(amoledUrl)
+        image = getBitmapFromUrl(latestUrl)
         finalImageBitmap = image
     })
 
     DisposableEffect(Unit) {
-        val activity = context as? ComponentActivity
         activity?.requestedOrientation = when (configuration.orientation) {
             Configuration.ORIENTATION_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             Configuration.ORIENTATION_PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
@@ -132,7 +138,7 @@ fun LatestFullScreen(
                             SubcomposeAsyncImage(
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = wallpaperFullScreenViewModel.scale,
-                                model = amoledUrl,
+                                model = latestUrl,
                                 contentDescription = null
                             )
                             LinearProgressIndicator(
@@ -187,6 +193,13 @@ fun LatestFullScreen(
                                             saveMediaToStorage(
                                                 it, context
                                             )
+                                            wallpaperFullScreenViewModel.interstitialState.value++
+                                            if (wallpaperFullScreenViewModel.interstitialState.value % 2 == 0){
+                                                createInterstitialAd(
+                                                    activity as MainActivity,
+                                                    wallpaperFullScreenViewModel
+                                                )
+                                            }
                                         }
                                         scope.launch {
                                             snackBarHostState.showSnackbar(
@@ -207,6 +220,11 @@ fun LatestFullScreen(
                                         finalImageBitmap?.let {
                                             saveMediaToStorage(
                                                 it, context
+                                            )
+                                            wallpaperFullScreenViewModel.interstitialState.value++
+                                            createInterstitialAd(
+                                                activity as MainActivity,
+                                                wallpaperFullScreenViewModel
                                             )
                                         }
                                         scope.launch {
@@ -361,6 +379,41 @@ fun LatestFullScreen(
                             tint = MaterialTheme.colors.bottomAppBarContentColor
                         )
                     }
+
+                    FloatingActionButton(
+                        onClick = {
+//                                  latestViewModel.addImagesToFirestore(latestViewModel.listOfUrls)
+                            wallpaperFullScreenViewModel.id += 1
+                            val favUrl =
+                                FavouriteUrls(
+                                    wallpaperFullScreenViewModel.id,
+                                    latestUrl,
+                                    latestUrl
+                                )
+                            favUrlsViewModel.addToFav(favUrl)
+                            wallpaperFullScreenViewModel.interstitialState.value++
+                            createInterstitialAd(
+                                activity as MainActivity,
+                                wallpaperFullScreenViewModel
+                            )
+                            scope.launch {
+                                snackBarHostState.showSnackbar(
+                                    "Added to Favourites!",
+                                    withDismissAction = true,
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                        },
+                        modifier = Modifier.padding(8.dp),
+                        backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.bottomAppBarContentColor
+                        )
+                    }
+
 
                     FloatingActionButton(
                         onClick = {

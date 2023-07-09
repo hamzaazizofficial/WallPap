@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_new_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.WallPap">
+        android:theme="@style/Theme.WallPap.MySplash">
 
         <meta-data android:name="applovin.sdk.key"
             android:value="B-k33krZDCeJyi8okEQuqdGHSR9SLyZ1iAbRd2DRo9buOmnqwVGVPwAFzADDUBC7cFpZB_utZFE7VWU5JufPCL"/>
@@ -35,7 +35,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.WallPap">
+            android:theme="@style/Theme.WallPap.MySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

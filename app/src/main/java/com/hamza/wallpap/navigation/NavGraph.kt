@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -64,9 +63,10 @@ fun NavGraph(
     context: Context,
     scope: CoroutineScope,
     systemUiController: SystemUiController,
+    wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
 ) {
     val homeViewModel: HomeViewModel = hiltViewModel()
-    val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
+//    val wallpaperFullScreenViewModel: WallpaperFullScreenViewModel = viewModel()
     val settingsViewModel: SettingsViewModel = hiltViewModel()
     val searchViewModel: SearchViewModel = hiltViewModel()
     val randomScreenViewModel: RandomScreenViewModel = viewModel()
@@ -265,7 +265,13 @@ fun NavGraph(
             val amoledUrl = it.arguments?.getString("amoledUrl")
             if (amoledUrl != null) {
                 LatestFullScreen(
-                    amoledUrl, navController, wallpaperFullScreenViewModel, context, scope
+                    amoledUrl,
+                    navController,
+                    wallpaperFullScreenViewModel,
+                    context,
+                    scope,
+                    favUrlsViewModel,
+                    latestViewModel
                 )
             }
         }

@@ -2,12 +2,11 @@ package com.hamza.wallpap.util
 
 import android.app.WallpaperManager
 import android.content.Context
-import android.os.Build
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
+import android.os.Build
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 
@@ -17,7 +16,7 @@ fun setWallPaper(
     fullUrl: String,
     wallpaperAs: Int,
     finalImageBitmap: Bitmap?,
-    wallpaperFullScreenViewModel: WallpaperFullScreenViewModel
+    wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
 ) {
     val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val screenWidth = windowManager.defaultDisplay.width
@@ -27,7 +26,7 @@ fun setWallPaper(
     val width = wallpaperManager.desiredMinimumWidth
     val height = wallpaperManager.desiredMinimumHeight
 
-//    Toast.makeText(context, "Setting your Wallpaper...", Toast.LENGTH_LONG).show()
+//    Toast.makeText(context, "Semtting your Wallpaper...", Toast.LENGTH_LONG).show()
 //    wallpaperFullScreenViewModel.interstitialState.value = !wallpaperFullScreenViewModel.interstitialState.value
 
     val thread = Thread {
@@ -38,22 +37,63 @@ fun setWallPaper(
                         scaleAndCropBitmap(it, screenWidth, screenHeight)
                     }
                     when (wallpaperAs) {
-                        1 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
-                        2 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+                        1 -> wallpaperManager.setBitmap(
+                            wallpaper,
+                            null,
+                            true,
+                            WallpaperManager.FLAG_SYSTEM
+                        )
+                        2 -> wallpaperManager.setBitmap(
+                            wallpaper,
+                            null,
+                            true,
+                            WallpaperManager.FLAG_LOCK
+                        )
                         3 -> {
-                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
-                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+                            wallpaperManager.setBitmap(
+                                wallpaper,
+                                null,
+                                true,
+                                WallpaperManager.FLAG_LOCK
+                            )
+                            wallpaperManager.setBitmap(
+                                wallpaper,
+                                null,
+                                true,
+                                WallpaperManager.FLAG_SYSTEM
+                            )
                         }
                     }
                 }
                 wallpaperFullScreenViewModel.scaleStretchState -> {
-                    val wallpaper = finalImageBitmap?.let { Bitmap.createScaledBitmap(it, width, height, true) }
+                    val wallpaper =
+                        finalImageBitmap?.let { Bitmap.createScaledBitmap(it, width, height, true) }
                     when (wallpaperAs) {
-                        1 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
-                        2 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+                        1 -> wallpaperManager.setBitmap(
+                            wallpaper,
+                            null,
+                            true,
+                            WallpaperManager.FLAG_SYSTEM
+                        )
+                        2 -> wallpaperManager.setBitmap(
+                            wallpaper,
+                            null,
+                            true,
+                            WallpaperManager.FLAG_LOCK
+                        )
                         3 -> {
-                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
-                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+                            wallpaperManager.setBitmap(
+                                wallpaper,
+                                null,
+                                true,
+                                WallpaperManager.FLAG_LOCK
+                            )
+                            wallpaperManager.setBitmap(
+                                wallpaper,
+                                null,
+                                true,
+                                WallpaperManager.FLAG_SYSTEM
+                            )
                         }
                     }
                 }
@@ -62,11 +102,31 @@ fun setWallPaper(
                         scaleAndFitBitmap(it, screenWidth, screenHeight)
                     }
                     when (wallpaperAs) {
-                        1 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
-                        2 -> wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
+                        1 -> wallpaperManager.setBitmap(
+                            wallpaper,
+                            null,
+                            true,
+                            WallpaperManager.FLAG_SYSTEM
+                        )
+                        2 -> wallpaperManager.setBitmap(
+                            wallpaper,
+                            null,
+                            true,
+                            WallpaperManager.FLAG_LOCK
+                        )
                         3 -> {
-                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_LOCK)
-                            wallpaperManager.setBitmap(wallpaper, null, true, WallpaperManager.FLAG_SYSTEM)
+                            wallpaperManager.setBitmap(
+                                wallpaper,
+                                null,
+                                true,
+                                WallpaperManager.FLAG_LOCK
+                            )
+                            wallpaperManager.setBitmap(
+                                wallpaper,
+                                null,
+                                true,
+                                WallpaperManager.FLAG_SYSTEM
+                            )
                         }
                     }
                 }
@@ -154,7 +214,12 @@ private fun scaleAndCropBitmap(bitmap: Bitmap, targetWidth: Int, targetHeight: I
 
     val scaledBitmap = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(scaledBitmap)
-    val scaleMatrix = RectF(offsetX.toFloat(), offsetY.toFloat(), (offsetX + scaledWidth).toFloat(), (offsetY + scaledHeight).toFloat())
+    val scaleMatrix = RectF(
+        offsetX.toFloat(),
+        offsetY.toFloat(),
+        (offsetX + scaledWidth).toFloat(),
+        (offsetY + scaledHeight).toFloat()
+    )
     canvas.drawBitmap(bitmap, null, scaleMatrix, null)
 
     return scaledBitmap

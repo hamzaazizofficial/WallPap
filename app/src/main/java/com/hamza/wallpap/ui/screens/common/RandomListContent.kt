@@ -1,6 +1,7 @@
 package com.hamza.wallpap.ui.screens.common
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.util.Log
 import androidx.compose.animation.*
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -57,13 +59,15 @@ fun RandomListContent(
     onRefresh: () -> Unit,
 ) {
     Log.d("Error", items.loadState.toString())
+    val configuration = LocalConfiguration.current
+    val orientation = configuration.orientation
 
 //    SwipeRefresh(
 //        state = refreshState,
 //        onRefresh = onRefresh
 //    ) {
         LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Fixed(2),
+            columns = StaggeredGridCells.Fixed(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 3 else 2),
             state = rememberLazyStaggeredGridState(),
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(2.dp)

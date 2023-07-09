@@ -20,7 +20,7 @@ class CustomWallpaperViewModel : ViewModel() {
 
     var saturationSliderValue = mutableStateOf(1f)
     var saturationSliderPosition = mutableStateOf(1f)
-
+    var interstitialState = mutableStateOf(0)
     var editorDropDownExpanded = mutableStateOf(false)
     var imageRotate = mutableStateOf(0f)
     var contentScale = mutableStateOf(ContentScale.Crop)

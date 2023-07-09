@@ -1,5 +1,6 @@
 package com.hamza.wallpap.ui.screens.favourite
 
+import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -32,6 +33,8 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import com.hamza.wallpap.MainActivity
+import com.hamza.wallpap.createInterstitialAd
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
@@ -60,6 +63,7 @@ fun FavouriteWallpaperFullScreen(
     context: Context,
     scope: CoroutineScope,
 ) {
+    val activity = (context as? Activity)
     val configuration = LocalConfiguration.current
     var smallSizeImage by remember { mutableStateOf<Bitmap?>(null) }
     var originalImage by remember { mutableStateOf<Bitmap?>(null) }
@@ -186,6 +190,11 @@ fun FavouriteWallpaperFullScreen(
                                             saveMediaToStorage(
                                                 it, context
                                             )
+                                            wallpaperFullScreenViewModel.interstitialState.value++
+                                            createInterstitialAd(
+                                                activity as MainActivity,
+                                                wallpaperFullScreenViewModel
+                                            )
                                         }
                                         scope.launch {
                                             snackBarHostState.showSnackbar(
@@ -206,6 +215,11 @@ fun FavouriteWallpaperFullScreen(
                                         finalImageBitmap?.let {
                                             saveMediaToStorage(
                                                 it, context
+                                            )
+                                            wallpaperFullScreenViewModel.interstitialState.value++
+                                            createInterstitialAd(
+                                                activity as MainActivity,
+                                                wallpaperFullScreenViewModel
                                             )
                                         }
                                         scope.launch {
@@ -375,6 +389,11 @@ fun FavouriteWallpaperFullScreen(
                                 FavouriteUrls(
                                     wallpaperFullScreenViewModel.id, fullUrl, regularUrl
                                 )
+                            )
+                            wallpaperFullScreenViewModel.interstitialState.value++
+                            createInterstitialAd(
+                                activity as MainActivity,
+                                wallpaperFullScreenViewModel
                             )
                             scope.launch {
                                 snackBarHostState.showSnackbar(

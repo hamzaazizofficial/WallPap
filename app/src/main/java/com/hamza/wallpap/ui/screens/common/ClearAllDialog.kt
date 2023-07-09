@@ -145,7 +145,7 @@ fun ClearAllDialogUI(
                             customWallpaperViewModel.bgImageRegularUrl.value = null
                             customWallpaperViewModel.bgImageUri.value = null
                             customWallpaperViewModel.bgBoxColor.value = Color(0xF1FFFFFF)
-                            customWallpaperViewModel.wallpaperTextColor.value = Color(0xF1FFFFFF)
+                            customWallpaperViewModel.wallpaperTextColor.value = Color(0xFF000000)
                             customWallpaperViewModel.wallpaperText.value = ""
                             customWallpaperViewModel.shareWallpaperVisible.value = false
                             customWallpaperViewModel.selectedTextColorIndex.value = 0
@@ -162,6 +162,8 @@ fun ClearAllDialogUI(
                             customWallpaperViewModel.imageTransparencySliderPosition.value = 1f
                             customWallpaperViewModel.saturationSliderValue.value = 1f
                             customWallpaperViewModel.saturationSliderPosition.value = 1f
+                            customWallpaperViewModel.selectedTextColorIndex.value = 1
+                            customWallpaperViewModel.colorItem.value = Color(0xFF000000)
                             dialogState.value = false
                         }
                         if (currentRoute.equals(Screen.Favourite.route)) {

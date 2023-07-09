@@ -10,7 +10,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
@@ -19,36 +18,46 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.ViewModelProvider
 import androidx.paging.ExperimentalPagingApi
 import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdListener
 import com.applovin.mediation.MaxError
 import com.applovin.mediation.ads.MaxInterstitialAd
 import com.applovin.sdk.AppLovinSdk
-import com.applovin.sdk.AppLovinSdkConfiguration
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.hamza.wallpap.ui.MainScreen
+import com.hamza.wallpap.ui.MainViewModel
 import com.hamza.wallpap.ui.animation.CircularReveal
+import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.ui.theme.WallPapTheme
 import com.hamza.wallpap.util.ThemeSetting
 import com.hamza.wallpap.util.ThemeSettingPreference
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
+import kotlin.math.pow
 
 lateinit var interstitialAd: MaxInterstitialAd
+var retryAttempt = 0.0
 
+fun createInterstitialAd(
+    mainActivity: MainActivity,
+    wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
+) {
+    interstitialAd = MaxInterstitialAd("f529325940f663df", mainActivity)
+    interstitialAd.setListener(mainActivity)
+
+    if (wallpaperFullScreenViewModel.interstitialState.value % 2 == 0) {
+//        Toast.makeText(mainActivity, "creating ad", Toast.LENGTH_SHORT).show()
+        interstitialAd.loadAd()
+    }
+}
+
+@Suppress("DEPRECATION")
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(), MaxAdListener {
     private lateinit var themeSetting: ThemeSetting
-    private var retryAttempt = 0.0
-
-    private fun createInterstitialAd() {
-        interstitialAd = MaxInterstitialAd("f529325940f663df", this)
-        interstitialAd.setListener(this)
-
-        // Load the first ad
-        interstitialAd.loadAd()
-    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     @OptIn(
@@ -57,16 +66,24 @@ class MainActivity : ComponentActivity(), MaxAdListener {
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        installSplashScreen().apply {
+            setKeepVisibleCondition {
+                mainViewModel.isLoading.value
+            }
+        }
         setContent {
+            val wallpaperFullScreenViewModel =
+                ViewModelProvider(this)[WallpaperFullScreenViewModel::class.java]
+
             AppLovinSdk.getInstance(applicationContext).mediationProvider = "max"
             AppLovinSdk.getInstance(applicationContext)
-                .initializeSdk { configuration: AppLovinSdkConfiguration ->
+                .initializeSdk {
                     // AppLovin SDK is initialized, start loading ads
-                    createInterstitialAd()
+//                    createInterstitialAd(this, wallpaperFullScreenViewModel)
                     Log.d("ad", "initialized")
 //                if  ( interstitialAd.isReady )
 //                {
-//                    interstitialAd.showAd()
 //                }
                 }
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
@@ -81,9 +98,9 @@ class MainActivity : ComponentActivity(), MaxAdListener {
                 com.hamza.wallpap.util.WallPapTheme.MODE_NIGHT -> true
             }
 
-            val isSystemDark = isSystemInDarkTheme()
-            var darkTheme by remember { mutableStateOf(isSystemDark) }
-            val onThemeToggle = { darkTheme = !darkTheme }
+//            val isSystemDark = isSystemInDarkTheme()
+//            var darkTheme by remember { mutableStateOf(isSystemDark) }
+//            val onThemeToggle = { darkTheme = !darkTheme }
             val navController = rememberAnimatedNavController()
 
             CircularReveal(
@@ -96,8 +113,10 @@ class MainActivity : ComponentActivity(), MaxAdListener {
                         color = MaterialTheme.colors.background
                     ) {
                         MainScreen(
+                            wallpaperFullScreenViewModel,
                             navController = navController,
-                            onItemSelected = { theme -> themeSetting.theme = theme })
+                            onItemSelected = { theme -> themeSetting.theme = theme }
+                        )
                     }
                 }
             }
@@ -109,6 +128,8 @@ class MainActivity : ComponentActivity(), MaxAdListener {
 
         // Reset retry attempt
         retryAttempt = 0.0
+        interstitialAd.loadAd()
+        interstitialAd.showAd()
     }
 
     override fun onAdDisplayed(p0: MaxAd?) {
@@ -127,9 +148,10 @@ class MainActivity : ComponentActivity(), MaxAdListener {
         // Interstitial ad failed to load
         // AppLovin recommends that you retry with exponentially higher delays up to a maximum delay (in this case 64 seconds)
 
+        Log.d("er", error.toString())
         retryAttempt++
         val delayMillis =
-            TimeUnit.SECONDS.toMillis(Math.pow(2.0, Math.min(6.0, retryAttempt)).toLong())
+            TimeUnit.SECONDS.toMillis(2.0.pow(6.0.coerceAtMost(retryAttempt)).toLong())
 
         Handler().postDelayed({ interstitialAd.loadAd() }, delayMillis)
     }

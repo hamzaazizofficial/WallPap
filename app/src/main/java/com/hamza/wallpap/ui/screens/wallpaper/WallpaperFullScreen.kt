@@ -1,5 +1,6 @@
 package com.hamza.wallpap.ui.screens.wallpaper
 
+import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -31,6 +32,8 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.google.accompanist.systemuicontroller.SystemUiController
+import com.hamza.wallpap.MainActivity
+import com.hamza.wallpap.createInterstitialAd
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.ui.screens.common.SetWallpaperDialog
@@ -60,6 +63,8 @@ fun WallpaperFullScreen(
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     val configuration = LocalConfiguration.current
     var expanded by remember { mutableStateOf(false) }
+    val activity = (context as? Activity)
+
 
     val matrix by remember { mutableStateOf(ColorMatrix()) }
     matrix.setToSaturation(wallpaperFullScreenViewModel.saturationSliderValue.value)
@@ -203,6 +208,14 @@ fun WallpaperFullScreen(
                                                     it,
                                                     context
                                                 )
+                                                wallpaperFullScreenViewModel.interstitialState.value++
+                                                createInterstitialAd(
+                                                    activity as MainActivity,
+                                                    wallpaperFullScreenViewModel
+                                                )
+//                                                if (wallpaperFullScreenViewModel.interstitialState.value % 2 == 0){
+//                                                    createInterstitialAd(activity as MainActivity)
+//                                                }
                                             }
                                             scope.launch {
                                                 snackBarHostState.showSnackbar(
@@ -210,9 +223,6 @@ fun WallpaperFullScreen(
                                                     withDismissAction = true,
                                                     duration = SnackbarDuration.Short
                                                 )
-//                                                if (interstitialAd.isReady) {
-//                                                    interstitialAd.showAd()
-//                                                }
                                             }
                                         }) {
                                         Icon(
@@ -229,6 +239,14 @@ fun WallpaperFullScreen(
                                                     it,
                                                     context
                                                 )
+                                                wallpaperFullScreenViewModel.interstitialState.value++
+                                                createInterstitialAd(
+                                                    activity as MainActivity,
+                                                    wallpaperFullScreenViewModel
+                                                )
+//                                                if (wallpaperFullScreenViewModel.interstitialState.value % 2 == 0){
+//                                                    createInterstitialAd(activity as MainActivity)
+//                                                }
                                             }
                                             scope.launch {
                                                 snackBarHostState.showSnackbar(
@@ -405,6 +423,11 @@ fun WallpaperFullScreen(
                                         regularUrl
                                     )
                                 favUrlsViewModel.addToFav(favUrl)
+                                wallpaperFullScreenViewModel.interstitialState.value++
+                                createInterstitialAd(
+                                    activity as MainActivity,
+                                    wallpaperFullScreenViewModel
+                                )
                                 scope.launch {
                                     snackBarHostState.showSnackbar(
                                         "Added to Favourites!",

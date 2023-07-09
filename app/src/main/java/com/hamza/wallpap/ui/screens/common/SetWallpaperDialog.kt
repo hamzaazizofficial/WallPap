@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.hamza.wallpap.R
-import com.hamza.wallpap.ui.screens.common.admob.mainInterstitialAd
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
 import com.hamza.wallpap.ui.theme.*
 import com.hamza.wallpap.util.setWallPaper
@@ -220,7 +219,6 @@ fun SetWallpaperDialogUI(
                                         wallpaperFullScreenViewModel
                                     )
                                     dialogState.value = false
-                                    wallpaperFullScreenViewModel.interstitialState.value ++
                                 }) {
                                 Text(
                                     textAlign = TextAlign.Center,
@@ -244,7 +242,6 @@ fun SetWallpaperDialogUI(
                                         wallpaperFullScreenViewModel
                                     )
                                     dialogState.value = false
-                                    wallpaperFullScreenViewModel.interstitialState.value ++
                                 }) {
                                 Text(
                                     text = stringResource(id = R.string.lock),
@@ -267,7 +264,6 @@ fun SetWallpaperDialogUI(
                                         wallpaperFullScreenViewModel
                                     )
                                     dialogState.value = false
-                                    wallpaperFullScreenViewModel.interstitialState.value ++
                                 }) {
                                 Text(
                                     text = stringResource(id = R.string.both),
@@ -435,7 +431,6 @@ fun SetWallpaperDialogUI(
                                         wallpaperFullScreenViewModel
                                     )
                                     dialogState.value = false
-                                    wallpaperFullScreenViewModel.interstitialState.value ++
                                 }) {
                                 Text(
                                     textAlign = TextAlign.Center,
@@ -459,7 +454,6 @@ fun SetWallpaperDialogUI(
                                         wallpaperFullScreenViewModel
                                     )
                                     dialogState.value = false
-                                    wallpaperFullScreenViewModel.interstitialState.value ++
                                 }) {
                                 Text(
                                     text = stringResource(id = R.string.lock),
@@ -482,7 +476,6 @@ fun SetWallpaperDialogUI(
                                         wallpaperFullScreenViewModel
                                     )
                                     dialogState.value = false
-                                    wallpaperFullScreenViewModel.interstitialState.value ++
                                 }) {
                                 Text(
                                     text = stringResource(id = R.string.both),
@@ -511,7 +504,6 @@ fun setWallpaperWithToast(
     val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         showToast(context, "Error setting wallpaper: ${exception.localizedMessage}")
     }
-
     val wallpaperCoroutineScope = CoroutineScope(Dispatchers.Main)
 
     wallpaperCoroutineScope.launch(coroutineExceptionHandler) {
@@ -525,9 +517,6 @@ fun setWallpaperWithToast(
             )
             showToast(context, "Setting wallpaper...")
             delay(1000)
-            if (wallpaperFullScreenViewModel.interstitialState.value % 2 == 0) {
-                mainInterstitialAd(context)
-            }
         } catch (e: Exception) {
             showToast(context, "Error setting wallpaper: ${e.localizedMessage}")
         }

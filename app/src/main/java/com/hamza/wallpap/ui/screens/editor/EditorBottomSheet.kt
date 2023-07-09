@@ -1,5 +1,6 @@
 package com.hamza.wallpap.ui.screens.editor
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -39,7 +40,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
+import com.hamza.wallpap.MainActivity
 import com.hamza.wallpap.R
+import com.hamza.wallpap.createInterstitialAd
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.screens.common.ColorPickerDialog
@@ -69,6 +72,7 @@ fun EditorBottomSheet(
     focusManager: FocusManager,
     isWhatsAppInstalled: Boolean,
 ) {
+    val activity = (context as? Activity)
     if (customWallpaperViewModel.wallpaperDialogState.value) {
         TextFormatDialog(
             dialogState = customWallpaperViewModel.wallpaperDialogState,
@@ -261,10 +265,12 @@ fun EditorBottomSheet(
                         )
                     },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
+                        unfocusedLabelColor = MaterialTheme.colors.iconColor,
                         focusedLabelColor = MaterialTheme.colors.textColor,
                         focusedBorderColor = MaterialTheme.colors.textColor,
                         unfocusedBorderColor = MaterialTheme.colors.iconColor,
-                        containerColor = MaterialTheme.colors.textColor
+                        textColor = MaterialTheme.colors.textColor,
+                        cursorColor = MaterialTheme.colors.textColor
                     ),
                     leadingIcon = {
                         IconButton(
@@ -681,6 +687,16 @@ fun EditorBottomSheet(
                                         it,
                                         context
                                     )
+                                    customWallpaperViewModel.interstitialState.value++
+//                                    if (customWallpaperViewModel.interstitialState.value % 2 == 0){
+//                                        createInterstitialAd(
+//                                            activity as MainActivity,
+//                                            wallpaperFullScreenViewModel
+//                                        )
+//                                    }
+                                    scope.launch {
+                                        bottomSheetState.hide()
+                                    }
                                 }
                             },
                         verticalAlignment = Alignment.CenterVertically,
