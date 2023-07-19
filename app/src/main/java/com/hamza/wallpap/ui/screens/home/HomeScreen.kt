@@ -2,7 +2,6 @@ package com.hamza.wallpap.ui.screens.home
 
 import android.app.Activity
 import android.content.Context
-import android.content.pm.ActivityInfo
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
@@ -28,7 +27,6 @@ import androidx.navigation.NavHostController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.LazyPagingItems
 import coil.annotation.ExperimentalCoilApi
-import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.UnsplashImageUI
@@ -52,7 +50,7 @@ fun HomeScreen(
     homeViewModel: HomeViewModel,
     scaffoldState: ScaffoldState,
     items: LazyPagingItems<UnsplashImageUI>,
-    refreshState: SwipeRefreshState,
+//    refreshState: SwipeRefreshState,
     context: Context,
     scope: CoroutineScope,
     systemUiController: SystemUiController,
@@ -121,9 +119,9 @@ fun HomeScreen(
             HomeListContent(
                 items = items,
                 navController,
-                homeViewModel,
-                onRefresh = { items.refresh() },
-                refreshState
+                homeViewModel
+//                onRefresh = { items.refresh() },
+//                refreshState
             )
         }
     }

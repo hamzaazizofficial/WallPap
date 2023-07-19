@@ -80,4 +80,5 @@
     <string name="your_fav_wallpapers">Your Favourite Wallpapers will appear here</string>
     <string name="search_here">Search here..</string>
     <string name="search">Search</string>
+    <string name="shuffle">Shuffle</string>
 </resources>

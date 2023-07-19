@@ -19,7 +19,7 @@ fun BottomBar(
         Screen.Home,
         Screen.Latest,
         Screen.CustomWallpaperEditorScreen,
-        Screen.Random,
+//        Screen.Random,
         Screen.Favourite
     )
     CompositionLocalProvider(LocalElevationOverlay provides null) {

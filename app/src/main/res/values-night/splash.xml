@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.WallPap.MySplash" parent="Theme.SplashScreen">
-<!--        <item name="windowSplashScreenBackground">#000000</item>-->
+        <item name="windowSplashScreenBackground">#000000</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
 <!--        <item name="android:cropToPadding">true</item>-->

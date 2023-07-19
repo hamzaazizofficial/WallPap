@@ -1,14 +1,19 @@
 package com.hamza.wallpap.ui
 
+import android.app.Application
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.applovin.sdk.AppLovinSdk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
     val items = listOf(
         "Home",
         "Settings",
@@ -24,7 +29,7 @@ class MainViewModel : ViewModel() {
     val isLoading = _isLoading.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             delay(300)
             _isLoading.value = false
         }

@@ -1,6 +1,8 @@
 package com.hamza.wallpap.ui.screens.settings
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
@@ -21,6 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavHostController
 import androidx.paging.ExperimentalPagingApi
 import com.google.accompanist.systemuicontroller.SystemUiController
@@ -202,7 +205,12 @@ fun SettingsScreen(
                     ),
                     modifier = Modifier
                 )
-                TextButton(onClick = { settingsViewModel.dialogState.value = true }) {
+                TextButton(onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data =
+                        Uri.parse("https://hamzaazizofficial.github.io/wallpap_privacy_policy/")
+                    startActivity(context, intent, null)
+                }) {
                     Text(
                         text = stringResource(id = R.string.policy),
                         fontSize = 16.sp,
@@ -233,7 +241,7 @@ fun SettingsScreen(
                     fontSize = 16.sp,
                     style = TextStyle(
                         fontStyle = MaterialTheme.typography.subtitle1.fontStyle,
-                        fontFamily = maven_pro_regular
+                        fontFamily = defaultFontFamily
                     ),
                     modifier = Modifier
                 )

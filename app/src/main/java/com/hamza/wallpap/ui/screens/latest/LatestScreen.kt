@@ -52,11 +52,10 @@ fun LatestScreen(
     latestViewModel: LatestViewModel,
     scaffoldState: ScaffoldState,
     systemUiController: SystemUiController,
-    items: List<WallpaperItem>,
     context: Context,
     scope: CoroutineScope,
 ) {
-    val imageUrls by latestViewModel.images.observeAsState(emptyList())
+    val imageUrls by latestViewModel.shuffledImages.observeAsState(emptyList())
     systemUiController.setSystemBarsColor(color = MaterialTheme.colors.systemBarColor)
     var isRefreshing by remember { mutableStateOf(false) }
     val configuration = LocalConfiguration.current

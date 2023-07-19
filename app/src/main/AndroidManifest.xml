@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WallPap.MySplash">
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
         <meta-data android:name="applovin.sdk.key"
             android:value="B-k33krZDCeJyi8okEQuqdGHSR9SLyZ1iAbRd2DRo9buOmnqwVGVPwAFzADDUBC7cFpZB_utZFE7VWU5JufPCL"/>
 
@@ -28,9 +32,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"/>
         </provider>
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-5035955104875940~2146186889" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

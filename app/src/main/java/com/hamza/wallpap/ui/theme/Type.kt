@@ -2,209 +2,317 @@ package com.hamza.wallpap.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
 import com.hamza.wallpap.R
 
 // Set of Material typography styles to start with
 
+val provider = GoogleFont.Provider(
+    providerAuthority = "com.google.android.gms.fonts",
+    providerPackage = "com.google.android.gms",
+    certificates = R.array.com_google_android_gms_fonts_certs
+)
+
+val defaultFont = GoogleFont("Maven Pro")
+
+val defaultFontFamily = FontFamily(
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = defaultFont,
+        fontProvider = provider
+    )
+)
+
+val monoton_regularFont = GoogleFont("Monoton")
+val abeezeeFont = GoogleFont("ABeeZee")
+val allertaFont = GoogleFont("Allerta")
+val amaranthFont = GoogleFont("Amaranth")
+val amatic_scFont = GoogleFont("Amatic SC")
+val archivo_blackFont = GoogleFont("Archivo Black")
+val arimoFont = GoogleFont("Arimo")
+val bungee_inlineFont = GoogleFont("Bungee Inline")
+val cabinFont = GoogleFont("Cabin")
+val chivoFont = GoogleFont("Chivo")
+val comicFont = GoogleFont("Comic Neue")
+val faster_oneFont = GoogleFont("Faster One")
+val francois_oneFont = GoogleFont("Francois One")
+val montserratFont = GoogleFont("Montserrat")
+val nunitoFont = GoogleFont("Nunito")
+val oxygenFont = GoogleFont("Oxygen")
+val permanent_markerFont = GoogleFont("Permanent Marker")
+//val press_start_2pFont = GoogleFont("Press Start 2P")
+val robotoFont = GoogleFont("Roboto")
+val schoolbellFont = GoogleFont("Schoolbell")
+
 val monoton_regular = FontFamily(
-    Font(R.font.monoton_regular)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = monoton_regularFont,
+        fontProvider = provider
+    )
 )
 
 val maven_pro_regular = FontFamily(
-    Font(R.font.maven_pro_regular)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = defaultFont,
+        fontProvider = provider
+    )
 )
+
 val abeezee = FontFamily(
-    Font(R.font.abeezee)
-)
-
-val aileron_bold = FontFamily(
-    Font(R.font.aileron_bold)
-)
-
-val aileron_regular = FontFamily(
-    Font(R.font.aileron_regular)
-)
-
-val aileron_semibold = FontFamily(
-    Font(R.font.aileron_semibold)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = abeezeeFont,
+        fontProvider = provider
+    )
 )
 
 val allerta = FontFamily(
-    Font(R.font.allerta)
-)
-
-val allerta_stencil = FontFamily(
-    Font(R.font.allerta_stencil)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = allertaFont,
+        fontProvider = provider
+    )
 )
 
 val amaranth = FontFamily(
-    Font(R.font.amaranth)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = amaranthFont,
+        fontProvider = provider
+    )
 )
 
 val amatic_sc = FontFamily(
-    Font(R.font.amatic_sc)
-)
-
-val amatic_sc_boldf = FontFamily(
-    Font(R.font.amatic_sc_bold)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = amatic_scFont,
+        fontProvider = provider
+    )
 )
 
 val archivo_black = FontFamily(
-    Font(R.font.archivo_black)
-)
-
-val ariblk = FontFamily(
-    Font(R.font.ariblk)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = archivo_blackFont,
+        fontProvider = provider
+    )
 )
 
 val arimo = FontFamily(
-    Font(R.font.arimo)
-)
-
-val arimo_bold = FontFamily(
-    Font(R.font.arimo_bold)
-)
-
-val arimo_italic = FontFamily(
-    Font(R.font.arimo_italic)
-)
-
-val bahnschrift = FontFamily(
-    Font(R.font.bahnschrift)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = arimoFont,
+        fontProvider = provider
+    )
 )
 
 val bungee_inline = FontFamily(
-    Font(R.font.bungee_inline)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = bungee_inlineFont,
+        fontProvider = provider
+    )
 )
 
 val cabin = FontFamily(
-    Font(R.font.cabin)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = cabinFont,
+        fontProvider = provider
+    )
 )
 
 val chivo = FontFamily(
-    Font(R.font.chivo)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = chivoFont,
+        fontProvider = provider
+    )
 )
 
 val comic = FontFamily(
-    Font(R.font.comic)
-)
-
-val comicbd = FontFamily(
-    Font(R.font.comicbd)
-)
-
-val consola = FontFamily(
-    Font(R.font.consola)
-)
-
-val consolab = FontFamily(
-    Font(R.font.consolab)
-)
-
-val cour = FontFamily(
-    Font(R.font.cour)
-)
-
-val courbd = FontFamily(
-    Font(R.font.courbd)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = comicFont,
+        fontProvider = provider
+    )
 )
 
 val faster_one = FontFamily(
-    Font(R.font.faster_one)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = faster_oneFont,
+        fontProvider = provider
+    )
 )
 
 val francois_one = FontFamily(
-    Font(R.font.francois_one)
-)
-
-val impact = FontFamily(
-    Font(R.font.impact)
-)
-
-val lucon = FontFamily(
-    Font(R.font.lucon)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = francois_oneFont,
+        fontProvider = provider
+    )
 )
 
 val montserrat = FontFamily(
-    Font(R.font.montserrat)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = montserratFont,
+        fontProvider = provider
+    )
 )
 
 val nunito = FontFamily(
-    Font(R.font.nunito)
-)
-
-val nunito_bold = FontFamily(
-    Font(R.font.nunito_bold)
-)
-
-val nunito_light = FontFamily(
-    Font(R.font.nunito_light)
-)
-
-val nunito_semibold = FontFamily(
-    Font(R.font.nunito_semibold)
-)
-
-val open_sans = FontFamily(
-    Font(R.font.open_sans)
-)
-
-val open_sans_bold = FontFamily(
-    Font(R.font.open_sans_bold)
-)
-
-val open_sans_semibold = FontFamily(
-    Font(R.font.open_sans_semibold)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = nunitoFont,
+        fontProvider = provider
+    )
 )
 
 val oxygen = FontFamily(
-    Font(R.font.oxygen)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = oxygenFont,
+        fontProvider = provider
+    )
 )
 
 val permanent_marker = FontFamily(
-    Font(R.font.permanent_marker)
-)
-
-val press_start_2p = FontFamily(
-    Font(R.font.press_start_2p)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = permanent_markerFont,
+        fontProvider = provider
+    )
 )
 
 val roboto = FontFamily(
-    Font(R.font.roboto)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = robotoFont,
+        fontProvider = provider
+    )
 )
 
 val schoolbell = FontFamily(
-    Font(R.font.schoolbell)
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = schoolbellFont,
+        fontProvider = provider
+    )
 )
 
-val seguibl = FontFamily(
-    Font(R.font.seguibl)
-)
+//val arimo_bold = FontFamily(
+//    Font(R.font.arimo_bold)
+//)
+//
+//val arimo_italic = FontFamily(
+//    Font(R.font.arimo_italic)
+//)
 
-val trebuc = FontFamily(
-    Font(R.font.trebuc)
-)
+//val bahnschrift = FontFamily(
+//    Font(R.font.bahnschrift)
+//)
 
-val trebuc_bd = FontFamily(
-    Font(R.font.trebucbd)
-)
+//val comicbd = FontFamily(
+//    Font(R.font.comicbd)
+//)
 
-val verdana = FontFamily(
-    Font(R.font.verdana)
-)
+//val consola = FontFamily(
+//    Font(R.font.consola)
+//)
+//
+//val consolab = FontFamily(
+//    Font(R.font.consolab)
+//)
+
+//val cour = FontFamily(
+//    Font(R.font.cour)
+//)
+
+//val courbd = FontFamily(
+//    Font(R.font.courbd)
+//)
+
+//val impact = FontFamily(
+//    Font(R.font.impact)
+//)
+
+//val lucon = FontFamily(
+//    Font(R.font.lucon)
+//)
+
+
+//val nunito_bold = FontFamily(
+//    Font(R.font.nunito_bold)
+//)
+//
+//val nunito_light = FontFamily(
+//    Font(R.font.nunito_light)
+//)
+//
+//val nunito_semibold = FontFamily(
+//    Font(R.font.nunito_semibold)
+//)
+
+
+
+
+
+
+
+//val press_start_2p = FontFamily(
+//    androidx.compose.ui.text.googlefonts.Font(
+//        googleFont = press_start_2pFont,
+//        fontProvider = provider
+//    )
+//)
+
+
+
+//val seguibl = FontFamily(
+//    Font(R.font.seguibl)
+//)
+//
+//val trebuc = FontFamily(
+//    Font(R.font.trebuc)
+//)
+//
+//val trebuc_bd = FontFamily(
+//    Font(R.font.trebucbd)
+//)
+//
+//val verdana = FontFamily(
+//    Font(R.font.verdana)
+//)
+
+//@OptIn(ExperimentalTextApi::class)
+//val AppFontTypography = Typography(
+//    defaultFontFamily = getGoogleFontFamily(
+//        name = "Poppins",
+//        weights = listOf(
+//            FontWeight.Normal,
+//            FontWeight.Bold,
+//            FontWeight.ExtraLight,
+//            FontWeight.SemiBold
+//        )
+//    )
+//)
+
+//@OptIn(ExperimentalTextApi::class)
+//private fun getGoogleFontFamily(
+//    name: String,
+//    provider: GoogleFont.Provider = googleFontProvider,
+//    weights: List<FontWeight>
+//): FontFamily {
+//    return FontFamily(
+//        weights.map {
+//            Font(GoogleFont(name), provider, it)
+//        }
+//    )
+//}
+//
+//@OptIn(ExperimentalTextApi::class)
+//private val googleFontProvider: GoogleFont.Provider by lazy {
+//    GoogleFont.Provider(
+//        providerAuthority = "com.google.android.gms.fonts",
+//        providerPackage = "com.google.android.gms",
+//        certificates = R.array.com_google_android_gms_fonts_certs
+//    )
+//}
 
 
 val Typography = Typography(
     body1 = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = defaultFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
-    defaultFontFamily = maven_pro_regular
+    defaultFontFamily = defaultFontFamily
     /* Other default text styles to override
     button = TextStyle(
         fontFamily = FontFamily.Default,

@@ -36,6 +36,7 @@ fun SetWallpaperDialog(
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
     fullUrl: String,
     finalImageBitmap: Bitmap?,
+    scope: CoroutineScope,
 ) {
     Dialog(
         onDismissRequest = { dialogState.value = false },
@@ -47,7 +48,8 @@ fun SetWallpaperDialog(
             context,
             wallpaperFullScreenViewModel,
             fullUrl,
-            finalImageBitmap
+            finalImageBitmap,
+            scope
         )
     }
 }
@@ -61,6 +63,7 @@ fun SetWallpaperDialogUI(
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
     fullUrl: String,
     finalImageBitmap: Bitmap?,
+    scope: CoroutineScope,
 ) {
     BoxWithConstraints {
         constraints
@@ -211,13 +214,16 @@ fun SetWallpaperDialogUI(
                             TextButton(
                                 modifier = Modifier.padding(4.dp),
                                 onClick = {
-                                    wallpaperFullScreenViewModel.setWallpaperAs = 1
-                                    setWallpaperWithToast(
-                                        context,
-                                        fullUrl,
-                                        finalImageBitmap,
-                                        wallpaperFullScreenViewModel
-                                    )
+                                    scope.launch(Dispatchers.IO) {
+                                        wallpaperFullScreenViewModel.setWallpaperAs = 1
+                                        setWallpaperWithToast(
+                                            context,
+                                            fullUrl,
+                                            finalImageBitmap,
+                                            wallpaperFullScreenViewModel,
+                                            scope
+                                        )
+                                    }
                                     dialogState.value = false
                                 }) {
                                 Text(
@@ -234,13 +240,16 @@ fun SetWallpaperDialogUI(
                             TextButton(
                                 modifier = Modifier.padding(4.dp),
                                 onClick = {
-                                    wallpaperFullScreenViewModel.setWallpaperAs = 2
-                                    setWallpaperWithToast(
-                                        context,
-                                        fullUrl,
-                                        finalImageBitmap,
-                                        wallpaperFullScreenViewModel
-                                    )
+                                    scope.launch(Dispatchers.IO) {
+                                        wallpaperFullScreenViewModel.setWallpaperAs = 2
+                                        setWallpaperWithToast(
+                                            context,
+                                            fullUrl,
+                                            finalImageBitmap,
+                                            wallpaperFullScreenViewModel,
+                                            scope
+                                        )
+                                    }
                                     dialogState.value = false
                                 }) {
                                 Text(
@@ -256,13 +265,16 @@ fun SetWallpaperDialogUI(
                             TextButton(
                                 modifier = Modifier.padding(4.dp),
                                 onClick = {
-                                    wallpaperFullScreenViewModel.setWallpaperAs = 3
-                                    setWallpaperWithToast(
-                                        context,
-                                        fullUrl,
-                                        finalImageBitmap,
-                                        wallpaperFullScreenViewModel
-                                    )
+                                    scope.launch(Dispatchers.IO) {
+                                        wallpaperFullScreenViewModel.setWallpaperAs = 3
+                                        setWallpaperWithToast(
+                                            context,
+                                            fullUrl,
+                                            finalImageBitmap,
+                                            wallpaperFullScreenViewModel,
+                                            scope
+                                        )
+                                    }
                                     dialogState.value = false
                                 }) {
                                 Text(
@@ -423,13 +435,16 @@ fun SetWallpaperDialogUI(
                             TextButton(
                                 modifier = Modifier.padding(5.dp),
                                 onClick = {
-                                    wallpaperFullScreenViewModel.setWallpaperAs = 1
-                                    setWallpaperWithToast(
-                                        context,
-                                        fullUrl,
-                                        finalImageBitmap,
-                                        wallpaperFullScreenViewModel
-                                    )
+                                    scope.launch(Dispatchers.IO) {
+                                        wallpaperFullScreenViewModel.setWallpaperAs = 1
+                                        setWallpaperWithToast(
+                                            context,
+                                            fullUrl,
+                                            finalImageBitmap,
+                                            wallpaperFullScreenViewModel,
+                                            scope
+                                        )
+                                    }
                                     dialogState.value = false
                                 }) {
                                 Text(
@@ -446,13 +461,16 @@ fun SetWallpaperDialogUI(
                             TextButton(
                                 modifier = Modifier.padding(5.dp),
                                 onClick = {
-                                    wallpaperFullScreenViewModel.setWallpaperAs = 2
-                                    setWallpaperWithToast(
-                                        context,
-                                        fullUrl,
-                                        finalImageBitmap,
-                                        wallpaperFullScreenViewModel
-                                    )
+                                    scope.launch(Dispatchers.IO) {
+                                        wallpaperFullScreenViewModel.setWallpaperAs = 2
+                                        setWallpaperWithToast(
+                                            context,
+                                            fullUrl,
+                                            finalImageBitmap,
+                                            wallpaperFullScreenViewModel,
+                                            scope
+                                        )
+                                    }
                                     dialogState.value = false
                                 }) {
                                 Text(
@@ -468,13 +486,16 @@ fun SetWallpaperDialogUI(
                             TextButton(
                                 modifier = Modifier.padding(5.dp),
                                 onClick = {
-                                    wallpaperFullScreenViewModel.setWallpaperAs = 3
-                                    setWallpaperWithToast(
-                                        context,
-                                        fullUrl,
-                                        finalImageBitmap,
-                                        wallpaperFullScreenViewModel
-                                    )
+                                    scope.launch(Dispatchers.IO) {
+                                        wallpaperFullScreenViewModel.setWallpaperAs = 3
+                                        setWallpaperWithToast(
+                                            context,
+                                            fullUrl,
+                                            finalImageBitmap,
+                                            wallpaperFullScreenViewModel,
+                                            scope
+                                        )
+                                    }
                                     dialogState.value = false
                                 }) {
                                 Text(
@@ -500,6 +521,7 @@ fun setWallpaperWithToast(
     fullUrl: String,
     finalImageBitmap: Bitmap?,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
+    scope: CoroutineScope,
 ) {
     val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         showToast(context, "Error setting wallpaper: ${exception.localizedMessage}")
@@ -508,13 +530,15 @@ fun setWallpaperWithToast(
 
     wallpaperCoroutineScope.launch(coroutineExceptionHandler) {
         try {
-            setWallPaper(
-                context,
-                fullUrl,
-                wallpaperFullScreenViewModel.setWallpaperAs,
-                finalImageBitmap,
-                wallpaperFullScreenViewModel
-            )
+            scope.launch(Dispatchers.IO) {
+                setWallPaper(
+                    context,
+                    fullUrl,
+                    wallpaperFullScreenViewModel.setWallpaperAs,
+                    finalImageBitmap,
+                    wallpaperFullScreenViewModel
+                )
+            }
             showToast(context, "Setting wallpaper...")
             delay(1000)
         } catch (e: Exception) {

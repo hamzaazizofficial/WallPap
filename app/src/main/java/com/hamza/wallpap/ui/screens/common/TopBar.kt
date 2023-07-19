@@ -7,7 +7,6 @@ import androidx.compose.animation.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
@@ -19,6 +18,7 @@ import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.navigation.Screen
 import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
+import com.hamza.wallpap.ui.screens.latest.LatestViewModel
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.*
 
@@ -35,6 +35,7 @@ fun TopBar(
     favUrlsViewModel: FavUrlsViewModel,
     context: Context,
     customWallpaperViewModel: CustomWallpaperViewModel,
+    latestViewModel: LatestViewModel,
 ) {
 
     if (customWallpaperViewModel.clearEditorDialogState.value) {
@@ -66,7 +67,7 @@ fun TopBar(
                 text =
                 if (currentRoute.equals(Screen.Home.route)) stringResource(id = R.string.home)
                 else if (currentRoute.equals(Screen.Settings.route)) stringResource(id = R.string.settings)
-                else if (currentRoute.equals(Screen.Random.route)) stringResource(id = R.string.random)
+//                else if (currentRoute.equals(Screen.Random.route)) stringResource(id = R.string.random)
                 else if (currentRoute.equals(Screen.Favourite.route)) stringResource(id = R.string.favourite)
                 else if (currentRoute.equals(Screen.Latest.route)) stringResource(id = R.string.latest)
                 else if (currentRoute.equals(Screen.CustomWallpaperEditorScreen.route)) stringResource(
@@ -190,12 +191,25 @@ fun TopBar(
 
                 if (!currentRoute.equals(Screen.Settings.route) &&
                     !currentRoute.equals(Screen.CustomWallpaperEditorScreen.route) &&
-                    !currentRoute.equals(Screen.Favourite.route)
+                    !currentRoute.equals(Screen.Favourite.route) &&
+                    !currentRoute.equals(Screen.Latest.route)
                 ) {
                     IconButton(onClick = onSearchClicked) {
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = stringResource(id = R.string.search),
+                            tint = MaterialTheme.colors.topAppBarContentColor
+                        )
+                    }
+                }
+
+                if (currentRoute.equals(Screen.Latest.route)){
+                    IconButton(onClick = {
+                        latestViewModel.shuffleImages()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.AutoAwesome,
+                            contentDescription = stringResource(id = R.string.shuffle),
                             tint = MaterialTheme.colors.topAppBarContentColor
                         )
                     }
