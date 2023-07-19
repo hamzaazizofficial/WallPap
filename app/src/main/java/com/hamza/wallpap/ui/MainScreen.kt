@@ -24,6 +24,7 @@ import com.hamza.wallpap.ui.screens.common.NavDrawer
 import com.hamza.wallpap.ui.screens.common.TopBar
 import com.hamza.wallpap.ui.screens.editor.CustomWallpaperViewModel
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
+import com.hamza.wallpap.ui.screens.latest.LatestViewModel
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.screens.settings.SettingsViewModel
 import com.hamza.wallpap.ui.screens.wallpaper.WallpaperFullScreenViewModel
@@ -42,6 +43,7 @@ fun MainScreen(
     favUrlsViewModel: FavUrlsViewModel = hiltViewModel(),
     customWallpaperViewModel: CustomWallpaperViewModel = hiltViewModel(),
     settingsViewModel: SettingsViewModel = viewModel(),
+    latestViewModel: LatestViewModel = viewModel(),
     onItemSelected: (WallPapTheme) -> Unit,
 ) {
     val systemUiController = rememberSystemUiController()
@@ -57,7 +59,7 @@ fun MainScreen(
         topBar = {
             if (
                 currentRoute.equals(Screen.Home.route) or
-                currentRoute.equals(Screen.Random.route) or
+//                currentRoute.equals(Screen.Random.route) or
                 currentRoute.equals(Screen.Latest.route) or
                 currentRoute.equals(Screen.Favourite.route) or
                 currentRoute.equals(Screen.Settings.route) or
@@ -93,14 +95,15 @@ fun MainScreen(
                     randomScreenViewModel,
                     favUrlsViewModel,
                     context,
-                    customWallpaperViewModel
+                    customWallpaperViewModel,
+                    latestViewModel
                 )
             }
         },
         bottomBar = {
             if (
                 currentRoute.equals(Screen.Home.route) or
-                currentRoute.equals(Screen.Random.route) or
+//                currentRoute.equals(Screen.Random.route) or
                 currentRoute.equals(Screen.Latest.route) or
                 currentRoute.equals(Screen.Favourite.route)
             ) {

@@ -1,11 +1,8 @@
 package com.hamza.wallpap.ui.screens.home
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
@@ -44,7 +41,6 @@ class HomeViewModel @Inject constructor(
                 repository.searchImages(it).cachedIn(viewModelScope)
             }
         }.map { pagingData ->
-            Log.d("check", "amshar")
             pagingData.map { image: UnsplashImage ->
                 UnsplashImageUI(image = image, height = heightFor(image.id))
             }

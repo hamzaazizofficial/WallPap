@@ -45,6 +45,7 @@ import com.hamza.wallpap.util.*
 import dev.shreyaspatil.capturable.Capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
@@ -95,7 +96,8 @@ fun WallpaperFullScreen(
             context = context,
             wallpaperFullScreenViewModel,
             fullUrl,
-            finalImageBitmap
+            finalImageBitmap,
+            scope
         )
     }
 
@@ -202,24 +204,23 @@ fun WallpaperFullScreen(
                                 ) {
                                     IconButton(
                                         onClick = {
-                                            captureController.capture()
-                                            finalImageBitmap?.let {
-                                                saveMediaToStorage(
-                                                    it,
-                                                    context
-                                                )
-                                                wallpaperFullScreenViewModel.interstitialState.value++
-                                                createInterstitialAd(
-                                                    activity as MainActivity,
-                                                    wallpaperFullScreenViewModel
-                                                )
-//                                                if (wallpaperFullScreenViewModel.interstitialState.value % 2 == 0){
-//                                                    createInterstitialAd(activity as MainActivity)
-//                                                }
+                                            scope.launch(Dispatchers.IO) {
+                                                captureController.capture()
+                                                finalImageBitmap?.let {
+                                                    saveMediaToStorage(
+                                                        it,
+                                                        context
+                                                    )
+                                                    wallpaperFullScreenViewModel.interstitialState.value++
+                                                    createInterstitialAd(
+                                                        activity as MainActivity,
+                                                        wallpaperFullScreenViewModel
+                                                    )
+                                                }
                                             }
                                             scope.launch {
                                                 snackBarHostState.showSnackbar(
-                                                    "Saved to Gallery!",
+                                                    message = "Saved to Gallery!",
                                                     withDismissAction = true,
                                                     duration = SnackbarDuration.Short
                                                 )
@@ -234,19 +235,18 @@ fun WallpaperFullScreen(
                                 } else {
                                     IconButton(
                                         onClick = {
-                                            finalImageBitmap?.let {
-                                                saveMediaToStorage(
-                                                    it,
-                                                    context
-                                                )
-                                                wallpaperFullScreenViewModel.interstitialState.value++
-                                                createInterstitialAd(
-                                                    activity as MainActivity,
-                                                    wallpaperFullScreenViewModel
-                                                )
-//                                                if (wallpaperFullScreenViewModel.interstitialState.value % 2 == 0){
-//                                                    createInterstitialAd(activity as MainActivity)
-//                                                }
+                                            scope.launch(Dispatchers.IO) {
+                                                finalImageBitmap?.let {
+                                                    saveMediaToStorage(
+                                                        it,
+                                                        context
+                                                    )
+                                                    wallpaperFullScreenViewModel.interstitialState.value++
+                                                    createInterstitialAd(
+                                                        activity as MainActivity,
+                                                        wallpaperFullScreenViewModel
+                                                    )
+                                                }
                                             }
                                             scope.launch {
                                                 snackBarHostState.showSnackbar(
@@ -415,19 +415,21 @@ fun WallpaperFullScreen(
                     ) {
                         FloatingActionButton(
                             onClick = {
-                                wallpaperFullScreenViewModel.id += 1
-                                val favUrl =
-                                    FavouriteUrls(
-                                        wallpaperFullScreenViewModel.id,
-                                        fullUrl,
-                                        regularUrl
+                                scope.launch(Dispatchers.IO) {
+                                    wallpaperFullScreenViewModel.id += 1
+                                    val favUrl =
+                                        FavouriteUrls(
+                                            wallpaperFullScreenViewModel.id,
+                                            fullUrl,
+                                            regularUrl
+                                        )
+                                    favUrlsViewModel.addToFav(favUrl)
+                                    wallpaperFullScreenViewModel.interstitialState.value++
+                                    createInterstitialAd(
+                                        activity as MainActivity,
+                                        wallpaperFullScreenViewModel
                                     )
-                                favUrlsViewModel.addToFav(favUrl)
-                                wallpaperFullScreenViewModel.interstitialState.value++
-                                createInterstitialAd(
-                                    activity as MainActivity,
-                                    wallpaperFullScreenViewModel
-                                )
+                                }
                                 scope.launch {
                                     snackBarHostState.showSnackbar(
                                         "Added to Favourites!",

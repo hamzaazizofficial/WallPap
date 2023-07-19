@@ -48,6 +48,7 @@ import com.hamza.wallpap.util.shareWallpaper
 import dev.shreyaspatil.capturable.Capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
@@ -60,7 +61,6 @@ fun LatestFullScreen(
     context: Context,
     scope: CoroutineScope,
     favUrlsViewModel: FavUrlsViewModel,
-    latestViewModel: LatestViewModel,
 ) {
     val activity = (context as? Activity)
     val configuration = LocalConfiguration.current
@@ -80,7 +80,8 @@ fun LatestFullScreen(
             context = context,
             wallpaperFullScreenViewModel,
             latestUrl,
-            finalImageBitmap
+            finalImageBitmap,
+            scope
         )
     }
 
@@ -188,17 +189,19 @@ fun LatestFullScreen(
                             ) {
                                 if ((wallpaperFullScreenViewModel.saturationSliderPosition.value != 1f && wallpaperFullScreenViewModel.saturationSliderValue.value != 1f)) {
                                     IconButton(onClick = {
-                                        captureController.capture()
-                                        finalImageBitmap?.let {
-                                            saveMediaToStorage(
-                                                it, context
-                                            )
-                                            wallpaperFullScreenViewModel.interstitialState.value++
-                                            if (wallpaperFullScreenViewModel.interstitialState.value % 2 == 0){
-                                                createInterstitialAd(
-                                                    activity as MainActivity,
-                                                    wallpaperFullScreenViewModel
+                                        scope.launch(Dispatchers.IO) {
+                                            captureController.capture()
+                                            finalImageBitmap?.let {
+                                                saveMediaToStorage(
+                                                    it, context
                                                 )
+                                                wallpaperFullScreenViewModel.interstitialState.value++
+                                                if (wallpaperFullScreenViewModel.interstitialState.value % 2 == 0) {
+                                                    createInterstitialAd(
+                                                        activity as MainActivity,
+                                                        wallpaperFullScreenViewModel
+                                                    )
+                                                }
                                             }
                                         }
                                         scope.launch {
@@ -217,15 +220,17 @@ fun LatestFullScreen(
                                     }
                                 } else {
                                     IconButton(onClick = {
-                                        finalImageBitmap?.let {
-                                            saveMediaToStorage(
-                                                it, context
-                                            )
-                                            wallpaperFullScreenViewModel.interstitialState.value++
-                                            createInterstitialAd(
-                                                activity as MainActivity,
-                                                wallpaperFullScreenViewModel
-                                            )
+                                        scope.launch(Dispatchers.IO) {
+                                            finalImageBitmap?.let {
+                                                saveMediaToStorage(
+                                                    it, context
+                                                )
+                                                wallpaperFullScreenViewModel.interstitialState.value++
+                                                createInterstitialAd(
+                                                    activity as MainActivity,
+                                                    wallpaperFullScreenViewModel
+                                                )
+                                            }
                                         }
                                         scope.launch {
                                             snackBarHostState.showSnackbar(
@@ -380,38 +385,46 @@ fun LatestFullScreen(
                         )
                     }
 
-                    FloatingActionButton(
-                        onClick = {
-//                                  latestViewModel.addImagesToFirestore(latestViewModel.listOfUrls)
-                            wallpaperFullScreenViewModel.id += 1
-                            val favUrl =
-                                FavouriteUrls(
-                                    wallpaperFullScreenViewModel.id,
-                                    latestUrl,
-                                    latestUrl
-                                )
-                            favUrlsViewModel.addToFav(favUrl)
-                            wallpaperFullScreenViewModel.interstitialState.value++
-                            createInterstitialAd(
-                                activity as MainActivity,
-                                wallpaperFullScreenViewModel
-                            )
-                            scope.launch {
-                                snackBarHostState.showSnackbar(
-                                    "Added to Favourites!",
-                                    withDismissAction = true,
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
-                        },
-                        modifier = Modifier.padding(8.dp),
-                        backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
+                    AnimatedVisibility(
+                        visible = wallpaperFullScreenViewModel.saturationSliderPosition.value == 1f && wallpaperFullScreenViewModel.saturationSliderValue.value == 1f,
+                        enter = scaleIn() + fadeIn(),
+                        exit = scaleOut() + fadeOut()
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Favorite,
-                            contentDescription = null,
-                            tint = MaterialTheme.colors.bottomAppBarContentColor
-                        )
+                        FloatingActionButton(
+                            onClick = {
+//                                  latestViewModel.addImagesToFirestore(latestViewModel.listOfUrls)
+                                scope.launch(Dispatchers.IO) {
+                                    wallpaperFullScreenViewModel.id += 1
+                                    val favUrl =
+                                        FavouriteUrls(
+                                            wallpaperFullScreenViewModel.id,
+                                            latestUrl,
+                                            latestUrl
+                                        )
+                                    favUrlsViewModel.addToFav(favUrl)
+                                    wallpaperFullScreenViewModel.interstitialState.value++
+                                    createInterstitialAd(
+                                        activity as MainActivity,
+                                        wallpaperFullScreenViewModel
+                                    )
+                                }
+                                scope.launch {
+                                    snackBarHostState.showSnackbar(
+                                        "Added to Favourites!",
+                                        withDismissAction = true,
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                            },
+                            modifier = Modifier.padding(8.dp),
+                            backgroundColor = MaterialTheme.colors.bottomAppBarBackgroundColor
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Favorite,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.bottomAppBarContentColor
+                            )
+                        }
                     }
 
 

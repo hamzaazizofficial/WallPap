@@ -5,7 +5,6 @@ import androidx.paging.PagingSource
 import androidx.room.*
 import com.hamza.wallpap.model.FavouriteUrls
 import com.hamza.wallpap.model.UnsplashImage
-import retrofit2.http.GET
 
 @Dao
 interface UnsplashImageDao {

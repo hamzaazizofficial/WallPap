@@ -21,7 +21,6 @@ class LatestViewModel : ViewModel() {
 
     private val _wallpaperItems = mutableStateListOf<String>()
     private val heightMap = hashMapOf<String, Int>()
-//    val wallpaperItems: List<String> get() = _wallpaperItems
     val wallpaperItems: List<WallpaperItem>
         @RequiresApi(Build.VERSION_CODES.O)
         get() = _wallpaperItems.map { wallpaperItem ->
@@ -33,6 +32,31 @@ class LatestViewModel : ViewModel() {
     private val imagesCollection = firestore.collection("images")
     private val _images = MutableLiveData<List<WallpaperItem>>()
     val images: LiveData<List<WallpaperItem>> get() = _images
+    private val _shuffledImages = MutableLiveData<List<WallpaperItem>>()
+    val shuffledImages: LiveData<List<WallpaperItem>> get() = _shuffledImages
+
+    private fun fetchImages() {
+        imagesCollection.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                // Handle error
+                return@addSnapshotListener
+            }
+
+            val images = snapshot?.documents?.mapNotNull { document ->
+                document.toObject(WallpaperItem::class.java)
+            }
+            val shuffledImages = images?.shuffled()
+            _images.value = images
+            _shuffledImages.value = shuffledImages
+//            images?.let { _shuffledImages.addAll(it) }
+        }
+    }
+
+    fun shuffleImages() {
+        val images = _images.value
+        val shuffledImages = images?.shuffled()
+        _shuffledImages.value = shuffledImages
+    }
 
 
     val listOfUrls = listOf(
@@ -255,19 +279,7 @@ class LatestViewModel : ViewModel() {
             }
     }
 
-    private fun fetchImages() {
-        imagesCollection.addSnapshotListener { snapshot, error ->
-            if (error != null) {
-                // Handle error
-                return@addSnapshotListener
-            }
 
-            val images = snapshot?.documents?.mapNotNull { document ->
-                document.toObject(WallpaperItem::class.java)
-            }
-            _images.value = images
-        }
-    }
 
 
     fun refreshWallpaperItems() {

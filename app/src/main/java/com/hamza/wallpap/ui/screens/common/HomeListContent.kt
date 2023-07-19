@@ -36,7 +36,6 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
-import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
@@ -51,8 +50,8 @@ fun HomeListContent(
     items: LazyPagingItems<UnsplashImageUI>,
     navController: NavHostController,
     homeViewModel: HomeViewModel,
-    onRefresh: () -> Unit,
-    refreshState: SwipeRefreshState,
+//    onRefresh: () -> Unit,
+//    refreshState: SwipeRefreshState,
 ) {
 //    SwipeRefresh(
 //        state = refreshState,

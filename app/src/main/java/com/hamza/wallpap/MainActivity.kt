@@ -25,8 +25,13 @@ import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdListener
 import com.applovin.mediation.MaxError
 import com.applovin.mediation.ads.MaxInterstitialAd
-import com.applovin.sdk.AppLovinSdk
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.hamza.wallpap.ui.MainScreen
 import com.hamza.wallpap.ui.MainViewModel
 import com.hamza.wallpap.ui.animation.CircularReveal
@@ -49,9 +54,27 @@ fun createInterstitialAd(
     interstitialAd.setListener(mainActivity)
 
     if (wallpaperFullScreenViewModel.interstitialState.value % 2 == 0) {
-//        Toast.makeText(mainActivity, "creating ad", Toast.LENGTH_SHORT).show()
         interstitialAd.loadAd()
+
+        // You can call Admob Interstitial Ad from here also.
+        /* showAdmobInterstitialAd(context) */
     }
+}
+
+fun showAdmobInterstitialAd(mainActivity: MainActivity) {
+    InterstitialAd.load(
+        mainActivity,
+        "ca-app-pub-3940256099942544/1033173712", //Change this with your own AdUnitID!
+        AdRequest.Builder().build(),
+        object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                interstitialAd.show(mainActivity)
+            }
+        }
+    )
 }
 
 @Suppress("DEPRECATION")
@@ -66,6 +89,10 @@ class MainActivity : ComponentActivity(), MaxAdListener {
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MobileAds.initialize(this) {}
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder().setTestDeviceIds(listOf("ABCDEF012345")).build()
+        )
         val mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         installSplashScreen().apply {
             setKeepVisibleCondition {
@@ -76,20 +103,9 @@ class MainActivity : ComponentActivity(), MaxAdListener {
             val wallpaperFullScreenViewModel =
                 ViewModelProvider(this)[WallpaperFullScreenViewModel::class.java]
 
-            AppLovinSdk.getInstance(applicationContext).mediationProvider = "max"
-            AppLovinSdk.getInstance(applicationContext)
-                .initializeSdk {
-                    // AppLovin SDK is initialized, start loading ads
-//                    createInterstitialAd(this, wallpaperFullScreenViewModel)
-                    Log.d("ad", "initialized")
-//                if  ( interstitialAd.isReady )
-//                {
-//                }
-                }
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-//                val splashScreen = installSplashScreen()
-//                splashScreen.setKeepOnScreenCondition { true }
-//            }
+            // showing Admob Interstitial Ad (You can call this function from anywhere)
+            showAdmobInterstitialAd(this)
+
             themeSetting = ThemeSettingPreference(context = LocalContext.current)
             val theme = themeSetting.themeStream.collectAsState()
             val useDarkColors = when (theme.value) {
@@ -98,11 +114,7 @@ class MainActivity : ComponentActivity(), MaxAdListener {
                 com.hamza.wallpap.util.WallPapTheme.MODE_NIGHT -> true
             }
 
-//            val isSystemDark = isSystemInDarkTheme()
-//            var darkTheme by remember { mutableStateOf(isSystemDark) }
-//            val onThemeToggle = { darkTheme = !darkTheme }
             val navController = rememberAnimatedNavController()
-
             CircularReveal(
                 targetState = useDarkColors,
                 animationSpec = tween(1600, easing = LinearOutSlowInEasing)
@@ -125,7 +137,6 @@ class MainActivity : ComponentActivity(), MaxAdListener {
 
     override fun onAdLoaded(maxAd: MaxAd) {
         // Interstitial ad is ready to be shown. interstitialAd.isReady() will now return 'true'
-
         // Reset retry attempt
         retryAttempt = 0.0
         interstitialAd.loadAd()
@@ -147,7 +158,6 @@ class MainActivity : ComponentActivity(), MaxAdListener {
     override fun onAdLoadFailed(adUnitId: String?, error: MaxError?) {
         // Interstitial ad failed to load
         // AppLovin recommends that you retry with exponentially higher delays up to a maximum delay (in this case 64 seconds)
-
         Log.d("er", error.toString())
         retryAttempt++
         val delayMillis =

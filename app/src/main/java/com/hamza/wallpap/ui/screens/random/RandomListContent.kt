@@ -1,4 +1,4 @@
-package com.hamza.wallpap.ui.screens.common
+package com.hamza.wallpap.ui.screens.random
 
 import android.content.Intent
 import android.content.res.Configuration
@@ -8,7 +8,6 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
@@ -38,12 +37,9 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.hamza.wallpap.R
 import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
-import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -55,8 +51,8 @@ fun RandomListContent(
     navController: NavHostController,
     randomViewModel: RandomScreenViewModel,
     homeViewModel: HomeViewModel,
-    refreshState: SwipeRefreshState,
-    onRefresh: () -> Unit,
+//    refreshState: SwipeRefreshState,
+//    onRefresh: () -> Unit,
 ) {
     Log.d("Error", items.loadState.toString())
     val configuration = LocalConfiguration.current

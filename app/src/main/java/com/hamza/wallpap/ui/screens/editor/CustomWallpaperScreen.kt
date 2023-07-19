@@ -3,9 +3,7 @@ package com.hamza.wallpap.ui.screens.editor
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -81,8 +79,6 @@ fun CustomWallpaperScreen(
     val captureController = rememberCaptureController()
     val scope = rememberCoroutineScope()
 
-    val isWhatsAppInstalled = isWhatsAppInstalled(context)
-
     var xPosText by remember { mutableStateOf(0) }
     var yPosText by remember { mutableStateOf(0) }
 
@@ -119,8 +115,7 @@ fun CustomWallpaperScreen(
                 context,
                 singlePhotoPickerLauncher,
                 keyboardController,
-                focusManager,
-                isWhatsAppInstalled
+                focusManager
             )
         },
         content = {
@@ -133,7 +128,9 @@ fun CustomWallpaperScreen(
                             AnimatedVisibility(
                                 visible = customWallpaperViewModel.bgImageFullUrl.value != null
                                         || customWallpaperViewModel.bgImageUri.value != null
-                                        || customWallpaperViewModel.bgBoxColor.value != Color(0xF1FFFFFF)
+                                        || customWallpaperViewModel.bgBoxColor.value != Color(
+                                    0xF1FFFFFF
+                                )
                                         || customWallpaperViewModel.wallpaperText.value != "",
                                 enter = scaleIn() + fadeIn(),
                                 exit = scaleOut() + fadeOut()
@@ -545,14 +542,4 @@ fun CustomWallpaperScreen(
             }
         }
     )
-}
-
-fun isWhatsAppInstalled(context: Context): Boolean {
-    val packageManager = context.packageManager
-    val whatsappIntent = Intent(Intent.ACTION_SEND)
-    whatsappIntent.type = "text/plain"
-    whatsappIntent.setPackage("com.whatsapp")
-
-    val resolveInfo = packageManager.resolveActivity(whatsappIntent, PackageManager.MATCH_DEFAULT_ONLY)
-    return resolveInfo != null
 }

@@ -3,7 +3,6 @@ package com.hamza.wallpap.ui.screens.search
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -22,12 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
-import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.hamza.wallpap.R
-import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.screens.common.HomeListContent
 import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.theme.maven_pro_regular
@@ -35,7 +31,6 @@ import com.hamza.wallpap.ui.theme.textColor
 import com.hamza.wallpap.ui.theme.topAppBarTitle
 import com.hamza.wallpap.util.isOnline
 
-@OptIn(ExperimentalFoundationApi::class)
 @RequiresApi(Build.VERSION_CODES.M)
 @ExperimentalPagingApi
 @ExperimentalCoilApi
@@ -44,8 +39,7 @@ fun SearchScreen(
     navController: NavHostController,
     searchViewModel: SearchViewModel,
     homeViewModel: HomeViewModel,
-    items: LazyPagingItems<UnsplashImageUI>,
-    refreshState: SwipeRefreshState,
+    //    refreshState: SwipeRefreshState,
     context: Context,
 ) {
     val searchQuery by searchViewModel.searchQuery
@@ -106,8 +100,8 @@ fun SearchScreen(
                     items = searchedImages,
                     navController,
                     homeViewModel,
-                    { items.refresh() },
-                    refreshState
+//                    { items.refresh() },
+//                    refreshState
                 )
             }
         }

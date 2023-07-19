@@ -2,7 +2,10 @@ package com.hamza.wallpap.ui.screens.editor
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
@@ -17,6 +20,8 @@ import com.hamza.wallpap.ui.theme.*
 import kotlin.random.Random
 
 class CustomWallpaperViewModel : ViewModel() {
+
+    var texts by mutableStateOf(listOf("Text 1", "Text 2", "Text 3"))
 
     var saturationSliderValue = mutableStateOf(1f)
     var saturationSliderPosition = mutableStateOf(1f)
@@ -45,47 +50,47 @@ class CustomWallpaperViewModel : ViewModel() {
             FontFamilySearchChip("Serif", FontFamily.Serif),
             FontFamilySearchChip("Sans Serif", FontFamily.SansSerif),
             FontFamilySearchChip("Abeezee", abeezee),
-            FontFamilySearchChip("Aileron Bold", aileron_bold),
-            FontFamilySearchChip("Aileron Regular", aileron_regular),
-            FontFamilySearchChip("Aileron SemiBold", aileron_semibold),
+//            FontFamilySearchChip("Aileron Bold", aileron_bold),
+//            FontFamilySearchChip("Aileron Regular", aileron_regular),
+//            FontFamilySearchChip("Aileron SemiBold", aileron_semibold),
             FontFamilySearchChip("Allerta", allerta),
-            FontFamilySearchChip("Allerta Stencil", allerta_stencil),
+//            FontFamilySearchChip("Allerta Stencil", allerta_stencil),
             FontFamilySearchChip("Amaranth", amaranth),
             FontFamilySearchChip("Amaranth SC", amatic_sc),
             FontFamilySearchChip("Amatic SC", amatic_sc),
-            FontFamilySearchChip("Amatic Bold", amatic_sc_boldf),
+//            FontFamilySearchChip("Amatic Bold", amatic_sc_boldf),
             FontFamilySearchChip("Archivo Black", archivo_black),
-            FontFamilySearchChip("Ariblk", ariblk),
+//            FontFamilySearchChip("Ariblk", ariblk),
             FontFamilySearchChip("Arimo", arimo),
-            FontFamilySearchChip("Arimo Bold", arimo_bold),
-            FontFamilySearchChip("Arimo Italic", arimo_italic),
-            FontFamilySearchChip("Bahnschrift", bahnschrift),
+//            FontFamilySearchChip("Arimo Bold", arimo_bold),
+//            FontFamilySearchChip("Arimo Italic", arimo_italic),
+//            FontFamilySearchChip("Bahnschrift", bahnschrift),
             FontFamilySearchChip("Bungee", bungee_inline),
             FontFamilySearchChip("Cabin", cabin),
             FontFamilySearchChip("Chivo", chivo),
             FontFamilySearchChip("Comic", comic),
-            FontFamilySearchChip("Comic Bold", comicbd),
-            FontFamilySearchChip("Consola", consola),
-            FontFamilySearchChip("Consolab", consolab),
-            FontFamilySearchChip("Cour", cour),
-            FontFamilySearchChip("Cour Bold", courbd),
+//            FontFamilySearchChip("Comic Bold", comicbd),
+//            FontFamilySearchChip("Consola", consola),
+//            FontFamilySearchChip("Consolab", consolab),
+//            FontFamilySearchChip("Cour", cour),
+//            FontFamilySearchChip("Cour Bold", courbd),
             FontFamilySearchChip("Faster One", faster_one),
             FontFamilySearchChip("Francois One", francois_one),
-            FontFamilySearchChip("Impact", impact),
-            FontFamilySearchChip("Lucon", lucon),
+//            FontFamilySearchChip("Impact", impact),
+//            FontFamilySearchChip("Lucon", lucon),
             FontFamilySearchChip("Montserrat", montserrat),
             FontFamilySearchChip("Nunito", nunito),
-            FontFamilySearchChip("Nunito Bold", nunito_bold),
-            FontFamilySearchChip("Nunito Light", nunito_light),
-            FontFamilySearchChip("Nunito SemiBold", nunito_semibold),
+//            FontFamilySearchChip("Nunito Bold", nunito_bold),
+//            FontFamilySearchChip("Nunito Light", nunito_light),
+//            FontFamilySearchChip("Nunito SemiBold", nunito_semibold),
             FontFamilySearchChip("Oxygen", oxygen),
             FontFamilySearchChip("Permanent Marker", permanent_marker),
-            FontFamilySearchChip("Press Start", press_start_2p),
+//            FontFamilySearchChip("Press Start", press_start_2p),
             FontFamilySearchChip("School Bell", schoolbell),
-            FontFamilySearchChip("Seguibl", seguibl),
-            FontFamilySearchChip("Trebuc", trebuc),
-            FontFamilySearchChip("Trebuc Bold", trebuc_bd),
-            FontFamilySearchChip("Verdana", verdana)
+//            FontFamilySearchChip("Seguibl", seguibl),
+//            FontFamilySearchChip("Trebuc", trebuc),
+//            FontFamilySearchChip("Trebuc Bold", trebuc_bd),
+//            FontFamilySearchChip("Verdana", verdana)
         )
     var selectedFontFamilyIndex = mutableStateOf(0)
 

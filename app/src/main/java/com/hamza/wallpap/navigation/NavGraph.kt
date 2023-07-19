@@ -18,12 +18,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.hamza.wallpap.data.local.dao.FavUrlsViewModel
 import com.hamza.wallpap.ui.screens.editor.CustomWallpaperScreen
@@ -35,7 +33,6 @@ import com.hamza.wallpap.ui.screens.home.HomeViewModel
 import com.hamza.wallpap.ui.screens.latest.LatestFullScreen
 import com.hamza.wallpap.ui.screens.latest.LatestScreen
 import com.hamza.wallpap.ui.screens.latest.LatestViewModel
-import com.hamza.wallpap.ui.screens.random.RandomScreen
 import com.hamza.wallpap.ui.screens.random.RandomScreenViewModel
 import com.hamza.wallpap.ui.screens.search.SearchScreen
 import com.hamza.wallpap.ui.screens.search.SearchViewModel
@@ -75,10 +72,10 @@ fun NavGraph(
     val homeItems = homeViewModel.itemsFlow.collectAsLazyPagingItems()
     val randomItems = randomScreenViewModel.itemsFlow.collectAsLazyPagingItems()
     val latestItems by remember { mutableStateOf(latestViewModel.wallpaperItems) }
-    val homeRefreshState =
-        rememberSwipeRefreshState(isRefreshing = homeItems.loadState.refresh is LoadState.Loading)
-    val randomRefreshState =
-        rememberSwipeRefreshState(isRefreshing = randomItems.loadState.refresh is LoadState.Loading)
+//    val homeRefreshState =
+//        rememberSwipeRefreshState(isRefreshing = homeItems.loadState.refresh is LoadState.Loading)
+//    val randomRefreshState =
+//        rememberSwipeRefreshState(isRefreshing = randomItems.loadState.refresh is LoadState.Loading)
     val favouriteItemsData = favUrlsViewModel.getAllFavUrls.observeAsState(listOf())
     val customWallpaperViewModel: CustomWallpaperViewModel = viewModel()
 
@@ -97,7 +94,7 @@ fun NavGraph(
                 homeViewModel,
                 scaffoldState,
                 homeItems,
-                homeRefreshState,
+//                homeRefreshState,
                 context,
                 scope,
                 systemUiController
@@ -119,8 +116,7 @@ fun NavGraph(
                 navController = navController,
                 searchViewModel,
                 homeViewModel,
-                homeItems,
-                homeRefreshState,
+                //                homeRefreshState,
                 context
             )
         }
@@ -149,19 +145,19 @@ fun NavGraph(
             )
         }
 
-        composable(Screen.Random.route) {
-            RandomScreen(
-                navController,
-                scaffoldState,
-                randomScreenViewModel,
-                randomItems,
-                systemUiController,
-                context,
-                scope,
-                randomRefreshState,
-                homeViewModel
-            )
-        }
+//        composable(Screen.Random.route) {
+//            RandomScreen(
+//                navController,
+//                scaffoldState,
+//                randomScreenViewModel,
+//                randomItems,
+//                systemUiController,
+//                context,
+//                scope,
+////                randomRefreshState,
+//                homeViewModel
+//            )
+//        }
 
         composable(Screen.HomeWallpaperFullScreen.route, enterTransition = {
             when (currentRoute) {
@@ -231,7 +227,11 @@ fun NavGraph(
         // Custom Wallpaper Screens
         composable(Screen.CustomWallpaperEditorScreen.route) {
             CustomWallpaperScreen(
-                navController, customWallpaperViewModel, homeItems, context, systemUiController
+                navController,
+                customWallpaperViewModel,
+                homeItems,
+                context,
+                systemUiController
             )
         }
 
@@ -242,7 +242,6 @@ fun NavGraph(
                 latestViewModel,
                 scaffoldState,
                 systemUiController,
-                latestItems,
                 context,
                 scope
             )
@@ -270,8 +269,7 @@ fun NavGraph(
                     wallpaperFullScreenViewModel,
                     context,
                     scope,
-                    favUrlsViewModel,
-                    latestViewModel
+                    favUrlsViewModel
                 )
             }
         }

@@ -1,10 +1,10 @@
 package com.hamza.wallpap.ui.screens.editor
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -40,9 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
-import com.hamza.wallpap.MainActivity
 import com.hamza.wallpap.R
-import com.hamza.wallpap.createInterstitialAd
 import com.hamza.wallpap.model.CustomWallpaperBackgroundColor
 import com.hamza.wallpap.ui.UnsplashImageUI
 import com.hamza.wallpap.ui.screens.common.ColorPickerDialog
@@ -51,6 +49,7 @@ import com.hamza.wallpap.util.isOnline
 import com.hamza.wallpap.util.saveMediaToStorage
 import com.hamza.wallpap.util.shareWallpaper
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -70,9 +69,7 @@ fun EditorBottomSheet(
     singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    isWhatsAppInstalled: Boolean,
 ) {
-    val activity = (context as? Activity)
     if (customWallpaperViewModel.wallpaperDialogState.value) {
         TextFormatDialog(
             dialogState = customWallpaperViewModel.wallpaperDialogState,
@@ -278,6 +275,11 @@ fun EditorBottomSheet(
                             onClick = {
                                 customWallpaperViewModel.wallpaperText.value = ""
                                 rotationAngle += 360f
+//                                val newText = customWallpaperViewModel.wallpaperText.value.trim()
+//                                if (newText.isNotEmpty()) {
+//                                    customWallpaperViewModel.texts = customWallpaperViewModel.texts.toMutableList().apply { add(newText) }
+//                                    customWallpaperViewModel.wallpaperText.value = ""
+//                                }
                             }
                         ) {
                             Icon(
@@ -682,21 +684,19 @@ fun EditorBottomSheet(
                             .fillMaxWidth()
                             .clip(shape = RoundedCornerShape(5.dp))
                             .clickable {
-                                customWallpaperViewModel.savedImageBitmap.value?.let {
-                                    saveMediaToStorage(
-                                        it,
-                                        context
-                                    )
-                                    customWallpaperViewModel.interstitialState.value++
-//                                    if (customWallpaperViewModel.interstitialState.value % 2 == 0){
-//                                        createInterstitialAd(
-//                                            activity as MainActivity,
-//                                            wallpaperFullScreenViewModel
-//                                        )
-//                                    }
-                                    scope.launch {
-                                        bottomSheetState.hide()
+                                scope.launch(Dispatchers.IO) {
+                                    customWallpaperViewModel.savedImageBitmap.value?.let {
+                                        saveMediaToStorage(
+                                            it,
+                                            context
+                                        )
                                     }
+                                }
+                                scope.launch {
+                                    Toast
+                                        .makeText(context, "Saved to Gallery", Toast.LENGTH_SHORT)
+                                        .show()
+                                    bottomSheetState.hide()
                                 }
                             },
                         verticalAlignment = Alignment.CenterVertically,
@@ -762,14 +762,14 @@ fun EditorBottomSheet(
                             .fillMaxWidth()
                             .clip(shape = RoundedCornerShape(5.dp))
                             .clickable {
-                                if (isWhatsAppInstalled) {
+                                try {
                                     shareWallpaper(
                                         context,
                                         customWallpaperViewModel.savedImageBitmap.value,
                                         shareWithWhatsAppOnly = true,
                                         saveToDrive = false
                                     )
-                                } else {
+                                } catch (e: java.lang.Exception) {
                                     val playStoreIntent = Intent(Intent.ACTION_VIEW)
                                     playStoreIntent.data =
                                         Uri.parse("market://details?id=com.whatsapp")
@@ -836,5 +836,3 @@ fun EditorBottomSheet(
         }
     }
 }
-
-
