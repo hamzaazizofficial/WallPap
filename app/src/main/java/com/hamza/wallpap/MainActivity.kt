@@ -50,6 +50,7 @@ fun createInterstitialAd(
     mainActivity: MainActivity,
     wallpaperFullScreenViewModel: WallpaperFullScreenViewModel,
 ) {
+    // f529325940f663df is my Applovin Interstitial Ad Unit ID, you can change it to yours.
     interstitialAd = MaxInterstitialAd("f529325940f663df", mainActivity)
     interstitialAd.setListener(mainActivity)
 
@@ -104,7 +105,7 @@ class MainActivity : ComponentActivity(), MaxAdListener {
                 ViewModelProvider(this)[WallpaperFullScreenViewModel::class.java]
 
             // showing Admob Interstitial Ad (You can call this function from anywhere)
-            showAdmobInterstitialAd(this)
+//            showAdmobInterstitialAd(this)
 
             themeSetting = ThemeSettingPreference(context = LocalContext.current)
             val theme = themeSetting.themeStream.collectAsState()
