@@ -1,7 +1,6 @@
 # WallPap - Compose Wallpaper App
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/your_username/WallPap-Compose-Wallpaper-App/blob/main/LICENSE)
-MIT License
 
 ![Banner](/path/to/banner/image)
 
