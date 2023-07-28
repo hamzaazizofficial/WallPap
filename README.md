@@ -81,6 +81,7 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 - [AppLovin Ads SDK](https://www.applovin.com/)
 - [Paging Library](https://developer.android.com/topic/libraries/architecture/paging)
 - [Room Persistence Library](https://developer.android.com/jetpack/androidx/releases/room)
+- [Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
 - [Retrofit](https://square.github.io/retrofit/)
 - [Navigation Component](https://developer.android.com/guide/navigation)
 
