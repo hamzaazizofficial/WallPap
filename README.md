@@ -1,6 +1,6 @@
 # WallPap - Compose Wallpaper App
 
-<img src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/wattpad.png?alt=media&token=dbf8282f-8a1e-435c-98d6-11f5cad1390a"/>
+<img height = 250px width = 250px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/wattpad.png?alt=media&token=dbf8282f-8a1e-435c-98d6-11f5cad1390a"/>
   
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/your_username/WallPap-Compose-Wallpaper-App/blob/main/LICENSE)
 
