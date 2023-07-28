@@ -55,6 +55,20 @@ Follow these instructions to build and run the project on your local machine.
 
 Contributions are welcome! If you find any issues or have suggestions for improvements, please feel free to open an issue or create a pull request.
 
+## Acknowledgments
+
+- [Jetpack Compose](https://developer.android.com/jetpack/compose)
+- [Firebase](https://firebase.google.com/)
+- [AppLovin Ads SDK](https://www.applovin.com/)
+- [Paging Library](https://developer.android.com/topic/libraries/architecture/paging)
+- [Room Persistence Library](https://developer.android.com/jetpack/androidx/releases/room)
+- [Retrofit](https://square.github.io/retrofit/)
+- [Navigation Component](https://developer.android.com/guide/navigation)
+
+## Contact
+
+For any inquiries or questions, you can reach me at your_email@example.com.
+
 ## License
 
 This project is licensed under the "MIT License"
@@ -78,18 +92,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE```
-
-## Acknowledgments
-
-- [Jetpack Compose](https://developer.android.com/jetpack/compose)
-- [Firebase](https://firebase.google.com/)
-- [AppLovin Ads SDK](https://www.applovin.com/)
-- [Paging Library](https://developer.android.com/topic/libraries/architecture/paging)
-- [Room Persistence Library](https://developer.android.com/jetpack/androidx/releases/room)
-- [Retrofit](https://square.github.io/retrofit/)
-- [Navigation Component](https://developer.android.com/guide/navigation)
-
-## Contact
-
-For any inquiries or questions, you can reach me at your_email@example.com.
 
