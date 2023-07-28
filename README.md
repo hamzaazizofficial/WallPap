@@ -59,7 +59,7 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 This project is licensed under the "MIT License"
 
-Copyright (c) 2023 Hamza Aziz
+```Copyright (c) 2023 Hamza Aziz```
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
