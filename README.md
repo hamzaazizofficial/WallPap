@@ -33,6 +33,7 @@ WallPap is an Android wallpaper app built with Jetpack Compose and Kotlin. It fe
 - Discover and browse a vast collection of high-quality wallpapers.
 - Download wallpapers to the device for offline use.
 - Set wallpapers directly from the app with one click.
+- Custom Wallpaper Editor to create custom beautiful wallpapers.
 - Smooth and responsive UI built with Jetpack Compose.
 - Seamless integration with Firebase for analytics and crash reporting.
 - Display ads using AppLovin Ads SDK to monetize the app.
@@ -76,6 +77,7 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 - [Jetpack Compose](https://developer.android.com/jetpack/compose)
 - [Firebase](https://firebase.google.com/)
+- [Unsplash](https://unsplash.com/)
 - [AppLovin Ads SDK](https://www.applovin.com/)
 - [Paging Library](https://developer.android.com/topic/libraries/architecture/paging)
 - [Room Persistence Library](https://developer.android.com/jetpack/androidx/releases/room)
