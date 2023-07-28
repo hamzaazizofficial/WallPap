@@ -1,8 +1,11 @@
 # WallPap - Compose Wallpaper App
 
+  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Thumbnail.png?alt=media&token=f423fd99-0eae-4759-a840-0d602aa8401d
+"/>
+  
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/your_username/WallPap-Compose-Wallpaper-App/blob/main/LICENSE)
 
-![Banner](/path/to/banner/image)
+
 
 ## Description
 
@@ -16,13 +19,15 @@ WallPap is an Android wallpaper app built with Jetpack Compose and Kotlin. It fe
   
   <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%202.png?alt=media&token=9d9f8969-732a-4d31-8b9b-1611ef60bc13"/>
   
-  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%202.png?alt=media&token=9d9f8969-732a-4d31-8b9b-1611ef60bc13"/>
+  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%203.png?alt=media&token=3747efc8-4135-4a5e-845a-6020eea1dadb"/>
   
-  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%202.png?alt=media&token=9d9f8969-732a-4d31-8b9b-1611ef60bc13"/>
+  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%205%20%E2%80%93%201.png?alt=media&token=589d0216-7f5f-4097-b285-9d7abdf1a49b"/>
   
-  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%202.png?alt=media&token=9d9f8969-732a-4d31-8b9b-1611ef60bc13"/>
+  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%205%20%E2%80%93%202.png?alt=media&token=bf74b5a8-58d7-4125-879b-43a2dee719c3"/>
   
-  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%202.png?alt=media&token=9d9f8969-732a-4d31-8b9b-1611ef60bc13"/>
+  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%205%20%E2%80%93%203.png?alt=media&token=1761a508-2447-4936-bccc-0ead71ac166f"/>
+
+  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%205%20%E2%80%93%203.png?alt=media&token=1761a508-2447-4936-bccc-0ead71ac166f"/>
 
 </div>
 
