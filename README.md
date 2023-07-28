@@ -32,7 +32,7 @@ WallPap is an Android wallpaper app built with Kotlin using Jetpack Compose UI T
 
 - Discover and browse a vast collection of high-quality wallpapers.
 - Change saturation of the wallpaper image.
-- Download wallpapers to the device for offline use.
+- Download wallpapers to the device for offline use or directly save to drive.
 - Set wallpapers directly from the app with one click.
 - Custom Wallpaper Editor to create custom beautiful wallpapers.
 - 20+ cool fonts for your wallpaper.
