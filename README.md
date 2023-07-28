@@ -11,6 +11,16 @@ WallPap is an Android wallpaper app built with Jetpack Compose and Kotlin. It fe
 ## Screenshots
 <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post.png?alt=media&token=912de106-fef8-4173-9de4-327899c423ef"/>
 
+<img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%202.png?alt=media&token=9d9f8969-732a-4d31-8b9b-1611ef60bc13"/>
+
+<img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%202.png?alt=media&token=9d9f8969-732a-4d31-8b9b-1611ef60bc13"/>
+
+<img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%202.png?alt=media&token=9d9f8969-732a-4d31-8b9b-1611ef60bc13"/>
+
+<img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%202.png?alt=media&token=9d9f8969-732a-4d31-8b9b-1611ef60bc13"/>
+
+<img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%202.png?alt=media&token=9d9f8969-732a-4d31-8b9b-1611ef60bc13"/>
+
 ## Features
 
 - Discover and browse a vast collection of high-quality wallpapers.
