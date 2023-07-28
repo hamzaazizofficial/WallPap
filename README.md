@@ -1,6 +1,6 @@
 # WallPap - Compose Wallpaper App
 
-  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Thumbnail.png?alt=media&token=f423fd99-0eae-4759-a840-0d602aa8401d"/>
+<img src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Thumbnail.png?alt=media&token=f423fd99-0eae-4759-a840-0d602aa8401d"/>
   
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/your_username/WallPap-Compose-Wallpaper-App/blob/main/LICENSE)
 
@@ -24,8 +24,6 @@ WallPap is an Android wallpaper app built with Jetpack Compose and Kotlin. It fe
   
   <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%205%20%E2%80%93%202.png?alt=media&token=bf74b5a8-58d7-4125-879b-43a2dee719c3"/>
   
-  <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%205%20%E2%80%93%203.png?alt=media&token=1761a508-2447-4936-bccc-0ead71ac166f"/>
-
   <img height = 300px width = 300px src="https://firebasestorage.googleapis.com/v0/b/homeautomation-89bad.appspot.com/o/Post%205%20%E2%80%93%203.png?alt=media&token=1761a508-2447-4936-bccc-0ead71ac166f"/>
 
 </div>
