@@ -84,7 +84,7 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 ## Contact
 
-For any inquiries or questions, you can reach me at your_email@example.com.
+For any inquiries or questions, you can reach me at hamzaabdulaziz786@gmail.com.
 
 ## License
 
